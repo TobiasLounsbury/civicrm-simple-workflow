@@ -1,0 +1,58 @@
+#Data hr {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+#Data {
+    border: 1px solid #000;
+    padding: 8px;
+}
+.Detail {
+    border: 1px solid #000;
+    background: #ddd;
+    padding: 3px;
+    margin: 3px;
+
+    background: -webkit-linear-gradient(#eeeeee, #bbbbbb); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#eeeeee, #bbbbbb); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#eeeeee, #bbbbbb); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#eeeeee, #bbbbbb); /* Standard syntax */
+}
+.DeleteProfile {
+    float: right;
+    cursor: pointer;
+}
+.DeleteProfile:hover {
+    font-weight: bold;
+}
+.PlaceHolder {
+    background-color: #cce85b;
+    border: 1px solid #555;
+}
+.entity_name {
+    display: inline-block !important;
+    width: 300px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.handle {
+    font-size: 16px;
+    cursor: move;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.jQuery-Selector {
+    width: 80%;
+
+}
+#Data label {
+    margin-left: 30px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+#Data label.leftmost {
+    margin-left: 40px;
+}
+#Data label.path {
+    margin-left: 1px;
+}

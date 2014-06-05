@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<menu>
+  <item>
+    <path>civicrm/workflows/add</path>
+    <page_callback>CRM_Workflow_Form_Workflow</page_callback>
+    <page_arguments>action=add</page_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/workflows/update</path>
+    <page_callback>CRM_Workflow_Form_Workflow</page_callback>
+    <page_arguments>action=edit</page_arguments>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/workflows</path>
+    <page_callback>CRM_Workflow_Page_Workflow_List</page_callback>
+    <title>Workflow_List</title>
+    <access_arguments>administer CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/workflows/profile</path>
+    <page_callback>CRM_Workflow_Form_Profile</page_callback>
+    <title>Profile</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/workflows/profiles</path>
+    <page_callback>CRM_Workflow_Page_Profiles</page_callback>
+    <title>Profiles</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+  <item>
+    <path>civicrm/workflow</path>
+    <page_callback>CRM_Workflow_Page_Execute</page_callback>
+    <title>Execute</title>
+    <access_arguments>access CiviCRM</access_arguments>
+  </item>
+</menu>
