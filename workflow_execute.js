@@ -25,7 +25,7 @@ CRM.$(function ($) {
             $("#ActionWindow").hide();
             $("jQueryNext").hide()
             //Show the contribution form we hid earlier
-            $(".crm-contribution-main-form-block").show();
+            $(".crm-contribution-main-form-block").fadeIn("fast");
         }
 
         if (currentStep.entity_table == "jQuery") {
@@ -33,25 +33,30 @@ CRM.$(function ($) {
             //Hide the workflow pane
             $("#ActionWindow").hide();
 
-            //Hide all of the extra elements we don't want to see in this step.
-            $(CRM.Workflow.allSelector).hide();
+            $(".crm-contribution-main-form-block").slideUp("fast", function(e) {
 
-            //Hide or show the Next button depending on if we are on the last page or not
-            if (parseInt(currentStep.order) == parseInt(CRM.Workflow.lastStep)) {
-                $("#jQueryNext").hide()
-            } else {
-                $("#jQueryNext span").text(" " + currentStep.next + " ");
-                $("#jQueryNext").show()
-            }
-            //Show the Elements that make up this step
-            $(currentStep.entity_id).show();
+                //Hide all of the extra elements we don't want to see in this step.
+                $(CRM.Workflow.allSelector).hide();
 
-            //Show the contribution form we hid earlier
-            $(".crm-contribution-main-form-block").show();
+                //Show the Elements that make up this step
+                $(currentStep.entity_id).show();
+
+                //Hide or show the Next button depending on if we are on the last page or not
+                if (parseInt(currentStep.order) == parseInt(CRM.Workflow.lastStep)) {
+                    $("#jQueryNext").hide()
+                } else {
+                    $("#jQueryNext span").text(" " + currentStep.next + " ");
+                    $("#jQueryNext").show()
+                }
+
+                //Show the contribution form we hid earlier
+                $(".crm-contribution-main-form-block").slideDown();
+
+            });
         }
 
-        if (currentStep.options && currentStep.options.title) {
-            $("#WorkflowTitle legend").text(currentStep.options.title);
+        if (currentStep.title && currentStep.title.length) {
+            $("#WorkflowTitle legend").text(currentStep.title);
             $("#WorkflowTitle").show();
         } else {
             $("#WorkflowTitle").hide();

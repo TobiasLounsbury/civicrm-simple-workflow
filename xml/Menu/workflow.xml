@@ -15,7 +15,7 @@
   <item>
     <path>civicrm/workflows</path>
     <page_callback>CRM_Workflow_Page_Workflow_List</page_callback>
-    <title>Workflow_List</title>
+    <title>Workflows</title>
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
@@ -34,6 +34,6 @@
     <path>civicrm/workflow</path>
     <page_callback>CRM_Workflow_Page_Execute</page_callback>
     <title>Execute</title>
-    <access_arguments>access CiviCRM</access_arguments>
+    <access_arguments>make online contributions</access_arguments>
   </item>
 </menu>

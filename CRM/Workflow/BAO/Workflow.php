@@ -1,7 +1,5 @@
 <?php
 
-//TODO: Change tablename to civicrm_workflow
-
 require_once 'CRM/Workflow/DAO/Workflow.php';
 
 class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
@@ -78,13 +76,21 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
         if (!$wid) {
             return null;
         }
-        $dsql = "SELECT * FROM civicrm_workflow WHERE id = {$wid} LIMIT 1";
-        $dao =& CRM_Core_DAO::executeQuery($dsql);
+        $wsql = "SELECT * FROM civicrm_workflow WHERE id = {$wid} LIMIT 1";
+        $dao =& CRM_Core_DAO::executeQuery($wsql);
 
         $result = null;
         if ($dao->fetch()) {
             $result = (array) $dao;
         }
+        $dsql = "SELECT COUNT(*) as `contains_page` FROM civicrm_workflow_detail WHERE workflow_id = {$wid} AND `entity_table` = 'Page'";
+        $dao =& CRM_Core_DAO::executeQuery($dsql);
+        if ($dao->fetch()) {
+            $result['contains_page'] = $dao->contains_page;
+        } else {
+            $result['contains_page'] = 0;
+        }
+
         return $result;
     }
 
@@ -95,7 +101,8 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
         $steps = array();
         while ($dao->fetch()) {
             $steps[$dao->order] = (array) $dao;
-            $steps[$dao->order]['options'] = json_decode($dao->options);
+            parse_str($dao->options, $options);
+            $steps[$dao->order]['options'] = $options;
         }
         return $steps;
     }
@@ -115,17 +122,8 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     }
 
     static function getWorkflows() {
-        $discounts = array();
 
-        $sql = "
-SELECT  id,
-    name,
-    description,
-    login_form_id,
-    require_login,
-    is_active
-FROM    civicrm_workflow
-";
+        $sql = "SELECT * FROM civicrm_workflow";
         $dao =& CRM_Core_DAO::executeQuery($sql, array());
         $allLinks = CRM_Workflow_Page_Workflow_List::actionLinks();
         while ($dao->fetch()) {

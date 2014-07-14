@@ -3,7 +3,6 @@
 //TODO: Allow custom injection jquery selector For where to place Breadcrumbs
 //TODO: Allow custom injection jquery selector For where to place ActionWindow
 //TODO: Allow custom injection jquery selector For where to move intro text
-//TODO: Fix Breadcrumbs
 
 require_once 'CRM/Core/Form.php';
 require_once 'CRM/Workflow/BAO/Workflow.php';
@@ -33,6 +32,9 @@ class CRM_Workflow_Form_Workflow extends CRM_Core_Form {
      * @access public
      */
     public function preProcess() {
+
+        //CRM_Workflow_hook::testHook();
+
         // current set id
         $this->_wid      = CRM_Utils_Request::retrieve('wid', 'Positive', $this, false, 0);
 
@@ -49,11 +51,6 @@ class CRM_Workflow_Form_Workflow extends CRM_Core_Form {
         }
         CRM_Utils_System::setTitle($title);
 
-        $url = CRM_Utils_System::url('civicrm/workflows', 'reset=1');
-        $breadCrumb = array(array('title' => ts('Workflows'),
-            'url' => $url,
-        ));
-        // CRM_Utils_System::appendBreadCrumb($breadCrumb);
 
         $this->set('BAOName', 'CRM_Workflow_BAO_Workflow');
         parent::preProcess();
@@ -87,13 +84,23 @@ class CRM_Workflow_Form_Workflow extends CRM_Core_Form {
             ts('Description'),
             array("rows" => 3, "cols" => 80)
         );
+
+        $entities = array();
+        $entities[] = array('entity_name' => 'contact_1', 'entity_type' => 'IndividualModel');
+        $allowCoreTypes = array_merge(array('Contact', 'Individual'), CRM_Contact_BAO_ContactType::subTypes('Individual'));
+        $allowSubTypes = array();
+
+        $this->addProfileSelector('login_form_id', ts('Login Profile'), $allowCoreTypes, $allowSubTypes, $entities);
+
+        /*
         $this->add(
-            'text', // field type
-            'login_form_id', // field name
-            ts('Login Profile ID'), // field label
-            array("maxlength" => 4, "size" => 4),
-            false // is required
+            'select',
+            'login_form_id',
+            ts('Login Profile'),
+            array('' => ts('- select profile -')) + $profiles,
+            false
         );
+        */
         $this->add(
             'checkbox',
             'require_login',
@@ -136,9 +143,6 @@ class CRM_Workflow_Form_Workflow extends CRM_Core_Form {
         }
         $defaults['is_active'] = $origID ? CRM_Utils_Array::value('is_active', $defaults) : 1;
         $defaults['require_login'] = $origID ? CRM_Utils_Array::value('require_login', $defaults) : 1;
-
-        // assign the defaults to smarty so delete can use it
-        //$this->assign('discountValue', $defaults);
 
         return $defaults;
     }

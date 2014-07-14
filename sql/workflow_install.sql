@@ -27,16 +27,12 @@ CREATE TABLE `civicrm_workflow` (
 -- *
 -- *******************************************************/
 CREATE TABLE `civicrm_workflow_detail` (
-     `id` int unsigned NOT NULL AUTO_INCREMENT  COMMENT 'Detail line ID',
      `breadcrumb` varchar(255) NOT NULL   COMMENT 'Link text to use for the workflow progress bar',
      `workflow_id` int unsigned COMMENT 'FK to Workflow ID of the Workflow Entity',
      `entity_table` varchar(64) NOT NULL   COMMENT 'Name of table where item being referenced is stored',
      `entity_id` text NOT NULL   COMMENT 'Foreign key to the referenced item',
-     `next` varchar(255) NOT NULL   COMMENT 'Name of table where item being referenced is stored',
-     `options` text NOT NULL   COMMENT 'Foreign key to the referenced item',
-     `order` int unsigned NOT NULL   COMMENT 'Order for profiles/price sets to be displayed in',
-
-     PRIMARY KEY ( `id` )
-
-
+     `next` varchar(255) NOT NULL   COMMENT 'Text for the Next button for this step',
+     `title` varchar(255) NULL   COMMENT 'Title for this workflow step',
+     `options` text NULL   COMMENT 'Generic field for misc options',
+     `order` int unsigned NOT NULL   COMMENT 'Order for profiles/price sets to be displayed in'
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci  ;

@@ -1,7 +1,5 @@
 <?php
 
-//TODO: Change tablename to civicrm_workflow
-
 require_once 'CRM/Core/DAO.php';
 require_once 'CRM/Utils/Type.php';
 class CRM_Workflow_DAO_Workflow extends CRM_Core_DAO {

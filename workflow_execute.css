@@ -7,6 +7,7 @@
 }
 ol.WorkflowSteps {
     margin: 0px auto;
+    margin-top: 5px;
     padding: 0;
     list-style-type: none;
     text-align: center;
@@ -14,10 +15,23 @@ ol.WorkflowSteps {
 ol.WorkflowSteps li {
     display: inline-block;
     text-align: center;
-    line-height: 3em;
-    color: silver;
-    border-bottom: 4px solid silver;
+    line-height: 30px;
+    color: white;
+    text-shadow: 0 -1px 1px #444;
     margin: 0px;
+
+    box-shadow: 0 1px 2px #fff, 0 -1px 1px #888, inset 0 -1px 1px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.8);
+
+    background-image: url(progress.png);
+    background-color: #777;
+}
+ol.WorkflowSteps li:first-of-type {
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+ol.WorkflowSteps li:last-of-type {
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
 }
 ol.WorkflowSteps li.stepDone span {
     cursor: pointer;
@@ -26,46 +40,12 @@ ol.WorkflowSteps li.stepAvailable span {
     cursor: pointer;
 }
 ol.WorkflowSteps li.stepDone {
-    color: black;
-    border-bottom: 4px solid yellowgreen;
+    background-color: #4a4;
+    text-shadow: 0 -1px 0px #072;
 }
 ol.WorkflowSteps li.stepActive {
-    border-bottom: 4px solid dodgerblue;
-}
-ol.WorkflowSteps li:after {
-    content: "\00a0\00a0";
-}
-ol.WorkflowSteps li:before {
-    position: relative;
-    bottom: -2.5em;
-    float: left;
-    left: 50%;
-    line-height: 1em;
-}
-ol.WorkflowSteps li.stepDone:before {
-    content: "\2713";
-    color: white;
-    background-color: yellowgreen;
-    height: 1.2em;
-    width: 1.2em;
-    line-height: 1.2em;
-    border: none;
-    border-radius: 1.2em;
-}
-ol.WorkflowSteps li.stepTodo:before {
-    content: "\039F";
-    color: silver;
-    background-color: white;
-    font-size: 1.5em;
-    bottom: -1.6em;
-}
-ol.WorkflowSteps li.stepActive:before {
-    content: "\2295";
-    color: dodgerblue;
-    background-color: white;
-    font-size: 1.5em;
-    bottom: -1.6em;
-    border: none;
+    background-color: #3e90ff;
+    text-shadow: -1px -1px 1px #27a;
 }
 div.breadcrumb {
     display: none;
@@ -73,4 +53,7 @@ div.breadcrumb {
 #WorkflowTitle {
     margin: auto;
     margin-top: 20px;
+}
+.crm-contribution-main-form-block {
+    display: none;
 }

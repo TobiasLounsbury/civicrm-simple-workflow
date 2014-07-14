@@ -36,5 +36,6 @@
     {* FOOTER *}
     <div class="crm-submit-buttons">
     {include file="CRM/common/formButtons.tpl" location="bottom"}
+    <a class="button" href="{crmURL p='civicrm/workflows' q='reset=1'}"><span>Cancel</span></a>
     </div>
 </div>

@@ -14,49 +14,44 @@ class CRM_Workflow_Page_Execute extends CRM_Core_Page {
         $steps = array();
 
         if ($wid) {
-            $wsql = "SELECT * FROM civicrm_workflow WHERE id = {$wid} LIMIT 1";
-            $dao =& CRM_Core_DAO::executeQuery($wsql);
-            if ($dao->fetch()) {
-                $workflow = (array) $dao;
-            }
 
-            $dsql = "SELECT * FROM civicrm_workflow_detail WHERE workflow_id = {$wid} ORDER BY `order`";
-            $dao =& CRM_Core_DAO::executeQuery($dsql);
+            $workflow = CRM_Workflow_BAO_Workflow::getWorkflow($wid);
+            $steps = CRM_Workflow_BAO_Workflow::getWorkflowDetails($wid, false);
 
+            $session = CRM_Core_Session::singleton();
+            $userID = $session->get('userID');
 
-            while ($dao->fetch()) {
-                $steps[$dao->order] = (array) $dao;
+            if ($workflow['is_active']) {
+
                 //If this workflow contains a contribution page forward to it
                 //And the page injector will take over
-                if ($dao->entity_table == "Page") {
-                    return CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/contribute/transact', 'reset=1&id=' . $dao->entity_id));
+                if ($workflow['contains_page'] &&
+                    (($workflow['require_login'] && $userID) || !$workflow['require_login']) &&
+                    (!($steps[1]['entity_table'] == "Profile" && $steps[1]['entity_id'] == $workflow['login_form_id']))) {
+                    return CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/contribute/transact', 'reset=1&id=' . $step['entity_id']));
                 }
+
+                //Let the page know the method we are using
+                CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('method' => "template")));
+
+                //Add Stylesheet
+                CRM_Core_Resources::singleton()->addStyleFile('org.botany.workflow', 'workflow_execute.css');
+
+                //Add Javascript files and settings
+                CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'workflow_execute.js');
+                CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('steps' => $steps)));
+
+                //Set the width for the step lis
+                $stepWidth = (empty($steps)) ? 98 : round(98 / sizeof($steps), 0, PHP_ROUND_HALF_DOWN);
+                CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('breadcrumWidth' => $stepWidth)));
+
+                //Assign the data so smarty can use it
+                $this->assign('workflow', $workflow);
+                $this->assign('steps', $steps);
+            } else {
+                $this->assign('error', "I'm sorry, this workflow has been disabled");
             }
         }
-
-        if ($workflow['is_active']) {
-            //Let the page know the method we are using
-            CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('method' => "template")));
-
-            //Add Stylesheet
-            CRM_Core_Resources::singleton()->addStyleFile('org.botany.workflow', 'workflow_execute.css');
-
-            //Add Javascript files and settings
-            CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'workflow_execute.js');
-            CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('steps' => $steps)));
-
-            //Set the width for the step lis
-            $stepWidth = (empty($steps)) ? 98 : round(98 / sizeof($steps), 0, PHP_ROUND_HALF_DOWN);
-            CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('breadcrumWidth' => $stepWidth)));
-
-            //Assign the data so smarty can use it
-            $this->assign('workflow', $workflow);
-            $this->assign('steps', $steps);
-        } else {
-            //Do something to say you can't use a disabled workflow
-
-        }
-
         parent::run();
     }
 }

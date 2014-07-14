@@ -43,19 +43,19 @@
             {if $d.entity_table ne "Page"}
                 <span class='handle'>ↈ</span>
             {/if}
-            <input type="hidden" name="data[{$d.id}][order]" value="{$d.order}" class="order"/>
-            <input type="hidden" name="data[{$d.id}][entity_table]" value="{$d.entity_table}" />
+            <input type="hidden" name="data[{$d.order}][order]" value="{$d.order}" class="order"/>
+            <input type="hidden" name="data[{$d.order}][entity_table]" value="{$d.entity_table}" />
             {if $d.entity_table eq "jQuery"}
-                <label class="path">Elements:</label> <input class='jQuery-Selector' name="data[{$d.id}][entity_id]" value="{$d.entity_id}" />
+                <label class="path">Elements:</label> <input class='jQuery-Selector' name="data[{$d.order}][entity_id]" value="{$d.entity_id}" />
             {else}
-                <input type="hidden" name="data[{$d.id}][entity_id]" value="{$d.entity_id}" />
+                <input type="hidden" name="data[{$d.order}][entity_id]" value="{$d.entity_id}" />
                 <div class='entity_name'>{$d.name}</div>
             {/if}
             <span class='DeleteProfile' onclick='DeleteStep(this)'>delete</span>
             <br />
-            <label class="leftmost">Breadcrumb:</label> <input name="data[{$d.id}][breadcrumb]" value="{$d.breadcrumb}" />
-            <label>Button Text:</label> <input name="data[{$d.id}][next]" value="{$d.next}" />
-            <label>Options:</label> <input name="data[{$d.id}][options]" value="{$d.options}" size='40' />
+            <label class="leftmost">Breadcrumb:</label> <input name="data[{$d.order}][breadcrumb]" value="{$d.breadcrumb}" />
+            <label>Button Text:</label> <input name="data[{$d.order}][next]" value="{$d.next}" />
+            <label>Title:</label> <input name="data[{$d.order}][title]" value="{$d.title}" size='40' />
         </div>
 
     {/foreach}
@@ -99,7 +99,7 @@ cj(document).ready(function() {
                     "<br />" +
                     "<label class='leftmost'>Breadcrumb:</label> <input name='data[" + pid + "][breadcrumb]' value='"+pname+"' />" +
                     "<label>Button Text:</label> <input name='data[" + pid + "][next]' value='Next' />" +
-                    "<label>Options:</label> <input name='data[" + pid + "][options]' size='40' value=\"{'title': '" + pname + "'}\" />" +
+                    "<label>Title:</label> <input name='data[" + pid + "][title]' size='40' value='" + pname + "' />" +
                 "</div>");
             RefreshSortable();
             ReorderProfiles();
@@ -123,7 +123,7 @@ cj(document).ready(function() {
                     "<br />" +
                     "<label class='leftmost'>Breadcrumb:</label> <input name='data[" + pid + "][breadcrumb]' value='"+pname+"' />" +
                     "<label>Button Text:</label> <input name='data[" + pid + "][next]' value='Next' />" +
-                    "<label>Options:</label> <input name='data[" + pid + "][options]' size='40' value=\"{'title': '" + pname + "'}\" />" +
+                    "<label>Title:</label> <input name='data[" + pid + "][title]' size='40' value='" + pname + "' />" +
                     "</div>");
 
             RefreshSortable();
@@ -147,7 +147,7 @@ cj(document).ready(function() {
                 "<br />" +
                 "<label class='leftmost'>Breadcrumb:</label> <input name='data[" + pid + "][breadcrumb]' value='"+cj("#dom-breadcrumb").val().trim()+"' />" +
                 "<label>Button Text:</label> <input name='data[" + pid + "][next]' value='Next' />" +
-                "<label>Options:</label> <input name='data[" + pid + "][options]' size='40' value=\"{'title': '" + cj("#dom-breadcrumb").val().trim()+ "'}\"/>" +
+                "<label>Title:</label> <input name='data[" + pid + "][title]' size='40' value='" + cj("#dom-breadcrumb").val().trim()+ "' />" +
                 "</div>");
 
         cj("#dom-id").val("");

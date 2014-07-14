@@ -1,11 +1,8 @@
 <?php
 
 
-//TODO: Add fields to allow for setting the "next" button text per step
-//TODO: Forward to list after save
-//TODO: Allow custom javascript per step
+//TODO: Allow custom javascript per step not just the default include
 //TODO: cross browser check
-//TODO: Fix Breadcrumbs
 
 
 require_once 'CRM/Core/Page.php';
@@ -29,7 +26,7 @@ class CRM_Workflow_Page_Profiles extends CRM_Core_Page {
             $details = array();
 
             while ($dao->fetch()) {
-                $details[$dao->id] = (array) $dao;
+                $details[$dao->order] = (array) $dao;
 
                 if($dao->entity_table == "Profile") {
                     $result = civicrm_api3('UFGroup', 'get', array(
@@ -37,7 +34,7 @@ class CRM_Workflow_Page_Profiles extends CRM_Core_Page {
                         'return' => "title",
                         'id' => $dao->entity_id,
                     ));
-                    $details[$dao->id]['name'] = $result['values'][0]['title'];
+                    $details[$dao->order]['name'] = $result['values'][0]['title'];
                 }
                 if($dao->entity_table == "Page") {
                     $result = civicrm_api3('ContributionPage', 'get', array(
@@ -45,7 +42,7 @@ class CRM_Workflow_Page_Profiles extends CRM_Core_Page {
                         'return' => "title",
                         'id' => $dao->entity_id,
                     ));
-                    $details[$dao->id]['name'] = $result['values'][0]['title'];
+                    $details[$dao->order]['name'] = $result['values'][0]['title'];
                 }
 
             }
