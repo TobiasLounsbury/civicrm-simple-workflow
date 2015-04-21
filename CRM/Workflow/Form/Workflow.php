@@ -3,6 +3,10 @@
 //TODO: Allow custom injection jquery selector For where to place Breadcrumbs
 //TODO: Allow custom injection jquery selector For where to place ActionWindow
 //TODO: Allow custom injection jquery selector For where to move intro text
+//TODO: Add a checkbox to allow someone to move the "header profile" above the price set
+//TODO: change the hide all selector so that it includes all divs
+//TODO: create a custom box to add to the hide all selector for hiding entirely unwanted elements
+
 
 require_once 'CRM/Core/Form.php';
 require_once 'CRM/Workflow/BAO/Workflow.php';

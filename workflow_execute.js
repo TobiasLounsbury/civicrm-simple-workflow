@@ -8,6 +8,14 @@ CRM.$(function ($) {
 
     function load_step(order) {
 
+        $('ol.WorkflowSteps li[data-order='+currentStep.order+']').removeClass("stepActive");
+        if ($('ol.WorkflowSteps li[data-order='+currentStep.order+']').hasClass("completed")) {
+            $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("stepDone");
+        } else {
+            $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("stepTodo");
+            $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("stepAvailable");
+        }
+
         //Set the currentStep
         currentStep = CRM.Workflow.steps[order];
 
@@ -16,7 +24,8 @@ CRM.$(function ($) {
                 $(".crm-contribution-main-form-block").hide();
                 $("#ActionWindow").show();
             }
-            var aw = CRM.loadForm(CRM.url("civicrm/profile/edit", {gid: currentStep.entity_id, reset: 1}), {target:"#ActionWindow", dialog: false, autoClose:false});
+            var lsurl = CRM.url("civicrm/profile/edit", {gid: currentStep.entity_id, reset: 1});
+            var aw = CRM.loadForm(lsurl, {target:"#ActionWindow", dialog: false, autoClose:false});
         }
 
         if (currentStep.entity_table == "Page") {
@@ -52,6 +61,10 @@ CRM.$(function ($) {
                 //Show the contribution form we hid earlier
                 $(".crm-contribution-main-form-block").slideDown();
 
+                var stepfname = window['CRM_Workflow_' + currentStep.breadcrumb.replace(/ /g, "_")];
+                if (typeof stepfname == 'function') {
+                    stepfname();
+                }
             });
         }
 
@@ -67,6 +80,9 @@ CRM.$(function ($) {
         $('ol.WorkflowSteps li[data-order='+order+']').removeClass("stepTodo");
         $('ol.WorkflowSteps li[data-order='+order+']').removeClass("stepAvailable");
         $('ol.WorkflowSteps li[data-order='+order+']').addClass("stepActive");
+
+        //Set the window Hash so it can be recalled on backbutton press
+        location.hash = order;
 
     }
 
@@ -93,7 +109,7 @@ CRM.$(function ($) {
         $("#WorkflowTitle").hide();
 
         //add a jquery next button if we are on a contirubtion page
-        $(".crm-contribution-main-form-block").append("<a href='#' id='jQueryNext' class='button'><span> Next </span></a>");
+        $(".crm-contribution-main-form-block").append("<a href='#' id='jQueryNext' class='button'><span> Next </span></a><div class='clear'></div>");
         $("#jQueryNext").hide();
 
     }
@@ -114,14 +130,6 @@ CRM.$(function ($) {
         var obj = $(e.target).parent();
 
         if(obj.hasClass("stepDone") || obj.hasClass("stepAvailable")) {
-
-            $('ol.WorkflowSteps li[data-order='+currentStep.order+']').removeClass("stepActive");
-            if ($('ol.WorkflowSteps li[data-order='+currentStep.order+']').hasClass("completed")) {
-                $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("stepDone");
-            } else {
-                $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("stepTodo");
-                $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("stepAvailable");
-            }
 
             //If we are injecting into a page, but moving to the page content
             if (obj.hasClass("Page") && CRM.Workflow.method == "inject") {
@@ -153,8 +161,13 @@ CRM.$(function ($) {
 
     //Bind to the load event to make small changes to the various Forms
     swin.on("crmLoad", function(data) {
-        console.log($("#ActionWindow .form-submit").val(" " + currentStep.next + " "));
+        $("#ActionWindow .crm-form-submit").val(" " + currentStep.next + " ");
+        $("#ActionWindow a.cancel").hide();
         $.getScript(CRM.config.resourceBase + "workflow/workflow_" + currentStep.entity_table.toLowerCase() + "_" + currentStep.entity_id + ".js");
+        var stepfname = window['CRM_Workflow_' + currentStep.breadcrumb.replace(/ /g, "_")];
+        if (typeof stepfname == 'function') {
+            stepfname();
+        }
     });
 
     swin.on("crmBeforeLoad", function(e, data) {
@@ -174,12 +187,41 @@ CRM.$(function ($) {
         load_step(get_next_step());
     });
 
+    //todo: Setup history functions So clicking back, takes you to previous tab
+    window.onhashchange = function() {
+        if (location.hash.length > 0) {
+            var hashOrder = parseInt(location.hash.replace('#',''),10);
+
+            //} else { order = 0; }
+            load_step(hashOrder);
+        }
+    }
+
     //Load the first step when the page loads
     //Or the last step if we are returning.
     if (CRM.Workflow.returning) {
+
+        //Mark all the steps as visited so it doesn't look like we are on the last step
+        //with an incomplete workflow
+        $('ol.WorkflowSteps li').addClass("completed");
+        $('ol.WorkflowSteps li:last').removeClass("completed");
+
+
+        //todo: Loop through all error classed fields and mark their tabs Red
+        //Loop through the tabs, and check to see if there are errors, and if so
+        //add an error class to them.
+        $.each(CRM.Workflow.steps, function(tab, data) {
+            if ($(data.entity_id).find(".error").length) {
+                $('ol.WorkflowSteps li[data-order='+tab+']').addClass("stepHasErrors");
+            }
+        });
+
+
+
         load_step(CRM.Workflow.lastStep);
     }  else {
         load_step(currentStep.order);
     }
 
 });
+

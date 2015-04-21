@@ -1,7 +1,9 @@
 <?php
 
 
-//TODO: Allow custom javascript per step not just the default include
+//TODO: Allow custom javascript function per step
+//TODO: Create some logic in the interface to allow selection of elements based on price-sets and profiles
+//TODO: With new interface, continue to allow custom selectors
 //TODO: cross browser check
 
 

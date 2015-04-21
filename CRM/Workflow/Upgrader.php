@@ -41,13 +41,13 @@ class CRM_Workflow_Upgrader extends CRM_Workflow_Upgrader_Base {
    *
    * @return TRUE on success
    * @throws Exception
-   *
-  public function upgrade_4200() {
-    $this->ctx->log->info('Applying update 4200');
-    CRM_Core_DAO::executeQuery('UPDATE foo SET bar = "whiz"');
-    CRM_Core_DAO::executeQuery('DELETE FROM bang WHERE willy = wonka(2)');
+   */
+
+    public function upgrade_101() {
+    $this->ctx->log->info('Applying update 1.0.1');
+    CRM_Core_DAO::executeQuery('ALTER TABLE `civicrm_workflow_detail` ADD COLUMN `custom_js` VARCHAR(255) NULL  AFTER `order`');
     return TRUE;
-  } // */
+  }
 
 
   /**

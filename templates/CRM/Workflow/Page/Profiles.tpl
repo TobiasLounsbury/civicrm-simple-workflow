@@ -73,8 +73,6 @@ cj(document).ready(function() {
             "data": cj("#Data").serialize(),
             "wid": wid
         }).done(function(result) {
-
-            console.log(result);
             if (!result.is_error) {
                 CRM.alert("All changes have been saved", "Saved", "success");
                 window.location = CRM.url("civicrm/workflows");

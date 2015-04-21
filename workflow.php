@@ -29,7 +29,7 @@ function workflow_civicrm_alterContent(  &$content, $context, $tplName, &$object
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildForm
  */
-function workflow_civicrm_buildForm($formName, &$form) {;
+function workflow_civicrm_buildForm($formName, &$form) {
     if ($formName == "CRM_Contribute_Form_Contribution_Main") {
         if (array_key_exists("workflow", $_GET) && $_GET['workflow'] == 0) {
             return;
@@ -79,7 +79,7 @@ function workflow_civicrm_buildForm($formName, &$form) {;
                 }
 
                 //Add Javascript files and settings
-                CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'workflow_execute.js');
+                CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'workflow_execute.js', 20, 'page-footer');
                 CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('steps' => $steps)));
 
                 //Set the width for the step lis
@@ -236,10 +236,10 @@ function workflow_civicrm_navigationMenu( &$params ) {
             'attributes' => array (
                 'label'      => 'CiviWorkflows',
                 'name'       => 'CiviWorkflows',
-                'url'        => 'civicrm/workflows&reset=1',
+                'url'        => 'civicrm/workflows?reset=1',
                 'permission' => 'administer CiviCRM',
                 'operator'   => NULL,
-                'separator'  => TRUE,
+                'separator'  => false,
                 'parentID'   => $administerMenuId,
                 'navID'      => $maxKey+1,
                 'active'     => 1
