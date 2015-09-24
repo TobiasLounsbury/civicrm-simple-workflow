@@ -48,7 +48,7 @@ ol.WorkflowSteps li.stepHasErrors {
     text-shadow: -1px -1px 1px #600000;
 }
 ol.WorkflowSteps li.stepActive {
-    background-color: #3e90ff !important;
+    background-color: #3e90ff;
     text-shadow: -1px -1px 1px #27a;
 }
 div.breadcrumb {
