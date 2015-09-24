@@ -25,6 +25,8 @@ CRM.$(function ($) {
                 $("#ActionWindow").show();
             }
             var lsurl = CRM.url("civicrm/profile/edit", {gid: currentStep.entity_id, reset: 1});
+            //alert(lsurl);
+            //console && console.log && console.log(lsurl);
             var aw = CRM.loadForm(lsurl, {target:"#ActionWindow", dialog: false, autoClose:false});
         }
 
@@ -111,6 +113,12 @@ CRM.$(function ($) {
         //add a jquery next button if we are on a contirubtion page
         $(".crm-contribution-main-form-block").append("<a href='#' id='jQueryNext' class='button'><span> Next </span></a><div class='clear'></div>");
         $("#jQueryNext").hide();
+        
+        //add wrapper to billing payment block so that it can be controlled.
+        $("#billing-payment-block").wrap('<div class="WorkflowBillingBlock" id="WorkflowBillingBlock"></div>');
+        
+        //add wrapper to submit button so that it can be controlled.
+        $("#crm-submit-buttons").wrap('<div class="WorkflowSubmit" id="WorkflowSubmit"></div>');
 
     }
 

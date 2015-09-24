@@ -13,7 +13,7 @@ class CRM_Workflow_hook {
     /**
      * Generate a default CRUD URL for an entity
      *
-     * @param int $wid: The ID of the Workflow for which details are being saved
+     * @param int $wid: The ID of the Workflow for which detailsare being saved
      * @param array $data:
      * @return mixed
      */

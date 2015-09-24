@@ -239,7 +239,7 @@ function workflow_civicrm_navigationMenu( &$params ) {
                 'url'        => 'civicrm/workflows?reset=1',
                 'permission' => 'administer CiviCRM',
                 'operator'   => NULL,
-                'separator'  => false,
+                'separator'  => FALSE,
                 'parentID'   => $administerMenuId,
                 'navID'      => $maxKey+1,
                 'active'     => 1
