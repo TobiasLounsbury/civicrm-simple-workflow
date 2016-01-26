@@ -14,7 +14,7 @@ function _civicrm_api3_workflow_save_spec(&$spec) {
 }
 
 /**
- * PriceSet.FetchSection API
+ * Workflow.save API
  *
  * @param array $params
  * @return array API result descriptor
@@ -86,6 +86,6 @@ function civicrm_api3_workflow_save($params) {
 
     }
     $returnValues = array();
-    return civicrm_api3_create_success($returnValues, $params, 'PriceSet', 'FetchSection');
+    return civicrm_api3_create_success($returnValues, $params, 'Workflow', 'Save');
 }
 
