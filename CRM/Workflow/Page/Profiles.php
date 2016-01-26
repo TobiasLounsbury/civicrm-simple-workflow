@@ -14,7 +14,9 @@ class CRM_Workflow_Page_Profiles extends CRM_Core_Page {
     $wid = CRM_Utils_Request::retrieve('wid', 'Positive', $this, false, 0);
 
     if ($wid) {
-      $wsql = "SELECT * FROM civicrm_workflow WHERE id = {$wid} LIMIT 1";
+      $workflowTable = CRM_Workflow_DAO_Workflow::$_tableName;
+      $detailTable = CRM_Workflow_DAO_WorkflowDetail::$_tableName;
+      $wsql = "SELECT * FROM `".$workflowTable."` WHERE id = {$wid} LIMIT 1";
       $dao =& CRM_Core_DAO::executeQuery($wsql);
       if (!$dao->fetch()) {
         $workflow = null;
@@ -22,7 +24,7 @@ class CRM_Workflow_Page_Profiles extends CRM_Core_Page {
         $workflow = (array) $dao;
       }
 
-      $dsql = "SELECT * FROM civicrm_workflow_detail WHERE workflow_id = {$wid} ORDER BY `order`";
+      $dsql = "SELECT * FROM `".$detailTable."` WHERE workflow_id = {$wid} ORDER BY `order`";
       $dao =& CRM_Core_DAO::executeQuery($dsql);
 
       $details = array();

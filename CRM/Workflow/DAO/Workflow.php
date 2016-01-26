@@ -1,7 +1,5 @@
 <?php
 
-require_once 'CRM/Core/DAO.php';
-require_once 'CRM/Utils/Type.php';
 class CRM_Workflow_DAO_Workflow extends CRM_Core_DAO {
     /**
      * static instance to hold the table name
@@ -9,7 +7,7 @@ class CRM_Workflow_DAO_Workflow extends CRM_Core_DAO {
      * @var string
      * @static
      */
-    static $_tableName = 'civicrm_workflow';
+    static $_tableName = 'civicrm_simple_workflow';
     /**
      * static instance to hold the field values
      *

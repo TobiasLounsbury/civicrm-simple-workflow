@@ -36,9 +36,6 @@ class CRM_Workflow_Form_Workflow extends CRM_Core_Form {
    * @access public
    */
   public function preProcess() {
-
-    //CRM_Workflow_hook::testHook();
-
     // current set id
     $this->_wid      = CRM_Utils_Request::retrieve('wid', 'Positive', $this, false, 0);
 
@@ -54,7 +51,6 @@ class CRM_Workflow_Form_Workflow extends CRM_Core_Form {
       $title = ts('Preview %1', array(1 => $title));
     }
     CRM_Utils_System::setTitle($title);
-
 
     $this->set('BAOName', 'CRM_Workflow_BAO_Workflow');
     parent::preProcess();
