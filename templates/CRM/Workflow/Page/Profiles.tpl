@@ -1,6 +1,7 @@
 {if $workflow}
 
-<h3>Add a new Profile: </h3>{literal}<input class="crm-profile-selector crm-form-text" data-group-type="Contact,Individual,Student,Parent,Staff,Contribution,Membership;;MembershipType:1:2" data-entities='[{"entity_name":"contact_1","entity_type":"IndividualModel"},{"entity_name":"contribution_1","entity_type":"ContributionModel","entity_sub_type":"2"},{"entity_name":"membership_1","entity_type":"MembershipModel","entity_sub_type":"1"}]' name="ProfileSelector" type="text" id="ProfileSelector">{/literal}
+    <h3>Add a new Profile: </h3>
+    <input class="crm-profile-selector crm-form-text" data-group-type="{$profilesDataGroupType}" data-entities='{$profilesDataEntities}' name="ProfileSelector" type="text" id="ProfileSelector">
 
     <p><button id="AddProfile">Add Profile to Workflow</button></p>
 
