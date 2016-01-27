@@ -11,10 +11,10 @@ class CRM_Workflow_hook {
   static $_nullObject = NULL;
 
   /**
-   * Generate a default CRUD URL for an entity
+   * This hook is called before saving details for a workflow
    *
-   * @param int $wid: The ID of the Workflow for which details are being saved
-   * @param array $data:
+   * @param $wid
+   * @param $data
    * @return mixed
    */
   static function beforeSave($wid, &$data) {
@@ -24,6 +24,13 @@ class CRM_Workflow_hook {
     );
   }
 
+  /**
+   * This hook is called after save of a workflow
+   *
+   * @param $wid
+   * @param $data
+   * @return mixed
+   */
   static function afterSave($wid, &$data) {
     return CRM_Utils_Hook::singleton()->invoke(2, $wid, $data,
       self::$_nullObject, self::$_nullObject, self::$_nullObject, self::$_nullObject,
@@ -31,7 +38,15 @@ class CRM_Workflow_hook {
     );
   }
 
-
+  /**
+   * This function allows 3rd party extensions to modify the load params
+   * of an individual step before it is loaded.
+   *
+   * @param $step
+   * @param $urlParams
+   * @param $settings
+   * @return mixed
+   */
   static function getStepParams($step, &$urlParams, &$settings) {
     return CRM_Utils_Hook::singleton()->invoke(3, $step, $urlParams, $settings,
       self::$_nullObject, self::$_nullObject, self::$_nullObject,
