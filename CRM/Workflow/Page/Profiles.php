@@ -72,6 +72,12 @@ class CRM_Workflow_Page_Profiles extends CRM_Core_Page {
 
     //Add Stylesheet
     CRM_Core_Resources::singleton()->addStyleFile('org.botany.workflow', 'workflow_profiles.css');
+    //Add JavaScript
+    CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'workflow_ui.js');
+    //Add Settings
+    CRM_Core_Resources::singleton()->addVars('SimpleWorkflow', array(
+      "wid" => $wid
+    ));
 
 
     $entities = array();
