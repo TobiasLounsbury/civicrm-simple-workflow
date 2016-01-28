@@ -18,11 +18,11 @@
     background: -moz-linear-gradient(#eeeeee, #bbbbbb); /* For Firefox 3.6 to 15 */
     background: linear-gradient(#eeeeee, #bbbbbb); /* Standard syntax */
 }
-.DeleteProfile {
+.DeleteStep {
     float: right;
     cursor: pointer;
 }
-.DeleteProfile:hover {
+.DeleteStep:hover {
     font-weight: bold;
 }
 .PlaceHolder {

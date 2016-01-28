@@ -28,7 +28,7 @@
                 <input type="hidden" name="data[{$d.order}][entity_id]" value="{$d.entity_id}" />
                 <div class='entity_name'>{$d.name}</div>
             {/if}
-            <span class='DeleteProfile' onclick='SWDeleteStep(this)'>delete</span>
+            <span class='DeleteStep'>delete</span>
             <br />
             <label class="leftmost">Breadcrumb:</label> <input name="data[{$d.order}][breadcrumb]" value="{$d.breadcrumb}" />
             <label>Button Text:</label> <input name="data[{$d.order}][next]" value="{$d.next}" />

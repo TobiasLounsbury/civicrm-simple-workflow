@@ -1,6 +1,6 @@
-<div id="SimpleWorkflowProfileTypeTemplate" class="profile Detail">
+<div id="SimpleWorkflowTypeTemplateProfile" class="profile Detail">
     <span class='handle'>ↈ</span>
-    <span class='DeleteProfile' onclick='DeleteStep(this)'>delete</span>
+    <span class='DeleteStep'>delete</span>
     <input type="hidden" name="data[#ORDER#][order]" class="order"/>
     <input type="hidden" name="data[#ORDER#][entity_table]" />
     <div class="crm-simple-workflow-step-details">

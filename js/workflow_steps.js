@@ -4,7 +4,7 @@ function SWRefreshSortable() {
     forcePlaceholderSize: true,
     handle: ".handle",
     update: function( event, ui ) {
-      ReorderProfiles();
+      SWReorderProfiles();
     }
   });
   CRM.$(".handle").disableSelection();
@@ -22,6 +22,13 @@ function SWDeleteStep(obj) {
 }
 
 CRM.$(function ($) {
+
+  $("#SortableDetails").click(function(event) {
+    if($(event.target).hasClass("DeleteStep")) {
+      SWDeleteStep(event.target);
+    }
+  });
+
   $("#SaveDetails").click(function(e) {
     CRM.api3('Workflow', 'save', {
       "data": $("#Data").serialize(),

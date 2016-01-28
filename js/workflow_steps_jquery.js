@@ -12,7 +12,7 @@ CRM.$(function ($) {
     "<label class='path'>Elements:</label> <input class='jQuery-Selector' name='data[" + pid + "][entity_id]' value='" + newpath + "' />" +
 
 
-    "<span class='DeleteProfile' onclick='SWDeleteStep(this)'>delete</span>" +
+    "<span class='DeleteStep'>delete</span>" +
     "<br />" +
     "<label class='leftmost'>Breadcrumb:</label> <input name='data[" + pid + "][breadcrumb]' value='"+$("#dom-breadcrumb").val().trim()+"' />" +
     "<label>Button Text:</label> <input name='data[" + pid + "][next]' value='Next' />" +

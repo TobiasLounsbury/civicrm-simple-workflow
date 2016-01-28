@@ -11,7 +11,7 @@ CRM.$(function ($) {
       "<input type='hidden' name='data[" + pid + "][entity_table]' value='Profile' />" +
       "<input type='hidden' name='data[" + pid + "][entity_id]' value='" + $("#ProfileSelector").val() + "' />" +
       "<label class='entity_name'>" + pname + "</label>" +
-      "<span class='DeleteProfile' onclick='SWDeleteStep(this)'>delete</span>" +
+      "<span class='DeleteStep'>delete</span>" +
       "<br />" +
       "<label class='leftmost'>Breadcrumb:</label> <input name='data[" + pid + "][breadcrumb]' value='"+pname+"' />" +
       "<label>Button Text:</label> <input name='data[" + pid + "][next]' value='Next' />" +
