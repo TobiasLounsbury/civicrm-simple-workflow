@@ -21,7 +21,7 @@ CRM.$(function ($) {
       "</div>");
 
       SWRefreshSortable();
-      SWReorderProfiles();
+      SWReorderSteps();
     }
   });
 

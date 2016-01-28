@@ -7,7 +7,7 @@
     {/foreach}
 
     <h3>Sort Pages</h3>
-    <form id="Data">
+    <form id="Data" class="crm-simple-workflow-steps-form">
 
     <div id="SortableDetails">
     {foreach from=$details item=d}

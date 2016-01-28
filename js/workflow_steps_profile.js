@@ -18,7 +18,7 @@ CRM.$(function ($) {
       "<label>Title:</label> <input name='data[" + pid + "][title]' size='40' value='" + pname + "' />" +
       "</div>");
       SWRefreshSortable();
-      SWReorderProfiles();
+      SWReorderSteps();
     }
   });
 

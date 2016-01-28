@@ -22,7 +22,7 @@ CRM.$(function ($) {
     $("#dom-id").val("");
     $("#dom-breadcrumb").val("");
     SWRefreshSortable();
-    SWReorderProfiles();
+    SWReorderSteps();
 
   });
 });

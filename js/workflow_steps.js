@@ -4,30 +4,26 @@ function SWRefreshSortable() {
     forcePlaceholderSize: true,
     handle: ".handle",
     update: function( event, ui ) {
-      SWReorderProfiles();
+      SWReorderSteps();
     }
   });
   CRM.$(".handle").disableSelection();
 }
 
-function SWReorderProfiles() {
+function SWReorderSteps() {
   CRM.$("#Data .Detail").each(function (i) {
     CRM.$(this).find(".order").val(i + 1);
   });
 }
 
-function SWDeleteStep(obj) {
-  CRM.$(obj).parent().remove();
-  SWReorderProfiles();
+function SWDeleteStep(event) {
+  CRM.$(event.target).parent().remove();
+  SWReorderSteps();
 }
 
 CRM.$(function ($) {
 
-  $("#SortableDetails").click(function(event) {
-    if($(event.target).hasClass("DeleteStep")) {
-      SWDeleteStep(event.target);
-    }
-  });
+  $(".crm-simple-workflow-steps-form").on("click", ".DeleteStep", SWDeleteStep);
 
   $("#SaveDetails").click(function(e) {
     CRM.api3('Workflow', 'save', {
