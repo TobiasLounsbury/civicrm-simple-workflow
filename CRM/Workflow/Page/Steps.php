@@ -88,16 +88,21 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       "CRM/Workflow/Page/Steps/AddStep_profile.tpl",
       "CRM/Workflow/Page/Steps/AddStep_page.tpl",
       "CRM/Workflow/Page/Steps/AddStep_jquery.tpl",
-      //"CRM/Workflow/Page/Steps/AddStep_url.tpl",
+      "CRM/Workflow/Page/Steps/AddStep_url.tpl",
     );
     $typeTemplates = array(
       "CRM/Workflow/Page/Steps/StepTypes_profile.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_page.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_jquery.tpl",
-      //"CRM/Workflow/Page/Steps/StepTypes_url.tpl"
+      "CRM/Workflow/Page/Steps/StepTypes_url.tpl"
     );
     
-    $javaScript = array();
+    $javaScript = array(
+      $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_url.js'),
+      $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_profile.js'),
+      $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_page.js'),
+      $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_jquery.js')
+    );
     $css = array();
 
     CRM_Workflow_hook::getStepTypes($uiTemplates, $typeTemplates, $javaScript, $css);
