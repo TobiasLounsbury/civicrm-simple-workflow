@@ -1,34 +1,10 @@
 {if $workflow}
 
-    <h3>Add a new Profile: </h3>
-    <input class="crm-profile-selector crm-form-text" data-group-type="{$profilesDataGroupType}" data-entities='{$profilesDataEntities}' name="ProfileSelector" type="text" id="ProfileSelector">
-
-    <p><button id="AddProfile">Add Profile to Workflow</button></p>
-
-    <h3>Contribution Pages</h3>
-    <select id="PageSelector">
-        {foreach from=$pages item=p}
-            <option value="{$p.id}">{$p.title}</option>
-        {/foreach}
-    </select>
-    <p>If you leave the breadcrumb for a page blank it will not be shown in the list (Use with jQuery Selectors to show billing block as final step).</p>
-    <button id="AddPage">Add Page to Workflow</button>
-    <p></p>
-
-    <h3>Page Subsections</h3>
-    <p>
-        This step type allows you to cut a page into subsections using a list of jquery selectors. It will only hide the elements in a jQuery subsection<br />
-        ex: #billing-payment-block,.custom_post_profile-group,#crm-submit-buttons
-    </p>
-    <label style="width: 125px;display:inline-block;font-weight: bold;">jQuery Selector:</label>
-
-    <input id="dom-id" size="75" /><br/>
-
-    <label style="width: 125px;display:inline-block;font-weight: bold;">Breadcrumb:</label>
-    <input id="dom-breadcrumb" /><br />
-
-    <button id="AddJQuery">Add Subsection to Workflow</button>
-    <p></p>
+    {foreach from=$uiTemplates item=templatePath}
+        <div class="crm-simple-workflow-ui-template">
+            {include file=$templatePath location="bottom"}
+        </div>
+    {/foreach}
 
     <h3>Sort Pages</h3>
     <form id="Data">
@@ -62,6 +38,13 @@
     {/foreach}
     </div>
     </form>
+
+    <div id="WorkflowStepTemplates">
+        {foreach from=$typeTemplates item=templatePath}
+            {include file=$templatePath location="bottom"}
+        {/foreach}
+    </div>
+
     <p><a class="button" href="#" id="SaveDetails"><span>Save</span></a> <a class="button" href="{crmURL p='civicrm/workflows' q='reset=1'}"><span>Cancel</span></a></p><br />
 {else}
     <h3>An error has occurred. Workflow not found.</h3>

@@ -19,14 +19,8 @@
     <access_arguments>administer CiviCRM</access_arguments>
   </item>
   <item>
-    <path>civicrm/workflows/profile</path>
-    <page_callback>CRM_Workflow_Form_Profile</page_callback>
-    <title>Profile</title>
-    <access_arguments>access CiviCRM</access_arguments>
-  </item>
-  <item>
-    <path>civicrm/workflows/profiles</path>
-    <page_callback>CRM_Workflow_Page_Profiles</page_callback>
+    <path>civicrm/workflows/steps</path>
+    <page_callback>CRM_Workflow_Page_Steps</page_callback>
     <title>Profiles</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>

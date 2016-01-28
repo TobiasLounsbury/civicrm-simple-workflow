@@ -28,7 +28,7 @@ class CRM_Workflow_Page_Workflow_List extends CRM_Core_Page {
         self::$_actionLinks = array(
             CRM_Core_Action::BROWSE => array(
                 'name' => ts('View and Edit Steps'),
-                'url' => 'civicrm/workflows/profiles',
+                'url' => 'civicrm/workflows/steps',
                 'qs' => 'reset=1&action=browse&wid=%%wid%%',
                 'title' => ts('View and Edit Steps'),
             ),

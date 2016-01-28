@@ -56,3 +56,10 @@
 #Data label.path {
     margin-left: 1px;
 }
+
+#WorkflowStepTemplates {
+  display: none;
+}
+.crm-simple-workflow-ui-template {
+  padding-bottom: 10px;
+}

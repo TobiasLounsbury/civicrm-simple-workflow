@@ -54,5 +54,11 @@ class CRM_Workflow_hook {
     );
   }
 
+  static function getStepTypes(&$uiTemplates, &$typeTemplates, &$javaScript, &$css) {
+    return CRM_Utils_Hook::singleton()->invoke(4, $uiTemplates, $typeTemplates, $javaScript, $css,
+      self::$_nullObject, self::$_nullObject,
+      'workflow_getStepTypes'
+    );
+  }
 
 }

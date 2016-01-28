@@ -3,6 +3,7 @@
 require_once 'workflow.civix.php';
 require_once 'workflow.hook.php';
 
+//$userID = CRM_Core_Session::getLoggedInContactID();
 
 //Hijack the page content so we can add the notifcation container
 function workflow_civicrm_alterContent(  &$content, $context, $tplName, &$object ) {

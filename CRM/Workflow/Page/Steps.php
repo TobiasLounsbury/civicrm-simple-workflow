@@ -9,7 +9,7 @@
 
 require_once 'CRM/Core/Page.php';
 
-class CRM_Workflow_Page_Profiles extends CRM_Core_Page {
+class CRM_Workflow_Page_Steps extends CRM_Core_Page {
   function run() {
     $wid = CRM_Utils_Request::retrieve('wid', 'Positive', $this, false, 0);
 
@@ -70,27 +70,56 @@ class CRM_Workflow_Page_Profiles extends CRM_Core_Page {
     $this->assign('workflow', $workflow);
     $this->assign('details', $details);
 
+    $ccr = CRM_Core_Resources::singleton();
     //Add Stylesheet
-    CRM_Core_Resources::singleton()->addStyleFile('org.botany.workflow', 'workflow_profiles.css');
+    $ccr->addStyleFile('org.botany.workflow', 'css/workflow_steps.css');
     //Add JavaScript
-    CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'workflow_ui.js');
+    $ccr->addScriptFile('org.botany.workflow', 'js/workflow_steps.js');
     //Add Settings
-    CRM_Core_Resources::singleton()->addVars('SimpleWorkflow', array(
-      "wid" => $wid
+    $ccr->addVars('SimpleWorkflow', array(
+      "wid" => $wid,
+      "workflow" => $workflow,
+      "details" => $details,
+      "pages" => $pages
     ));
 
 
-    $entities = array();
-    $entities[] = array('entity_name' => 'contact_1', 'entity_type' => 'IndividualModel');
-    $allowCoreTypes = array_merge(array('Contact', 'Individual', 'Case'), CRM_Contact_BAO_ContactType::subTypes('Individual'));
-    $allowSubTypes = array();
-    $default = FALSE;
-    $usedFor = NULL;
+    $uiTemplates = array(
+      "CRM/Workflow/Page/Steps/AddStep_profile.tpl",
+      "CRM/Workflow/Page/Steps/AddStep_page.tpl",
+      "CRM/Workflow/Page/Steps/AddStep_jquery.tpl",
+      //"CRM/Workflow/Page/Steps/AddStep_url.tpl",
+    );
+    $typeTemplates = array(
+      "CRM/Workflow/Page/Steps/StepTypes_profile.tpl",
+      "CRM/Workflow/Page/Steps/StepTypes_page.tpl",
+      "CRM/Workflow/Page/Steps/StepTypes_jquery.tpl",
+      //"CRM/Workflow/Page/Steps/StepTypes_url.tpl"
+    );
+    
+    $javaScript = array();
+    $css = array();
 
+    CRM_Workflow_hook::getStepTypes($uiTemplates, $typeTemplates, $javaScript, $css);
+
+    foreach($css as $file) {
+      $ccr->addStyleUrl($file);
+    }
+
+    foreach($javaScript as $file) {
+      $ccr->addScriptUrl($file);
+    }
+
+    $this->assign('uiTemplates', $uiTemplates);
+    $this->assign('typeTemplates', $typeTemplates);
+
+
+    $entities = array(array('entity_name' => 'contact_1', 'entity_type' => 'IndividualModel'));
+    $allowCoreTypes = array_merge(array('Contact', 'Individual', 'Case'), CRM_Contact_BAO_ContactType::subTypes('Individual'));
     CRM_UF_Page_ProfileEditor::registerProfileScripts();
     CRM_UF_Page_ProfileEditor::registerSchemas(CRM_Utils_Array::collect('entity_type', $entities));
 
-    $this->assign('profilesDataGroupType', CRM_Core_BAO_UFGroup::encodeGroupType($allowCoreTypes, $allowSubTypes, ';;'));
+    $this->assign('profilesDataGroupType', CRM_Core_BAO_UFGroup::encodeGroupType($allowCoreTypes, array(), ';;'));
     $this->assign('profilesDataEntities', json_encode($entities));
 
     parent::run();
