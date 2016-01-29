@@ -61,4 +61,11 @@ class CRM_Workflow_hook {
     );
   }
 
+
+  static function execute($context, &$form) {
+    return CRM_Utils_Hook::singleton()->invoke(2, $context, $form,
+      self::$_nullObject, self::$_nullObject, self::$_nullObject, self::$_nullObject,
+      'workflow_execute'
+    );
+  }
 }
