@@ -1,3 +1,18 @@
-CRM.$(function ($) {
+function SimpleWorkflowStepAddUrl(template, index, data) {
+  //Set defaults if we have no data.
+  if(CRM.$.isEmptyObject(data) ) {
+    data.entity_id = CRM.$("#SWURLUrl").val();
+    data.breadcrumb = CRM.$("#SWURLBreadcrumb").text().trim();
+    data.name = data.breadcrumb.toLowerCase();
+    data.title = data.breadcrumb;
+    data.next = "Next";
+  }
 
-});
+  template.find(".crm-simple-workflow-step-details").prepend(
+    CRM.$("#SimpleWorkflowTypeTemplateUrl").html()
+  );
+
+  template.find(".entity_table").val("url");
+  template.addClass("url");
+  return true;
+}
