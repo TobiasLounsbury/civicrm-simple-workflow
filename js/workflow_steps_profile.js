@@ -1,25 +1,19 @@
-CRM.$(function ($) {
+function SimpleWorkflowStepAddProfile(template, index, data) {
+  //Set defaults if we have no data.
+  if(CRM.$.isEmptyObject(data) ) {
+    data.entity_id = CRM.$("#ProfileSelector").val();
+    data.entity_name = CRM.$(".select2-chosen").text().trim();
+    data.breadcrumb = data.entity_name;
+    data.title = data.entity_name;
+    data.next = "Next";
+  }
 
-  $("#AddProfile").click(function(e) {
-    var porder = $("#SortableDetails .Detail").length + 1;
-    var pid = "0:Profile:" + porder;
-    var pname = $(".select2-chosen").text().trim();
-    if ($("#Profile_"+$("#ProfileSelector").val()).length == 0) {
-      $("#SortableDetails").append("<div id='Profile_" + $("#ProfileSelector").val() + "' class='Profile Detail'>"+
-      "<span class='handle'>ↈ</span>" +
-      "<input type='hidden' name='data[" + pid + "][order]' value='" + porder + "' class='order' />" +
-      "<input type='hidden' name='data[" + pid + "][entity_table]' value='Profile' />" +
-      "<input type='hidden' name='data[" + pid + "][entity_id]' value='" + $("#ProfileSelector").val() + "' />" +
-      "<label class='entity_name'>" + pname + "</label>" +
-      "<span class='DeleteStep'>delete</span>" +
-      "<br />" +
-      "<label class='leftmost'>Breadcrumb:</label> <input name='data[" + pid + "][breadcrumb]' value='"+pname+"' />" +
-      "<label>Button Text:</label> <input name='data[" + pid + "][next]' value='Next' />" +
-      "<label>Title:</label> <input name='data[" + pid + "][title]' size='40' value='" + pname + "' />" +
-      "</div>");
-      SWRefreshSortable();
-      SWReorderSteps();
-    }
-  });
+  template.find(".crm-simple-workflow-step-details").prepend(
+    CRM.$("#SimpleWorkflowTypeTemplateProfile").html()
+  );
 
-});
+  template.find(".entity_name").html(data.entity_name);
+  template.find(".entity_table").val("profile");
+  template.addClass("profile");
+  return true;
+}

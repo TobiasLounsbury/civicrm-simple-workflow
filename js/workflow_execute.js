@@ -201,7 +201,7 @@ CRM.$(function ($) {
       //} else { order = 0; }
       load_step(hashOrder);
     }
-  }
+  };
 
   //Load the first step when the page loads
   //Or the last step if we are returning.
