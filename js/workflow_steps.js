@@ -55,6 +55,19 @@ function SWGetStepFunction(prefix, type) {
   return false;
 }
 
+
+/**
+ * This function handles click events to toggle the visibility
+ * of the various Add Step Forms
+ */
+function SWToggleAddForm(event) {
+  var obj = CRM.$(event.target).next();
+  if(obj.hasClass("SWToggleForm")) {
+    obj.slideToggle();
+  }
+}
+
+
 /**
  * This function handles click events to toggle the visibility
  * of the step detail pane.
@@ -160,6 +173,10 @@ CRM.$(function ($) {
   $(".crm-simple-workflow-steps-form").on("click", ".DeleteStep", SWDeleteStep);
   //Wire up all the toggle detail buttons
   $(".crm-simple-workflow-steps-form").on("click", ".SWToggleDetails", SWToggleStepDetails);
+
+  //Wire up all the toggles for showing the ADD panes
+  $("#AddSteps").on("click", ".SWToggleFormTrigger", SWToggleAddForm);
+
   //Wire up all the AddStep buttons
   $("#AddSteps").on("click", ".AddStepButton", function(event) {
     var stepType = CRM.$(event.target).data("step-type");

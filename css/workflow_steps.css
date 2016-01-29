@@ -82,3 +82,11 @@
 .crm-simple-workflow-step-details textarea {
   width: 100%;
 }
+
+.SWToggleFormTrigger {
+  cursor: pointer;
+}
+
+.SWToggleForm {
+  display: none;
+}
