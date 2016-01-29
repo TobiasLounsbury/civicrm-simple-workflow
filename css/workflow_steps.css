@@ -18,12 +18,13 @@
     background: -moz-linear-gradient(#eeeeee, #bbbbbb); /* For Firefox 3.6 to 15 */
     background: linear-gradient(#eeeeee, #bbbbbb); /* Standard syntax */
 }
-.DeleteStep {
-    float: right;
-    cursor: pointer;
+#Data span.DeleteStep {
+  float: right;
+  cursor: pointer;
+  font-weight: bold;
 }
 .DeleteStep:hover {
-    font-weight: bold;
+  color: #b00;
 }
 .PlaceHolder {
     background-color: #cce85b;
@@ -79,6 +80,13 @@
   clear: both;
 }
 
+.crm-simple-workflow-step-details .SWStepField {
+  margin-top: 3px;
+}
+.crm-simple-workflow-step-details .SWStepField label {
+  display: inline-block;
+  min-width: 10%;
+}
 .crm-simple-workflow-step-details textarea {
   width: 100%;
 }
@@ -89,4 +97,13 @@
 
 .SWToggleForm {
   display: none;
+}
+.SWStepInlineField {
+  display: inline-block;
+  float: right;
+  padding: 0px 3px;
+}
+
+.SWStepInlineField label {
+  padding-right: 2px;
 }
