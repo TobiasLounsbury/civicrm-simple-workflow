@@ -33,12 +33,10 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
         $details[$dao->order] = (array) $dao;
 
         if($dao->entity_table == "Profile") {
-          $result = civicrm_api3('UFGroup', 'get', array(
-            'sequential' => 1,
+          $details[$dao->order]['entity_name'] = civicrm_api3('UFGroup', 'getvalue', array(
             'return' => "title",
             'id' => $dao->entity_id,
           ));
-          $details[$dao->order]['name'] = $result['values'][0]['title'];
         }
         if($dao->entity_table == "Page") {
           $result = civicrm_api3('ContributionPage', 'get', array(
@@ -94,7 +92,8 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       "CRM/Workflow/Page/Steps/StepTypes_profile.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_page.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_jquery.tpl",
-      "CRM/Workflow/Page/Steps/StepTypes_url.tpl"
+      "CRM/Workflow/Page/Steps/StepTypes_url.tpl",
+      "CRM/Workflow/Page/Steps/StepTypes_default.tpl"
     );
     
     $javaScript = array(
