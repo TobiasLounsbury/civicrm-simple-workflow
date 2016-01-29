@@ -1,4 +1,4 @@
-<h3>Add a new Profile: </h3>
+<h3>{ts}Add a new Profile{/ts}:</h3>
 <input class="crm-profile-selector crm-form-text" data-group-type="{$profilesDataGroupType}" data-entities='{$profilesDataEntities}' name="ProfileSelector" type="text" id="ProfileSelector">
 
-<p><button id="AddProfile">Add Profile to Workflow</button></p>
+<p><button id="AddProfile" class="AddStepButton" data-step-type="profile">{ts}Add Profile to Workflow{/ts}</button></p>

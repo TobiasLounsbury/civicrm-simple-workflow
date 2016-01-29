@@ -1,13 +1,13 @@
-<h3>Page Subsections</h3>
+<h3>{ts}Page Subsections{/ts}</h3>
 <p>
-    This step type allows you to cut a page into subsections using a list of jquery selectors. It will only hide the elements in a jQuery subsection<br />
-    ex: #billing-payment-block,.custom_post_profile-group,#crm-submit-buttons
+    {ts}This step type allows you to cut a page into subsections using a list of jquery selectors. It will only hide the elements in a jQuery subsection{/ts}<br />
+    {ts}ex: #billing-payment-block,.custom_post_profile-group,#crm-submit-buttons{/ts}
 </p>
-<label style="width: 125px;display:inline-block;font-weight: bold;">jQuery Selector:</label>
+<label style="width: 125px;display:inline-block;font-weight: bold;">{ts}jQuery Selector{/ts}:</label>
 
 <input id="dom-id" size="75" /><br/>
 
-<label style="width: 125px;display:inline-block;font-weight: bold;">Breadcrumb:</label>
+<label style="width: 125px;display:inline-block;font-weight: bold;">{ts}Breadcrumb{/ts}:</label>
 <input id="dom-breadcrumb" /><br />
 
-<button id="AddJQuery">Add Subsection to Workflow</button>
+<button id="AddJQuery" class="AddStepButton" data-step-type="jquery">{ts}Add Subsection to Workflow{/ts}</button>
