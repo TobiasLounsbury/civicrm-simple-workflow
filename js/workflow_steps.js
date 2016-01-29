@@ -203,6 +203,9 @@ CRM.$(function ($) {
     SWAddStep(CRM.vars.SimpleWorkflow.details[i].entity_table, CRM.vars.SimpleWorkflow.details[i]);
   }
 
+  //show the first form
+  $("#AddSteps .SWToggleForm:first").show();
+
   //Setup the sortable.
   SWRefreshSortable();
 });
