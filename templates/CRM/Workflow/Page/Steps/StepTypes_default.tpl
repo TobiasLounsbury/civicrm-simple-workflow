@@ -1,0 +1,23 @@
+<div id="SimpleWorkflowTypeTemplateDefault" class="Detail">
+    <span class='handle'>ↈ</span>
+    <span class='DeleteStep'>{ts}delete{/ts}</span>
+    <input type="hidden" name="data[#ORDER#][order]" class="order"/>
+    <input type="hidden" name="data[#ORDER#][entity_table]" class="entity_table" />
+    <div class='entity_name'></div>
+    <label>{ts}Breadcrumb{/ts}:</label>
+    <input name="data[#ORDER#][breadcrumb]" class="step_breadcrumb" />
+    <hr />
+    <span class="crm-button SWToggleDetails">{ts}Show Details{/ts}</span>
+    <br />
+    <div class="crm-simple-workflow-step-details">
+        <div class="SWStepField">
+            <label>{ts}Button Text{/ts}:</label>
+            <input name="data[#ORDER#][next]" class="step_next" />
+        </div>
+        <div class="SWStepField">
+            <label>{ts}Title{/ts}:</label>
+            <input name="data[#ORDER#][title]" size='40' class="step_title" />
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
