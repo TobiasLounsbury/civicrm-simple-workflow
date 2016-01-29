@@ -29,24 +29,23 @@
     background-color: #cce85b;
     border: 1px solid #555;
 }
-.entity_name {
-    display: inline-block !important;
-    width: 300px;
+#Data .entity_name {
+    display: inline-block;
     font-weight: bold;
     text-decoration: underline;
 }
 .handle {
     font-size: 16px;
     cursor: move;
-    margin-right: 10px;
+    float: left;
     margin-left: 10px;
+    margin-right: 10px;
 }
 .jQuery-Selector {
     width: 80%;
 
 }
 #Data label {
-    margin-left: 30px;
     margin-right: 10px;
     font-weight: bold;
 }
@@ -57,9 +56,29 @@
     margin-left: 1px;
 }
 
+.SWToggleDetails {
+  float: left;
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 #WorkflowStepTemplates {
   display: none;
 }
+
 .crm-simple-workflow-ui-template {
   padding-bottom: 10px;
+}
+
+.crm-simple-workflow-step-details {
+  margin-top: 10px;
+  border-top: 1px solid #aaa;
+  padding: 5px 10px;
+  display: none;
+  clear: both;
+}
+
+.crm-simple-workflow-step-details textarea {
+  width: 100%;
 }
