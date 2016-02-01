@@ -13,7 +13,7 @@ function SimpleWorkflowStepAddProfile(template, index, data) {
   );
 
   template.find(".entity_name").html(data.entity_name);
-  template.find(".entity_table").val("profile");
-  template.addClass("profile");
+  template.find(".entity_table").val("Profile");
+  template.addClass("Profile");
   return true;
 }

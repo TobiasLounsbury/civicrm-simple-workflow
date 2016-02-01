@@ -13,7 +13,7 @@ function SimpleWorkflowStepAddPage(template, index, data) {
   );
 
   template.find(".entity_name").html(data.entity_name);
-  template.find(".entity_table").val("page");
+  template.find(".entity_table").val("Page");
   template.find(".handle").hide();
   template.addClass("Page");
 

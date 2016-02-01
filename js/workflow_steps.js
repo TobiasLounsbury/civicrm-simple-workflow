@@ -117,6 +117,9 @@ function SWDeleteStep(event) {
 function SWSetIndexAndData(obj, index, data) {
   obj.find("input,textarea").each(function() {
     var inp = CRM.$(this);
+
+    inp.attr("name", inp.attr("name").replace("#ORDER#", index));
+
     var data_name = inp.attr("name").replace(/.*\[([^\[]*)\]$/g, "$1");
 
     if (data.hasOwnProperty(data_name)) {

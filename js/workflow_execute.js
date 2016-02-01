@@ -122,13 +122,14 @@ CRM.$(function ($) {
   var swin = $("#ActionWindow").crmSnippet();
 
   //Bind to the load event to make small changes to the various Forms
-  swin.on("crmLoad", function(data) {
-    $("#ActionWindow .crm-form-submit").val(" " + currentStep.next + " ");
-    $("#ActionWindow a.cancel").hide();
-    $.getScript(CRM.config.resourceBase + "workflow/workflow_" + currentStep.entity_table.toLowerCase() + "_" + currentStep.entity_id + ".js");
-    var stepfname = window['CRM_Workflow_' + currentStep.breadcrumb.replace(/ /g, "_")];
-    if (typeof stepfname == 'function') {
-      stepfname();
+  swin.on("crmLoad", function(event) {
+    if($(event.target).attr("id") == "ActionWindow") {
+      $("#ActionWindow .crm-form-submit").val(" " + currentStep.next + " ");
+      $("#ActionWindow a.cancel").hide();
+      var stepfname = window['SimpleWorkflow_Step_' + currentStep.name + "_Load"];
+      if (typeof stepfname == 'function') {
+        stepfname();
+      }
     }
   });
 

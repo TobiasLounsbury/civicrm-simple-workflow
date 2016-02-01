@@ -6,7 +6,12 @@ CRM.$(function ($) {
         $(".crm-contribution-main-form-block").hide();
         $("#ActionWindow").show();
       }
+
       var lsurl = CRM.url(currentStep.entity_id);
+      if(currentStep.entity_id.indexOf("http") == 0) {
+        lsurl = currentStep.entity_id;
+      }
+      window.$ = CRM.$;
       var aw = CRM.loadForm(lsurl, {target:"#ActionWindow", dialog: false, autoClose:false});
     }
   });
