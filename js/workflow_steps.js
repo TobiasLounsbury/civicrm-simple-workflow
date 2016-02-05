@@ -118,17 +118,21 @@ function SWSetIndexAndData(obj, index, data) {
   obj.find("input,textarea").each(function() {
     var inp = CRM.$(this);
 
-    inp.attr("name", inp.attr("name").replace("#ORDER#", index));
+    if(inp.attr("name")) {
+      inp.attr("name", inp.attr("name").replace("#ORDER#", index));
 
-    var data_name = inp.attr("name").replace(/.*\[([^\[]*)\]$/g, "$1");
 
-    if (data.hasOwnProperty(data_name)) {
-      inp.val(data[data_name]);
+      var data_name = inp.attr("name").replace(/.*\[([^\[]*)\]$/g, "$1");
+
+      if (data.hasOwnProperty(data_name)) {
+        inp.val(data[data_name]);
+      }
+
+      if (data.hasOwnProperty("options") && data.options !== null && data.options.hasOwnProperty(data_name)) {
+        inp.val(data.options[data_name]);
+      }
     }
 
-    if (data.hasOwnProperty("options") && data.options !== null && data.options.hasOwnProperty(data_name)) {
-      inp.val(data.options[data_name]);
-    }
   });
 }
 
