@@ -162,6 +162,37 @@ function SWAddStep(stepType, data) {
 }
 
 
+
+function SWValidateSteps(formData) {
+  var valid = true;
+  var names = [];
+  var stepTypes = [];
+  for(var i in formData.data) {
+    if(!formData.data[i].name) {
+      CRM.alert(ts("Name is a required field for all steps"), ts("Error"), "warning");
+      valid = false;
+    }
+    names.push(formData.data[i].name);
+    stepTypes.push(formData.data[i].entity_table);
+  }
+
+  if(names.length !== CRM._.unique(names).length) {
+    CRM.alert(ts("Names must be unique for each step"), ts("Error"), "warning");
+    valid = false;
+  }
+
+  //Allow other scripts to do validation
+  for(var t in stepTypes) {
+    var func = SWGetStepFunction("SimpleWorkflowValidateSteps", stepTypes[t]);
+    if (func) {
+      valid = (valid && func(formData));
+    }
+  }
+
+  return valid;
+}
+
+
 /**
  * Initial Page setup
  */
@@ -188,17 +219,20 @@ CRM.$(function ($) {
 
   //Wire up the Save Workflow button
   $("#SaveDetails").click(function(e) {
-    CRM.api3('Workflow', 'save', {
-      "data": $("#Data").serialize(),
-      "wid": CRM.vars.SimpleWorkflow.wid
-    }).done(function(result) {
-      if (!result.is_error) {
-        CRM.alert(ts("All changes have been saved"), ts("Saved"), "success");
-        window.location = CRM.url("civicrm/workflows");
-      } else {
-        CRM.alert(ts("There was an error saving your changes") + ".<br />" + result.error_message, ts("Error"), "error");
-      }
-    });
+    var formData = $("#Data").serializeObject();
+    if(SWValidateSteps(formData)) {
+      CRM.api3('Workflow', 'save', {
+        "data": $("#Data").serialize(),
+        "wid": CRM.vars.SimpleWorkflow.wid
+      }).done(function (result) {
+        if (!result.is_error) {
+          CRM.alert(ts("All changes have been saved"), ts("Saved"), "success");
+          window.location = CRM.url("civicrm/workflows");
+        } else {
+          CRM.alert(ts("There was an error saving your changes") + ".<br />" + result.error_message, ts("Error"), "error");
+        }
+      });
+    }
   });
 
   //Load the Data
