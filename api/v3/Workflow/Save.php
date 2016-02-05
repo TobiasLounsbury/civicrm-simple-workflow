@@ -58,7 +58,7 @@ function civicrm_api3_workflow_save($params) {
       $next = $d['next'];
       $title = $d['title'];
       $name = $d['name'];
-      $options = json_encode($d['options']);
+      $options = ($d['options']) ? json_encode($d['options']) : "{}";
 
       $sql = $sql. "( %". ($i+0) .", %". ($i+1) .", %". ($i+2) .", %". ($i+3) .", %". ($i+4) .", %". ($i+5) .", %". ($i+6) .", %". ($i+7) .", %". ($i+8) . "),";
 
