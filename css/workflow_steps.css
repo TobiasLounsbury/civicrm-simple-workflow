@@ -80,10 +80,10 @@
   clear: both;
 }
 
-.SWStepField {
+.SWStepField, #Data .SWStepField {
   margin-top: 3px;
 }
-.SWStepField label {
+.SWStepField label, #Data .SWStepField label {
   display: inline-block;
   min-width: 10%;
 }
@@ -98,13 +98,13 @@
 .SWToggleForm {
   display: none;
 }
-.SWStepInlineField {
+.SWStepInlineField, #Data .SWStepInlineField {
   display: inline-block;
   float: right;
   padding: 0px 3px;
 }
 
-.SWStepInlineField label {
+.SWStepInlineField label, #Data .SWStepInlineField label {
   padding-right: 2px;
 }
 
