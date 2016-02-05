@@ -80,10 +80,10 @@
   clear: both;
 }
 
-.crm-simple-workflow-step-details .SWStepField {
+.SWStepField {
   margin-top: 3px;
 }
-.crm-simple-workflow-step-details .SWStepField label {
+.SWStepField label {
   display: inline-block;
   min-width: 10%;
 }
@@ -106,4 +106,10 @@
 
 .SWStepInlineField label {
   padding-right: 2px;
+}
+
+#AddSteps label {
+  min-width: 125px;
+  display:inline-block;
+  font-weight: bold;
 }
