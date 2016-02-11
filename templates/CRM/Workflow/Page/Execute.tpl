@@ -8,3 +8,5 @@
 --></ol>
 <div id="ActionWindow"></div>
 {/if}
+
+{include file="CRM/common/notifications.tpl" location="bottom"}

@@ -46,9 +46,11 @@ class CRM_Workflow_Page_Execute extends CRM_Core_Page {
         CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_profile.js', 21, 'page-footer');
         CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_jquery.js', 21, 'page-footer');
         CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_url.js', 21, 'page-footer');
+        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_case.js', 21, 'page-footer');
 
-        CRM_Core_Resources::singleton()->addScriptUrl('http://prep.local/sites/all/modules/civicrm/js/wysiwyg/crm.wysiwyg.js?o1mzho', 100);
-        CRM_Core_Resources::singleton()->addScriptUrl('http://prep.local/sites/all/modules/civicrm/js/wysiwyg/crm.ckeditor.js?o1mzho', 101);
+
+        //This causes the wysiwyg libraries to be included on the page.
+        $this->assign('includeWysiwygEditor', true);
 
         CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array(
           'steps' => $steps,

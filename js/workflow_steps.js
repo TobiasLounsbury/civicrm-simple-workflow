@@ -115,7 +115,7 @@ function SWDeleteStep(event) {
  *  The data to set within each input/textarea
  */
 function SWSetIndexAndData(obj, index, data) {
-  obj.find("input,textarea").each(function() {
+  obj.find("input,textarea,select").each(function() {
     var inp = CRM.$(this);
 
     if(inp.attr("name")) {
@@ -124,12 +124,24 @@ function SWSetIndexAndData(obj, index, data) {
 
       var data_name = inp.attr("name").replace(/.*\[([^\[]*)\]$/g, "$1");
 
-      if (data.hasOwnProperty(data_name)) {
-        inp.val(data[data_name]);
-      }
+      if(inp.is(":checkbox")) {
+        if (data.hasOwnProperty(data_name)) {
+          inp.prop("checked", data[data_name]);
+        }
 
-      if (data.hasOwnProperty("options") && data.options !== null && data.options.hasOwnProperty(data_name)) {
-        inp.val(data.options[data_name]);
+        if (data.hasOwnProperty("options") && data.options !== null && data.options.hasOwnProperty(data_name)) {
+          inp.prop("checked", data.options[data_name]);
+        }
+      } else if(inp.is(":radio")) {
+        //todo: Properly handle Radio buttons
+      } else {
+        if (data.hasOwnProperty(data_name)) {
+          inp.val(data[data_name]);
+        }
+
+        if (data.hasOwnProperty("options") && data.options !== null && data.options.hasOwnProperty(data_name)) {
+          inp.val(data.options[data_name]);
+        }
       }
     }
 

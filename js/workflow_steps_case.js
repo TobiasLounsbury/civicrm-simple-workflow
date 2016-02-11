@@ -10,7 +10,8 @@ function SimpleWorkflowStepAddCase(template, index, data) {
     data.options = {
       "include_profile": CRM.$("#SWCaseIncludeProfile").is(":checked"),
       "core_fields": "",
-      mode: "create"
+      mode: "create",
+      defaults: {}
     };
   }
 
@@ -31,20 +32,33 @@ function SimpleWorkflowStepAddCase(template, index, data) {
 
   var fieldsData = [
    {id: "client_id", text: ts("Client ID")},
+   {id: "case_type_id", text: ts("Case Type")},
    {id: "medium_id", text: ts("Activity Medium")},
+   {id: "activity_location", text: ts("Location")},
    {id: "activity_details", text: ts("Details")},
    {id: "activity_subject", text: ts("Subject")},
    {id: "status_id", text: ts("Case Status")},
    {id: "start_date", text: ts("Case Start Date")},
    {id: "duration", text: ts("Activity Duration")},
-   {id: "attachments", text: ts("Attachments")},
+   {id: "attachments", text: ts("Attachments")}
   ];
 
 
   cFields.select2({data: fieldsData, multiple: true});
   template.find("div.case_option_core_fields").css("width", "75%");
 
-  template.find(".case_option_include_profile").prop("checked", data.options.include_profile);
+  //Set values for defaults.
+  if(data.hasOwnProperty("options") && data.options.hasOwnProperty("defaults")) {
+    for (var x in fieldsData) {
+      if (data.options.defaults.hasOwnProperty(fieldsData[x].id)) {
+        if(fieldsData[x].id === 'client_id') {
+          template.find(".case_option_defaults_client_id").prop("checked", data.options.defaults.client_id);
+        } else {
+          template.find(".case_option_defaults_" + fieldsData[x].id).val(data.options.defaults[fieldsData[x].id]);
+        }
+      }
+    }
+  }
 
   template.find(".entity_table").val("Case");
   template.addClass("Case");

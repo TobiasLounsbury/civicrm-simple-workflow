@@ -144,6 +144,13 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       "caseTypes" => $caseTypes,
     ));
 
+    $mediums = civicrm_api3('Activity', 'getoptions', array(
+      'field' => "activity_medium_id",
+    ));
+    $this->assign('caseMediums', $mediums['values']);
+
+    $this->assign('caseStatus', CRM_Case_PseudoConstant::caseStatus());
+
     parent::run();
   }
 
