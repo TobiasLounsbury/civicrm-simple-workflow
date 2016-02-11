@@ -31,6 +31,9 @@ CRM.$(function ($) {
       $("#WorkflowTitle").hide();
     }
 
+    $("#PreMessage").html(currentStep.pre_message);
+    $("#PostMessage").html(currentStep.post_message);
+
     //Set the new form step to active
     $('ol.WorkflowSteps li[data-order='+order+']').removeClass("stepDone");
     $('ol.WorkflowSteps li[data-order='+order+']').removeClass("stepTodo");
@@ -45,6 +48,10 @@ CRM.$(function ($) {
   function inject_workflow_elements() {
     $("#Main").before('<div id="ActionWindow"></div>');
     $("#ActionWindow").before('<ol class="WorkflowSteps" id="WorkflowSteps"></ol>');
+    $("#ActionWindow").before('<div id="PreMessage"></div>');
+    $("#crm-submit-buttons").before('<div id="PostMessage"></div>');
+
+
     if (CRM.Workflow.returning) {
       var liclass = "stepDone";
       $("#ActionWindow").hide();
