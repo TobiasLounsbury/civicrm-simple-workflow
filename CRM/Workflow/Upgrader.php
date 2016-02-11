@@ -54,6 +54,8 @@ class CRM_Workflow_Upgrader extends CRM_Workflow_Upgrader_Base {
     CRM_Core_DAO::executeQuery('RENAME TABLE `civicrm_workflow` TO `civicrm_simple_workflow`');
     CRM_Core_DAO::executeQuery('RENAME TABLE `civicrm_workflow_detail` TO `civicrm_simple_workflow_detail`');
     CRM_Core_DAO::executeQuery('ALTER TABLE `civicrm_simple_workflow_detail` ADD COLUMN `name` VARCHAR(255) NOT NULL  AFTER `breadcrumb`');
+    CRM_Core_DAO::executeQuery('ALTER TABLE `civicrm_simple_workflow_detail` ADD COLUMN `pre_message` text NULL  AFTER `custom_js`');
+    CRM_Core_DAO::executeQuery('ALTER TABLE `civicrm_simple_workflow_detail` ADD COLUMN `post_message` text NULL  AFTER `pre_message`');
     CRM_Core_DAO::executeQuery("UPDATE `civicrm_simple_workflow_detail` SET `name` = REPLACE(`breadcrumb`, ' ', '_')");
     CRM_Core_DAO::executeQuery('ALTER TABLE `civicrm_simple_workflow_detail` ADD PRIMARY KEY (`workflow_id`, `name`)');
     return TRUE;

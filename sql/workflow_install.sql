@@ -37,6 +37,8 @@ CREATE TABLE `civicrm_simple_workflow_detail` (
      `options` text NULL   COMMENT 'Generic field for misc options',
      `order` int unsigned NOT NULL   COMMENT 'Order for profiles/price sets to be displayed in',
      `custom_js` VARCHAR(255) NULL,
+     `pre_message` text NULL COMMENT 'This field is for HTML to be displayed BEFORE the step',
+     `post_message` text NULL COMMENT 'This field is for HTML to be displayed AFTER the step',
 
      PRIMARY KEY (`workflow_id`, `name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci  ;
