@@ -28,6 +28,14 @@
             <label>{ts}Title{/ts}:</label>
             <input name="data[#ORDER#][title]" size='40' class="step_title" />
         </div>
+        <div class="SWStepField">
+            <label>{ts}Pre-Step HTML{/ts}:</label><br />
+            <textarea name="data[#ORDER#][pre_message]" class="pre_message"></textarea>
+        </div>
+        <div class="SWStepField">
+            <label>{ts}Post-Step HTML{/ts}:</label><br />
+            <textarea name="data[#ORDER#][post_message]" class="post_message"></textarea>
+        </div>
     </div>
     <div class="clear"></div>
 </div>
