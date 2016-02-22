@@ -14,6 +14,7 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
   protected $_workflow;
   protected $_step;
   protected $_caseType;
+  protected $_profiles;
 
   /**
    * Function to set variables up before form is built
@@ -38,18 +39,6 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
     ));
 
     $this->_caseType = $result['values'][0];
-
-    if(array_key_exists("options", $this->_step) && array_key_exists("include_profile", $this->_step['options'])) {
-
-      $result = civicrm_api3('CustomGroup', 'get', array(
-        'extends' => "Case",
-        'extends_entity_column_value' => $this->_step['entity_id'],
-      ));
-
-      if($result['is_error'] == 0 && $result['count'] > 0) {
-        $this->_customFieldGroups = $result['values'];
-      }
-    }
 
     parent::preProcess();
   }
@@ -142,10 +131,6 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
     }
 
 
-
-    //Todo: Add included profile/custom fields
-
-
     $this->addButtons(array(
       array(
         'type' => 'submit',
@@ -156,6 +141,25 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
 
     // export form elements
     $this->assign('elementNames', $this->getRenderableElementNames());
+
+
+    //Add included profile/custom fields
+    if(array_key_exists("options", $this->_step) &&
+      array_key_exists("include_profile", $this->_step['options']) &&
+      $this->_step['options']['include_profile']) {
+
+      //Add the profile to the form
+      $contactID = CRM_Utils_Array::value('userID', $_SESSION['CiviCRM']);
+
+      $pids = $this->_step['options']['include_profile'];
+      if(!is_array($pids)) {
+        $pids = explode(",", $pids);
+      }
+
+      $this->_profiles = $this->buildCustom($pids, $contactID);
+      $this->assign('customProfiles', $this->_profiles);
+    }
+
     parent::buildQuickForm();
   }
 
@@ -194,11 +198,64 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
 
     //Set the case type
     $values['case_type_id'] = $this->_step['entity_id'];
-    $values['subject'] = $values['activity_subject'];
+
+    if(!array_key_exists("subject", $values)) {
+      if(array_key_exists("case_subject", $values)) {
+        $values['subject'] = $values['case_subject'];
+      } else {
+        $values['subject'] = $values['activity_subject'];
+      }
+    }
+
+    //Cleanup Data before we call create
+    foreach($this->_profiles as $fields) {
+      foreach($fields as $fieldName => $field) {
+        if(array_key_exists("html_type", $field) && $field['html_type'] == "CheckBox") {
+          $value = $values[$fieldName];
+          if (is_array($value)) {
+            $value = array_filter($value);
+            //$value = array_keys($value);
+          }
+          $values[$fieldName] = $value;
+        }
+      }
+    }
+
 
     $result = civicrm_api3('Case', 'create', $values);
 
     parent::postProcess();
+  }
+
+
+  function buildCustom(array $profileIds = array(), $contactID = null, $prefix = '') {
+    $profiles = array();
+    $fieldList = array(); // master field list
+
+    foreach($profileIds as $profileID) {
+      $fields = CRM_Core_BAO_UFGroup::getFields($profileID, FALSE, CRM_Core_Action::ADD,
+        NULL, NULL, FALSE, NULL,
+        FALSE, NULL, CRM_Core_Permission::CREATE,
+        'field_name', TRUE
+      );
+
+      foreach ($fields as $key => $field) {
+        if (array_key_exists($key, $fieldList)) continue;
+
+        CRM_Core_BAO_UFGroup::buildProfile(
+          $this,
+          $field,
+          CRM_Profile_Form::MODE_CREATE,
+          $contactID,
+          TRUE,
+          null,
+          null,
+          $prefix
+        );
+        $profiles[$profileID][$key] = $fieldList[$key] = $field;
+      }
+    }
+    return $profiles;
   }
 
   /**
