@@ -8,7 +8,7 @@ function SimpleWorkflowStepAddCase(template, index, data) {
     data.title = data.entity_name;
     data.next = "Next";
     data.options = {
-      "include_profile": "",
+      "include_profile": CRM.$("#SWCaseIncludeProfile").val(),
       "core_fields": "",
       mode: "create",
       defaults: {}
