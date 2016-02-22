@@ -11,8 +11,8 @@
     </div>
 
     <div class="SWStepField">
-        <input type="checkbox" id="SWCaseIncludeProfile" checked="checked" />
-        <label>{ts}Include Associated Profile/custom data if present{/ts}</label>
+        <label>{ts}Include Profile{/ts}</label>
+        <input class="crm-profile-selector crm-form-text" data-group-type="Case" data-entities='{$profilesDataEntities}' name="SWCaseIncludeProfile" type="text" id="SWCaseIncludeProfile">
     </div>
 
     <div class="SWStepField">

@@ -2,8 +2,8 @@
     <input type ="hidden" name="data[#ORDER#][entity_id]" class="entity_id" />
 
     <div class="SWStepField">
-        <input type ="checkbox" name="data[#ORDER#][options][include_profile]" class="case_option_include_profile" />
-        <label>{ts}Include Profile/Custom Data{/ts}</label>
+        <label>{ts}Include Profile{/ts}:</label>
+        <input data-entities='{$profilesDataEntities}' name="data[#ORDER#][options][include_profile]" type="text" class="case_option_include_profile">
     </div>
 
     <div class="SWStepField">
@@ -24,7 +24,7 @@
 
         <div class="SWStepField">
             <input type="checkbox" name="data[#ORDER#][options][defaults][client_id]" value="user_contact_id" class="case_option_defaults_client_id" />
-            <label>{ts}Logged in User{/ts}:</label>
+            <label>{ts}Assume currently logged in contact is client{/ts}</label>
         </div>
 
         <div class="SWStepField">

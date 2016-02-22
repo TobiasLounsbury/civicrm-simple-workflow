@@ -8,7 +8,7 @@ function SimpleWorkflowStepAddCase(template, index, data) {
     data.title = data.entity_name;
     data.next = "Next";
     data.options = {
-      "include_profile": CRM.$("#SWCaseIncludeProfile").is(":checked"),
+      "include_profile": "",
       "core_fields": "",
       mode: "create",
       defaults: {}
@@ -59,6 +59,11 @@ function SimpleWorkflowStepAddCase(template, index, data) {
       }
     }
   }
+
+  if(data.hasOwnProperty("options") && data.options.hasOwnProperty("include_profile")) {
+    template.find(".case_option_include_profile").val(data.options.include_profile);
+  }
+  template.find(".case_option_include_profile").crmProfileSelector({"groupTypeFilter": "Case"});
 
   template.find(".entity_table").val("Case");
   template.addClass("Case");
