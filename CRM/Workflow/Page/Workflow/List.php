@@ -43,6 +43,7 @@ class CRM_Workflow_Page_Workflow_List extends CRM_Core_Page {
                 'url' => 'civicrm/workflow',
                 'qs' => 'wid=%%wid%%&reset=1',
                 'title' => ts('Link to the Workflow page'),
+                'fe' => TRUE,
             ),
             CRM_Core_Action::DISABLE => array(
                 'name' => ts('Disable'),
