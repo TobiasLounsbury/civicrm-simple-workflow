@@ -97,6 +97,7 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       "CRM/Workflow/Page/Steps/AddStep_jquery.tpl",
       "CRM/Workflow/Page/Steps/AddStep_url.tpl",
       "CRM/Workflow/Page/Steps/AddStep_case.tpl",
+      "CRM/Workflow/Page/Steps/AddStep_html.tpl",
     );
     $typeTemplates = array(
       "CRM/Workflow/Page/Steps/StepTypes_profile.tpl",
@@ -104,6 +105,7 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       "CRM/Workflow/Page/Steps/StepTypes_jquery.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_url.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_case.tpl",
+      "CRM/Workflow/Page/Steps/StepTypes_html.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_default.tpl"
     );
 
@@ -112,7 +114,8 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_profile.js'),
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_page.js'),
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_jquery.js'),
-      $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_case.js')
+      $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_case.js'),
+      $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_html.js')
     );
     $css = array();
 
@@ -128,6 +131,14 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
 
     $this->assign('uiTemplates', $uiTemplates);
     $this->assign('typeTemplates', $typeTemplates);
+
+
+    //Add the wysiwyg libraries for < 4.7
+    $version = substr(CRM_Utils_System::version(), 0, 3);
+    if($version <= 4.6) {
+      //crmUi depends on loading ckeditor, but ckeditor doesn't work with aggregation.
+      $ccr->addScriptFile('civicrm', 'packages/ckeditor/ckeditor.js', 120, 'html-header', FALSE);
+    }
 
 
     //Support for Profiles

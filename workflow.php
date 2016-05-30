@@ -88,6 +88,7 @@ function workflow_civicrm_buildForm($formName, &$form) {
         CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_profile.js', 21, 'page-footer');
         CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_jquery.js', 21, 'page-footer');
         CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_url.js', 21, 'page-footer');
+        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_html.js', 21, 'page-footer');
         CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array(
           'steps' => $steps,
           'workflow' => $workflow
