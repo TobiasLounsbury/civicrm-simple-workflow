@@ -235,6 +235,10 @@ CRM.$(function ($) {
 
   //Wire up the Save Workflow button
   $("#SaveDetails").click(function(e) {
+    //Trigger a before save so other scripts can do stuff before we
+    //Serialize the data.
+    $("#Data").trigger("before:save");
+
     var formData = $("#Data").serializeObject();
     if(SWValidateSteps(formData)) {
       CRM.api3('Workflow', 'save', {
@@ -249,6 +253,7 @@ CRM.$(function ($) {
         }
       });
     }
+    e.preventDefault();
   });
 
   //Load the Data

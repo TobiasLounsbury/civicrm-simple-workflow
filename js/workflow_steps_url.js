@@ -3,7 +3,7 @@ function SimpleWorkflowStepAddUrl(template, index, data) {
   if(CRM.$.isEmptyObject(data) ) {
     data.entity_id = CRM.$("#SWURLUrl").val();
     data.breadcrumb = CRM.$("#SWURLBreadcrumb").val();
-    data.name = data.breadcrumb.toLowerCase();
+    data.name = data.breadcrumb.toLowerCase().replace(" ", "_");
     data.title = data.breadcrumb;
     data.next = "Next";
   }

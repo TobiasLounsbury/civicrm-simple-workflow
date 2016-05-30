@@ -3,7 +3,7 @@ function SimpleWorkflowStepAddCase(template, index, data) {
   if(CRM.$.isEmptyObject(data) ) {
     data.entity_id = CRM.$("#SWCaseSelector").val();
     data.breadcrumb = CRM.$("#SWCaseBreadcrumb").val();
-    data.name = data.breadcrumb.toLowerCase();
+    data.name = data.breadcrumb.toLowerCase().replace(" ", "_");
     data.entity_name = CRM.$("#SWCaseSelector option:selected").text().trim();
     data.title = data.entity_name;
     data.next = "Next";

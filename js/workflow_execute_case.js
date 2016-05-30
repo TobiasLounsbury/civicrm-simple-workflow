@@ -1,6 +1,6 @@
 CRM.$(function ($) {
 
-  $("body").on("SimpleWorkflow-loadStep", function(event, currentStep) {
+  $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {
     if (currentStep.entity_table == "Case") {
       if (CRM.Workflow.method == "inject") {
         $(".crm-contribution-main-form-block").hide();

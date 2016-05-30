@@ -1,6 +1,6 @@
 CRM.$(function ($) {
 
-  $("body").on("SimpleWorkflow-loadStep", function(event, currentStep) {
+  $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {
 
     if (currentStep.entity_table == "jQuery") {
 
@@ -15,17 +15,14 @@ CRM.$(function ($) {
         //Show the Elements that make up this step
         $(currentStep.entity_id).show();
 
-        //Hide or show the Next button depending on if we are on the last page or not
-        if (parseInt(currentStep.order) == parseInt(CRM.Workflow.lastStep)) {
-          $("#jQueryNext").hide()
-        } else {
-          $("#jQueryNext span").text(" " + currentStep.next + " ");
-          $("#jQueryNext").show()
-        }
+        //Set the Button Text and show if applicable
+        CRM.Workflow.SetButtonText();
 
         //Show the contribution form we hid earlier
         $(".crm-contribution-main-form-block").slideDown();
 
+        //todo: This should be deprecated in favor of more
+        //deterministic methods rather than maric naming
         var stepfname = window['CRM_Workflow_' + currentStep.breadcrumb.replace(/ /g, "_")];
         if (typeof stepfname == 'function') {
           stepfname();

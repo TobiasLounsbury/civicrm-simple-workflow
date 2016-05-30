@@ -9,6 +9,7 @@
 <div id="PreMessage"></div>
 <div id="ActionWindow"></div>
 <div id="PostMessage"></div>
+<a href='#' id='SWNextButton' class='button'><span> Next </span></a><div class='clear'></div>
 {/if}
 
 {include file="CRM/common/notifications.tpl" location="bottom"}
