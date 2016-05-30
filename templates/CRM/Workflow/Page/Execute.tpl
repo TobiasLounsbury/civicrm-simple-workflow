@@ -6,5 +6,10 @@
         --><li class="stepTodo {$step.entity_table}" data-order="{$step.order}"><span>{$step.breadcrumb}</span></li><!--
     {/foreach}
 --></ol>
+<div id="PreMessage"></div>
 <div id="ActionWindow"></div>
+<div id="PostMessage"></div>
+<a href='#' id='SWNextButton' class='button'><span> Next </span></a><div class='clear'></div>
 {/if}
+
+{include file="CRM/common/notifications.tpl" location="bottom"}

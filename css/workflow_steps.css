@@ -1,0 +1,120 @@
+#Data hr {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+#Data {
+    border: 1px solid #000;
+    padding: 8px;
+}
+.Detail {
+    border: 1px solid #000;
+    background: #ddd;
+    padding: 3px;
+    margin: 3px;
+
+    background: -webkit-linear-gradient(#eeeeee, #bbbbbb); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(#eeeeee, #bbbbbb); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(#eeeeee, #bbbbbb); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(#eeeeee, #bbbbbb); /* Standard syntax */
+}
+#Data span.DeleteStep {
+  float: right;
+  cursor: pointer;
+  font-weight: bold;
+}
+.DeleteStep:hover {
+  color: #b00;
+}
+.PlaceHolder {
+    background-color: #cce85b;
+    border: 1px solid #555;
+}
+#Data .entity_name {
+    display: inline-block;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.handle {
+    font-size: 16px;
+    cursor: move;
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.jQuery-Selector {
+    width: 80%;
+
+}
+#Data label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+#Data label.leftmost {
+    margin-left: 40px;
+}
+#Data label.path {
+    margin-left: 1px;
+}
+
+.SWToggleDetails {
+  float: left;
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#WorkflowStepTemplates {
+  display: none;
+}
+
+.crm-simple-workflow-ui-template {
+  padding-bottom: 10px;
+}
+
+.crm-simple-workflow-step-details {
+  margin-top: 10px;
+  border-top: 1px solid #aaa;
+  padding: 5px 10px;
+  display: none;
+  clear: both;
+}
+
+.SWStepField, #Data .SWStepField {
+  margin-top: 3px;
+}
+.SWStepField label, #Data .SWStepField label {
+  display: inline-block;
+  min-width: 10%;
+}
+.crm-simple-workflow-step-details textarea {
+  width: 100%;
+}
+
+.SWToggleFormTrigger {
+  cursor: pointer;
+}
+
+.SWToggleForm {
+  display: none;
+}
+.SWStepInlineField, #Data .SWStepInlineField {
+  display: inline-block;
+  float: right;
+  padding: 0px 3px;
+}
+
+.SWStepInlineField label, #Data .SWStepInlineField label {
+  padding-right: 2px;
+}
+
+#AddSteps label {
+  min-width: 125px;
+  display:inline-block;
+  font-weight: bold;
+}
+
+#Data fieldset {
+  border: 1px solid #999;
+  padding-left: 20px;
+}

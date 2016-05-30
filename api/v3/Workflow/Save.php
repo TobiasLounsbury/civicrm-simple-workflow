@@ -46,7 +46,7 @@ function civicrm_api3_workflow_save($params) {
   $dao =& CRM_Core_DAO::executeQuery($dsql);
 
   if (!empty($data)) {
-    $sql = "INSERT INTO `".$detailTable."` ( workflow_id, entity_table, entity_id, `order`, breadcrumb, `next`, title) VALUES ";
+    $sql = "INSERT INTO `".$detailTable."` ( workflow_id, entity_table, entity_id, `order`, breadcrumb, `next`, title, `name`, `options`, `pre_message`, `post_message`) VALUES ";
     $i = 1;
     $vals = array();
     foreach($data as $key => $d) {
@@ -57,7 +57,12 @@ function civicrm_api3_workflow_save($params) {
       $breadcrumb = $d['breadcrumb'];
       $next = $d['next'];
       $title = $d['title'];
-      $sql = $sql. "( %". ($i+0) .", %". ($i+1) .", %". ($i+2) .", %". ($i+3) .", %". ($i+4) .", %". ($i+5) .", %". ($i+6) ."),";
+      $name = $d['name'];
+      $options = ($d['options']) ? json_encode($d['options']) : "{}";
+      $preMessage = $d['pre_message'];
+      $postMessage = $d['post_message'];
+
+      $sql = $sql. "( %". ($i+0) .", %". ($i+1) .", %". ($i+2) .", %". ($i+3) .", %". ($i+4) .", %". ($i+5) .", %". ($i+6) .", %". ($i+7) .", %". ($i+8) . ", %". ($i+9) .", %". ($i+10) ."),";
 
 
       //$vals[$i++] = array($did, 'Integer');
@@ -68,6 +73,10 @@ function civicrm_api3_workflow_save($params) {
       $vals[$i++] = array($breadcrumb, 'String');
       $vals[$i++] = array($next, 'String');
       $vals[$i++] = array($title, 'String');
+      $vals[$i++] = array($name, 'String');
+      $vals[$i++] = array($options, 'String');
+      $vals[$i++] = array($preMessage, 'String');
+      $vals[$i++] = array($postMessage, 'String');
     }
     $sql = substr($sql, 0, -1);
     try {
