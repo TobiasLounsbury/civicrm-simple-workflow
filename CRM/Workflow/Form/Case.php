@@ -74,7 +74,7 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
 
     //Details
     if (in_array("activity_details", $fields)) {
-      $this->addWysiwyg('activity_details', ts('Details'), array('rows' => 4, 'cols' => 60), FALSE);
+      $this->add('wysiwyg', 'activity_details', ts('Details'), array('rows' => 4, 'cols' => 60), FALSE);
     }
 
     //Subject
@@ -207,22 +207,38 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
       }
     }
 
-    //Cleanup Data before we call create
+
+
+    //This is the peculiar format that Case requires for custom data
+    $values['custom'] = CRM_Core_BAO_CustomField::postProcess(
+      $values,
+      NULL,
+      'Case'
+    );
+
+    //Cleanup Data before we call create otherwise the custom_[x]
+    //values that are blank cause errors.
+    //We aren't actually storing these values here, because of bugs in the Case API.
     foreach($this->_profiles as $fields) {
       foreach($fields as $fieldName => $field) {
         if(array_key_exists("html_type", $field) && $field['html_type'] == "CheckBox") {
           $value = $values[$fieldName];
           if (is_array($value)) {
             $value = array_filter($value);
-            //$value = array_keys($value);
+            $value = array_keys($value);
           }
           $values[$fieldName] = $value;
         }
       }
     }
 
+    $case = civicrm_api3('Case', 'create', $values);
 
-    $result = civicrm_api3('Case', 'create', $values);
+    //This is a hack to store custom case data because the API explicitly
+    //strips out all custom data passed to the API ad replaces it with an empty array
+    if($case['is_error'] == 0 && array_key_exists("id", $case)) {
+      CRM_Core_BAO_CustomValueTable::store($customValues, 'civicrm_case', $case['id']);
+    }
 
     parent::postProcess();
   }
