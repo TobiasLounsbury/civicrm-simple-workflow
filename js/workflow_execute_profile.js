@@ -6,7 +6,9 @@ CRM.$(function ($) {
         $(".crm-contribution-main-form-block").hide();
         $("#ActionWindow").show();
       }
-      var lsurl = CRM.url("civicrm/profile/edit", {gid: currentStep.entity_id, reset: 1});
+
+      var actionType = currentStep.options.mode || "edit";
+      var lsurl = CRM.url("civicrm/profile/" + actionType, {gid: currentStep.entity_id, reset: 1});
       var aw = CRM.loadForm(lsurl, {target:"#ActionWindow", dialog: false, autoClose:true});
     }
   });
