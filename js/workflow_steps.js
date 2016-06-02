@@ -133,7 +133,11 @@ function SWSetIndexAndData(obj, index, data) {
           inp.prop("checked", data.options[data_name]);
         }
       } else if(inp.is(":radio")) {
-        //todo: Properly handle Radio buttons
+        if (data.hasOwnProperty(data_name)) {
+          inp.prop("checked", (inp.val() == data[data_name]));
+        } else if (data.hasOwnProperty("options") && data.options !== null && data.options.hasOwnProperty(data_name)) {
+          inp.prop("checked", (inp.val() == data.options[data_name]));
+        }
       } else {
         if (data.hasOwnProperty(data_name)) {
           inp.val(data[data_name]);
