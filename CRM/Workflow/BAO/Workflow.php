@@ -104,8 +104,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     $steps = array();
     while ($dao->fetch()) {
       $steps[$dao->order] = (array) $dao;
-      parse_str($dao->options, $options);
-      $steps[$dao->order]['options'] = $options;
+      $steps[$dao->order]['options'] = (array) json_decode($dao->options);
     }
     return $steps;
   }
