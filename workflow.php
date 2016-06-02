@@ -2,6 +2,7 @@
 
 require_once 'workflow.civix.php';
 require_once 'workflow.hook.php';
+require_once 'workflow.util.php';
 
 //$userID = CRM_Core_Session::getLoggedInContactID();
 
@@ -61,34 +62,13 @@ function workflow_civicrm_buildForm($formName, &$form) {
           }
         }
 
-        //Inject the needed resources into the page
-
-        //Let the page know we are injecting into a page rather than loading a template.
+        //Let the page know the method we are using
         CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('method' => "inject")));
 
-        //Add Stylesheet
-        CRM_Core_Resources::singleton()->addStyleFile('org.botany.workflow', 'workflow_execute.css');
+        //Inject the needed resources into the page
+        simpleWorkflowAddResources($formName, $form);
 
-
-        //Add JS Libraries if we need them for notifications.
-        if (!CRM_Core_Permission::check('access CiviCRM')) {
-          $notiFile = CRM_Core_Resources::singleton()->getUrl('civicrm', "packages/jquery/plugins/jquery.notify.min.js", true);
-          CRM_Core_Resources::singleton()->addScriptUrl($notiFile, -2, 'html-header');
-
-          $blockFile = CRM_Core_Resources::singleton()->getUrl('civicrm', "packages/jquery/plugins/jquery.blockUI.min.js", true);
-          CRM_Core_Resources::singleton()->addScriptUrl($blockFile, -1, 'html-header');
-        }
-
-        //Allow other extensions to include files.
-        CRM_Workflow_hook::execute($formName, $form);
-
-        //Add Javascript files and settings
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute.js', 100, 'page-footer');
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_page.js', 21, 'page-footer');
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_profile.js', 21, 'page-footer');
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_jquery.js', 21, 'page-footer');
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_url.js', 21, 'page-footer');
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_html.js', 21, 'page-footer');
+        //Add the settings we need.
         CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array(
           'steps' => $steps,
           'workflow' => $workflow
@@ -97,12 +77,6 @@ function workflow_civicrm_buildForm($formName, &$form) {
         //Set the width for the step lis
         $stepWidth = (empty($steps)) ? 98 : round(98 / sizeof($steps), 0, PHP_ROUND_HALF_DOWN);
         CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('breadcrumWidth' => $stepWidth)));
-
-
-
-
-
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute.js', 20, 'page-footer');
 
 
 

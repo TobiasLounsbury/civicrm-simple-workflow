@@ -2,16 +2,15 @@
 
 //TODO: Verify Permissions
 //TODO: Work on Force Login
-//TODO: Uncomment Contribution page check and forward
 
 require_once 'CRM/Core/Page.php';
+require_once 'workflow.util.php';
 
 class CRM_Workflow_Page_Execute extends CRM_Core_Page {
   function run() {
     CRM_Utils_System::setTitle("");
     $wid = CRM_Utils_Request::retrieve('wid', 'Positive', $this, false, 0);
     $workflow = null;
-    $steps = array();
 
     if ($wid) {
 
@@ -25,34 +24,19 @@ class CRM_Workflow_Page_Execute extends CRM_Core_Page {
 
         //If this workflow contains a contribution page forward to it
         //And the page injector will take over
-        if ($workflow['contains_page'] &&
+        if ($workflow['contains_page'] > 0 &&
           (($workflow['require_login'] && $userID) || !$workflow['require_login']) &&
           (!($steps[1]['entity_table'] == "Profile" && $steps[1]['entity_id'] == $workflow['login_form_id']))) {
-          return CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/contribute/transact', 'reset=1&id=' . $step['entity_id']));
+          return CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/contribute/transact', 'reset=1&id=' . $workflow['contains_page']));
         }
 
         //Let the page know the method we are using
         CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('method' => "template")));
 
-        //Add Stylesheet
-        CRM_Core_Resources::singleton()->addStyleFile('org.botany.workflow', 'css/workflow_execute.css');
+        //Add the needed resources to execute the workflow
+        simpleWorkflowAddResources("CRM_Workflow_Page_Execute", $this);
 
-        //Allow other extensions to include files.
-        CRM_Workflow_hook::execute("CRM_Workflow_Page_Execute", $this);
-
-        //Add Javascript files and settings
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute.js', 100, 'page-footer');
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_page.js', 21, 'page-footer');
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_profile.js', 21, 'page-footer');
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_jquery.js', 21, 'page-footer');
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_url.js', 21, 'page-footer');
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_case.js', 21, 'page-footer');
-        CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_html.js', 21, 'page-footer');
-
-
-        //This causes the wysiwyg libraries to be included on the page.
-        $this->assign('includeWysiwygEditor', true);
-
+        //Assign the Data
         CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array(
           'steps' => $steps,
           'workflow' => $workflow
