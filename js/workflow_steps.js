@@ -115,13 +115,18 @@ function SWDeleteStep(event) {
  *  The data to set within each input/textarea
  */
 function SWSetIndexAndData(obj, index, data) {
-  obj.find("input,textarea,select").each(function() {
+  obj.find("input,textarea,select,label").each(function() {
     var inp = CRM.$(this);
 
+    //Do attribute string replacement.
+    var fieldAttrs = ["name", "id", "for"];
+    for (var i in fieldAttrs) {
+      if (inp.attr(fieldAttrs[i])) {
+        inp.attr(fieldAttrs[i], inp.attr(fieldAttrs[i]).replace("#ORDER#", index));
+      }
+    }
+
     if(inp.attr("name")) {
-      inp.attr("name", inp.attr("name").replace("#ORDER#", index));
-
-
       var data_name = inp.attr("name").replace(/.*\[([^\[]*)\]$/g, "$1");
 
       if(inp.is(":checkbox")) {
