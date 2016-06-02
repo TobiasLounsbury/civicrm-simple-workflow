@@ -6,6 +6,8 @@ function SimpleWorkflowStepAddProfile(template, index, data) {
     data.breadcrumb = data.entity_name;
     data.title = data.entity_name;
     data.next = "Next";
+    data.options = data.options || {};
+    data.options.mode = CRM.$("[name='SW-Profile-Mode']:checked").val();
   }
 
   template.find(".crm-simple-workflow-step-details").prepend(
