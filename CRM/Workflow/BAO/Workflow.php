@@ -85,7 +85,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
       $result = (array) $dao;
     }
     $detailTable = CRM_Workflow_DAO_WorkflowDetail::$_tableName;
-    $dsql = "SELECT COUNT(*) as `contains_page` FROM `".$detailTable."` WHERE workflow_id = {$wid} AND `entity_table` = 'Page'";
+    $dsql = "SELECT `entity_id` as `contains_page` FROM `".$detailTable."` WHERE workflow_id = {$wid} AND `entity_table` = 'Page'";
     $dao =& CRM_Core_DAO::executeQuery($dsql);
     if ($dao->fetch()) {
       $result['contains_page'] = $dao->contains_page;
