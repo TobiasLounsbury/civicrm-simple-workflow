@@ -1,6 +1,7 @@
 <?php
 
 require_once 'CRM/Core/Form.php';
+require_once 'workflow.util.php';
 
 /**
  * Form controller class
@@ -170,10 +171,7 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
 
     if(array_key_exists("options", $this->_step) && array_key_exists("defaults", $this->_step['options'])) {
       $defaults = (array) $this->_step['options']['defaults'];
-
-      if(array_key_exists('client_id', $defaults) && $defaults['client_id'] == 'user_contact_id') {
-        $defaults['client_id'] = CRM_Core_Session::getLoggedInContactID();
-      }
+      $defaults['client_id'] = _workflow_get_step_contact($this->_wid, $defaults['client_id']);
     }
 
     return $defaults;
@@ -185,11 +183,9 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
 
     if(array_key_exists("options", $this->_step) && array_key_exists("defaults", $this->_step['options'])) {
       $defaults = (array) $this->_step['options']['defaults'];
-
-      if(array_key_exists('client_id', $defaults) && $defaults['client_id'] == 'user_contact_id') {
-        $defaults['client_id'] = CRM_Core_Session::getLoggedInContactID();
-      }
     }
+
+    $defaults['client_id'] = _workflow_get_step_contact($this->_wid, $defaults['client_id']);
 
     $values = array_merge($defaults, $values);
 
@@ -208,11 +204,12 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
     }
 
 
-
+    $fields = null;
+    $entityID = null;
     //This is the peculiar format that Case requires for custom data
     $values['custom'] = CRM_Core_BAO_CustomField::postProcess(
       $values,
-      NULL,
+      $fields,
       'Case'
     );
 
@@ -237,6 +234,8 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
     //This is a hack to store custom case data because the API explicitly
     //strips out all custom data passed to the API ad replaces it with an empty array
     if($case['is_error'] == 0 && array_key_exists("id", $case)) {
+      $this->case_id = $case['id'];
+      $this->client_id = $values['contact_id'];
       CRM_Core_BAO_CustomValueTable::store($customValues, 'civicrm_case', $case['id']);
     }
 
