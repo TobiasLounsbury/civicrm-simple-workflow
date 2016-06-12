@@ -71,6 +71,12 @@ class CRM_Workflow_Page_Workflow_List extends CRM_Core_Page {
                 'title' => ts('Make a Copy of this workflow'),
                 'extra' => 'onclick = "return confirm(\'' . $copyExtra . '\');"',
             ),
+          CRM_Core_Action::EXPORT => array(
+            'name' => ts('Export Workflow'),
+            'url' => CRM_Utils_System::currentPath(),
+            'qs' => 'action=export&reset=1&wid=%%wid%%',
+            'title' => ts('Export this workflow to a json file')
+          ),
         );
     }
     return self::$_actionLinks;
@@ -96,6 +102,9 @@ class CRM_Workflow_Page_Workflow_List extends CRM_Core_Page {
 
                 case 'copy':
                     CRM_Workflow_BAO_Workflow::copy($_GET['wid']);
+                    break;
+                case 'export':
+                    CRM_Workflow_BAO_Workflow::exportJSON($_GET['wid']);
                     break;
             }
         }

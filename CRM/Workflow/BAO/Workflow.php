@@ -255,4 +255,11 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
       $dao =& CRM_Core_DAO::executeQuery($nsql);
     }
   }
+
+  static function exportJSON($wid) {
+    $workflow = self::getWorkflow($wid);
+    $steps = self::getWorkflowDetails($wid);
+    $buffer = json_encode(array("workflow" => $workflow, "steps" => $steps));
+    CRM_Utils_System::download($workflow['name'], "application/json", $buffer, "json");
+  }
 }
