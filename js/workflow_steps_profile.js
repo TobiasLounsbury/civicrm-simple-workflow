@@ -14,8 +14,32 @@ function SimpleWorkflowStepAddProfile(template, index, data) {
     CRM.$("#SimpleWorkflowTypeTemplateProfile").html()
   );
 
+  //Handle initial visibility of relationships
+  if (data.options.mode == "edit") {
+    template.find(".SW-Relationships").hide();
+  } else {
+    //Add all the relationships we have saved if any.
+    SWRelationship_AddAll(template, data.options.relationships);
+  }
+
   template.find(".entity_name").html(data.entity_name);
   template.find(".entity_table").val("Profile");
   template.addClass("Profile");
   return true;
 }
+
+CRM.$(function ($) {
+
+  $("#Data").change(function(e) {
+    var obj = $(e.target);
+
+    //Wire up change profile mode
+    if (obj.hasClass("SW-Profile-Mode")) {
+      if (obj.val() == "create") {
+        obj.closest(".Detail").find(".SW-Relationships").slideDown();
+      } else {
+        obj.closest(".Detail").find(".SW-Relationships").slideUp();
+      }
+    }
+  });
+});
