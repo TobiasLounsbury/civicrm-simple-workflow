@@ -16,7 +16,7 @@ function SimpleWorkflowStepAddProfile(template, index, data) {
 
   //Handle initial visibility of relationships
   if (data.options.mode == "edit") {
-    template.find(".SW-Relationships").hide();
+    template.find(".SW-Profile-Relationships-Wrapper").hide();
   } else {
     //Add all the relationships we have saved if any.
     SWRelationship_AddAll(template, data.options.relationships);
@@ -36,9 +36,9 @@ CRM.$(function ($) {
     //Wire up change profile mode
     if (obj.hasClass("SW-Profile-Mode")) {
       if (obj.val() == "create") {
-        obj.closest(".Detail").find(".SW-Relationships").slideDown();
+        obj.closest(".Detail").find(".SW-Profile-Relationships-Wrapper").slideDown();
       } else {
-        obj.closest(".Detail").find(".SW-Relationships").slideUp();
+        obj.closest(".Detail").find(".SW-Profile-Relationships-Wrapper").slideUp();
       }
     }
   });
