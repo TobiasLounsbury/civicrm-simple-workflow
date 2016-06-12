@@ -32,10 +32,14 @@ function civicrm_api3_workflow_save($params) {
   }
 
   $wid = $params['wid'];
-  $d = urldecode($params['data']);
-  $data = parse_str($d);
-  //I don't know why this is important, but it made things work.
-  $try2 = parse_str($params['data']);
+  if(is_string($params['data'])) {
+    $d = urldecode($params['data']);
+    $data = parse_str($d);
+    //I don't know why this is important, but it made things work.
+    $try2 = parse_str($params['data']);
+  } else {
+    $data = $params['data'];
+  }
 
   //Hook in case someone wants to alter the data
   CRM_Workflow_hook::beforeSave($wid, $data);
