@@ -32,21 +32,26 @@ function simpleWorkflowAddResources($formName, &$form) {
   CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_jquery.js', 21, 'page-footer');
   CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_url.js', 21, 'page-footer');
   CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_html.js', 21, 'page-footer');
+  CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_case.js', 21, 'page-footer');
 
 
   //This causes the wysiwyg libraries to be included on the page.
   $form->assign('includeWysiwygEditor', true);
 }
 
+function _workflow_get_step_contact($wid, $contact) {
+  if ($contact == "<user>") {
+    return CRM_Core_Session::getLoggedInContactID();
+  } else {
+    $key = "workflow_{$wid}_step_{$contact}_contact_id";
+    return CRM_Core_Session::singleton()->get($key, "SimpleWorkflow");
+  }
+}
+
 function _workflow_profile_process_relationships($contactID, $relationships, $wid) {
   foreach($relationships as $relationship) {
 
-    if ($relationship->contact == "<user>") {
-      $relatedContact = CRM_Core_Session::getLoggedInContactID();
-    } else {
-      $key = "workflow_{$wid}_step_{$relationship->contact}_contact_id";
-      $relatedContact = CRM_Core_Session::singleton()->get($key, "SimpleWorkflow");
-    }
+    $relatedContact = _workflow_get_step_contact($wid, $relationship->contact);
 
     if($contactID && $relatedContact) {
       list($type, $primary, $secondary) = explode("_", $relationship->relType);
@@ -55,6 +60,28 @@ function _workflow_profile_process_relationships($contactID, $relationships, $wi
         "relationship_type_id" => $type,
         "contact_id_{$primary}" => $contactID,
         "contact_id_{$secondary}" => $relatedContact
+      );
+
+      try {
+        $result = civicrm_api3("Relationship", "create", $params);
+      } catch (Exception $e) {
+        CRM_Core_Error::debug_log_message($e->getMessage());
+      }
+    }
+  }
+}
+
+function _workflow_case_process_relationships($case, $relationships, $wid) {
+  foreach($relationships as $relationship) {
+    $relatedContact = _workflow_get_step_contact($wid, $relationship->contact);
+    if($case && $relatedContact) {
+      list($type, $primary, $secondary) = explode("_", $relationship->relType);
+
+      $params = array(
+        "relationship_type_id" => $type,
+        "contact_id_{$primary}" => $relatedContact,
+        "contact_id_{$secondary}" => $relatedContact,
+        "case_id" => $case
       );
 
       try {
