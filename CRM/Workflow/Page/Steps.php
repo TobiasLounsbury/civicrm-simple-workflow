@@ -80,7 +80,7 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
     //Add Stylesheet
     $ccr->addStyleFile('org.botany.workflow', 'css/workflow_steps.css');
     //Add JavaScript
-    $ccr->addScriptFile('org.botany.workflow', 'js/workflow_steps.js');
+    $ccr->addScriptFile('org.botany.workflow', 'js/workflow_steps.js', 100);
     $ccr->addScriptFile('org.botany.workflow', 'js/jquery.serialize-object.min.js', -200, 'html-header');
     //Add Settings
     $ccr->addVars('SimpleWorkflow', array(
@@ -106,7 +106,8 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       "CRM/Workflow/Page/Steps/StepTypes_url.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_case.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_html.tpl",
-      "CRM/Workflow/Page/Steps/StepTypes_default.tpl"
+      "CRM/Workflow/Page/Steps/StepTypes_default.tpl",
+      "CRM/Workflow/Page/Steps/StepTypes_relationship_template.tpl"
     );
 
     $javaScript = array(
@@ -115,6 +116,7 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_page.js'),
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_jquery.js'),
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_case.js'),
+      $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_widget_relationships.js'),
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_html.js')
     );
     $css = array();
@@ -126,7 +128,7 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
     }
 
     foreach($javaScript as $file) {
-      $ccr->addScriptUrl($file);
+      $ccr->addScriptUrl($file, 50);
     }
 
     $this->assign('uiTemplates', $uiTemplates);
@@ -148,6 +150,31 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
     CRM_UF_Page_ProfileEditor::registerSchemas(CRM_Utils_Array::collect('entity_type', $entities));
     $this->assign('profilesDataGroupType', CRM_Core_BAO_UFGroup::encodeGroupType($allowCoreTypes, array(), ';;'));
     $this->assign('profilesDataEntities', json_encode($entities));
+
+    //Support for Relationships
+    $result = civicrm_api3('RelationshipType', 'get', array(
+      'is_active' => 1,
+    ));
+    $relTypes = array();
+    $relTypeOptions = array();
+    if ($result['count'] > 0) {
+      foreach ($result['values'] as $relType) {
+        $relTypes[$relType['id']] = $relType;
+        $relTypeOptions[$relType['id']. '_a_b'] = $relType['label_a_b'];
+        if ($relType['label_a_b'] != $relType['label_b_a']) {
+          $relTypeOptions[$relType['id']. '_b_a'] = $relType['label_b_a'];
+        }
+      }
+    }
+
+    //Assign relationship data
+    $this->assign('relationshipTypeOptions', $relTypeOptions);
+    $this->assign("relationshipWidget", "CRM/Workflow/Page/Steps/StepTypes_relationship_widget.tpl");
+    $ccr->addVars('SimpleWorkflow', array(
+      "relationshipTypeOptions" => $relTypeOptions,
+      "relationshipTypes" => $relTypes
+    ));
+
 
     //Add the Case Data to page
     $this->assign('caseTypes', $caseTypes);
