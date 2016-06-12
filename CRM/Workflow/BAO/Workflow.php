@@ -275,6 +275,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     }
 
     $buffer = json_encode(array("workflow" => $workflow, "steps" => $steps));
-    CRM_Utils_System::download($workflow['name'], "application/json", $buffer, "json");
+    $filename = str_replace(" ", "_", $workflow['name']);
+    CRM_Utils_System::download($filename, "application/json", $buffer, "json");
   }
 }
