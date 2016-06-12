@@ -145,7 +145,8 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
 
     //Support for Profiles
     $entities = array(array('entity_name' => 'contact_1', 'entity_type' => 'IndividualModel'));
-    $allowCoreTypes = array_merge(array('Contact', 'Individual', 'Case'), CRM_Contact_BAO_ContactType::subTypes('Individual'));
+    $allowCoreTypes = array_merge(array('Contact', 'Individual', 'Case', "Organization", "Household"), CRM_Contact_BAO_ContactType::subTypes('Individual'));
+    $allowCoreTypes = array_merge($allowCoreTypes, CRM_Contact_BAO_ContactType::subTypes('Organization'));
     CRM_UF_Page_ProfileEditor::registerProfileScripts();
     CRM_UF_Page_ProfileEditor::registerSchemas(CRM_Utils_Array::collect('entity_type', $entities));
     $this->assign('profilesDataGroupType', CRM_Core_BAO_UFGroup::encodeGroupType($allowCoreTypes, array(), ';;'));
