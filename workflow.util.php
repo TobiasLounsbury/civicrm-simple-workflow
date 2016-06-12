@@ -71,7 +71,8 @@ function _workflow_profile_process_relationships($contactID, $relationships, $wi
   }
 }
 
-function _workflow_case_process_relationships($case, $relationships, $wid) {
+function _workflow_case_process_relationships($case, $client, $relationships, $wid) {
+
   foreach($relationships as $relationship) {
     $relatedContact = _workflow_get_step_contact($wid, $relationship->contact);
     if($case && $relatedContact) {
@@ -79,13 +80,14 @@ function _workflow_case_process_relationships($case, $relationships, $wid) {
 
       $params = array(
         "relationship_type_id" => $type,
-        "contact_id_{$primary}" => $relatedContact,
+        "contact_id_{$primary}" => $client,
         "contact_id_{$secondary}" => $relatedContact,
         "case_id" => $case
       );
 
       try {
         $result = civicrm_api3("Relationship", "create", $params);
+        CRM_Case_BAO_Case::createCaseRoleActivity($case, $result['id'], $client, $relatedContact);
       } catch (Exception $e) {
         CRM_Core_Error::debug_log_message($e->getMessage());
       }
