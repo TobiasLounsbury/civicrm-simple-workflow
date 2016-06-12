@@ -175,6 +175,10 @@ CRM.$(function ($) {
       if (typeof stepfname == 'function') {
         stepfname();
       }
+
+      //Add a hidden field to trigger the backend that this is a
+      //workflow "form"
+      $("#ActionWindow form").append("<input type='hidden' name='SimpleWorkflowFormStep' value='" + CRM.Workflow.workflow.id + "_" + currentStep.name + "' />");
     }
   });
 
