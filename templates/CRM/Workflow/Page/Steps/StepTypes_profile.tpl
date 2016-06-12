@@ -5,11 +5,11 @@
     </p>
 
     <!--// Add relationships that will be auto-created if this is a new contact //-->
-    <div class="SW-Profile-Relationships-Wrapper SWStepField">
-        <label>{ts}Relationships{/ts}</label>
+    <fieldset class="SW-Profile-Relationships-Wrapper">
+        <legend>{ts}Relationships{/ts}</legend>
         <p>{ts key='profile-relationship-help'}Relationships that will be created for this contact:{/ts}</p>
         {include file=$relationshipWidget location="bottom"}
-    </div>
+    </fieldset>
 
     <input type="hidden" name="data[#ORDER#][entity_id]" class="entity_id" />
 </div>
