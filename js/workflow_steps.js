@@ -269,22 +269,18 @@ CRM.$(function ($) {
     e.preventDefault();
   });
 
+  //Load the Data
+  for(var i in CRM.vars.SimpleWorkflow.details) {
+    SWAddStep(CRM.vars.SimpleWorkflow.details[i].entity_table, CRM.vars.SimpleWorkflow.details[i]);
+  }
+
+  //Setup the sortable.
+  SWRefreshSortable();
+
   //show the first form
   $("#AddSteps .SWToggleForm:first").show();
-
-  //wait a few hundred milliseconds so others have time to register their hooks.
-  setTimeout(function() {
-
-    //Load the Data
-    for(var i in CRM.vars.SimpleWorkflow.details) {
-      SWAddStep(CRM.vars.SimpleWorkflow.details[i].entity_table, CRM.vars.SimpleWorkflow.details[i]);
-    }
-
-    //Setup the sortable.
-    SWRefreshSortable();
-
-    //Let anyting that wants to run some init code do so now.
-    $("#Data").trigger("load:complete");
-  }, 200);
+  
+  //Let anyting that wants to run some init code do so now.
+  $("#Data").trigger("load:complete");
 });
 
