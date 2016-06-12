@@ -30,8 +30,11 @@
         <legend>{ts}Defaults:{/ts}</legend>
 
         <div class="SWStepField">
-            <input type="checkbox" name="data[#ORDER#][options][defaults][client_id]" value="user_contact_id" class="case_option_defaults_client_id" />
-            <label>{ts}Assume currently logged in contact is client{/ts}</label>
+            <label>{ts}Client{/ts}:</label>
+            <input type="hidden" class="SW-Relationship-Contact-Hidden case_option_defaults_client_id" name="data[#ORDER#][options][defaults][client_id]" />
+            <select class="SW-Relationship-Contact case_option_defaults_client_id_widget">
+                <option value="<user>">Active User</option>
+            </select>
         </div>
 
         <div class="SWStepField">

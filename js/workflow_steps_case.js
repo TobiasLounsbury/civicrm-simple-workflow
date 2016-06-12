@@ -55,7 +55,7 @@ function SimpleWorkflowStepAddCase(template, index, data) {
     for (var x in fieldsData) {
       if (data.options.defaults.hasOwnProperty(fieldsData[x].id)) {
         if(fieldsData[x].id === 'client_id') {
-          template.find(".case_option_defaults_client_id").prop("checked", data.options.defaults.client_id);
+          SWRelationship_SetValueDelayed(template.find(".case_option_defaults_client_id_widget"), data.options.defaults.client_id);
         } else {
           template.find(".case_option_defaults_" + fieldsData[x].id).val(data.options.defaults[fieldsData[x].id]);
         }
