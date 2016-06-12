@@ -76,7 +76,7 @@ function SWRelationship_Add(target, type, contact) {
 
   //Set the Contact if we have it
   if (contact) {
-    SWRelationship_SetValueDelayed(newRel, contact);
+    SWRelationship_SetValueDelayed(newRel.find(".SW-Relationship-Contact"), contact);
   }
 
   //Add the relationship to the step.
@@ -85,8 +85,19 @@ function SWRelationship_Add(target, type, contact) {
 
 function SWRelationship_SetValueDelayed(target, value) {
   //todo: Refactor this so it checks that the option exists.
-  var index = CRM.$(".order[value=" + value + "]").closest(".Detail").attr("data-index");
-  target.find(".SW-Relationship-Contact").val(index);
+  if(value) {
+    var index = CRM.$(".order[value=" + value + "]").closest(".Detail").attr("data-index");
+    target.val(index);
+    //Stop gap that will wait a while and re-try
+    //This could cause problems if it never becomes available.
+    if(!target.val()) {
+      setTimeout(function() {
+        SWRelationship_SetValueDelayed(target, value);
+      },100);
+    } else {
+      SWRelationship_SetContactValue(target);
+    }
+  }
 }
 
 CRM.$(function ($) {
