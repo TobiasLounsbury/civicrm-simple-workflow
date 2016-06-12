@@ -263,6 +263,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
         unset($workflow[$key]);
       }
     }
+    unset($workflow['N']);
 
     $steps = self::getWorkflowDetails($wid);
 
@@ -272,6 +273,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
           unset($step[$key]);
         }
       }
+      unset($step['N']);
     }
 
     $buffer = json_encode(array("workflow" => $workflow, "steps" => $steps));
