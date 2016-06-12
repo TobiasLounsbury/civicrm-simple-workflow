@@ -26,6 +26,9 @@ function SimpleWorkflowStepAddCase(template, index, data) {
   mode.attr("name", mode.attr("name").replace("#ORDER#", index));
   mode.val(data.options.mode);
 
+  //Add all the relationships we have saved if any.
+  SWRelationship_AddAll(template, data.options.relationships);
+
   var cFields = template.find(".case_option_core_fields");
   cFields.attr("name", cFields.attr("name").replace("#ORDER#", index));
   cFields.val(data.options.core_fields);

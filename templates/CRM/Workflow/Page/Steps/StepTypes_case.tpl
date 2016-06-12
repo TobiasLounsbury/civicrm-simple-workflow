@@ -19,6 +19,13 @@
         <input name="data[#ORDER#][options][core_fields]" class="case_option_core_fields" />
     </div>
 
+    <!--// Add relationships that will be auto-created for this case //-->
+    <fieldset class="SW-Case-Relationships-Wrapper">
+        <legend>{ts}Roles{/ts}</legend>
+        <p>{ts key='profile-relationship-help'}Roles that will be assigned for this case (these should match existing roles in the case type):{/ts}</p>
+        {include file=$relationshipWidget location="bottom"}
+    </fieldset>
+
     <fieldset>
         <legend>{ts}Defaults:{/ts}</legend>
 
