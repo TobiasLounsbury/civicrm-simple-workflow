@@ -22,6 +22,7 @@ function SWReorderSteps() {
   CRM.$("#Data .Detail").each(function (i) {
     CRM.$(this).find(".order").val(i + 1);
   });
+  CRM.$("#Data").trigger("steps:reordered");
 }
 
 /**
@@ -101,6 +102,7 @@ function SWDeleteStep(event) {
     obj.remove();
   }
   SWReorderSteps();
+  CRM.$("#Data").trigger("step:deleted", obj);
 }
 
 /**
@@ -175,15 +177,17 @@ function SWAddStep(stepType, data) {
   if(func) {
     var template = CRM.$("#SimpleWorkflowTypeTemplateDefault").clone();
     template.removeAttr("id");
+    template.attr("data-index", CRM.vars.SimpleWorkflow.nextIndex);
     if(func(template, CRM.vars.SimpleWorkflow.nextIndex, data)) {
       SWSetIndexAndData(template, CRM.vars.SimpleWorkflow.nextIndex, data);
-      CRM.vars.SimpleWorkflow.nextIndex++;
       CRM.$("#SortableDetails").append(template);
     }
+    CRM.vars.SimpleWorkflow.nextIndex++;
   }
 
   SWRefreshSortable();
   SWReorderSteps();
+  CRM.$("#Data").trigger("step:added", data, template);
 }
 
 
@@ -265,15 +269,22 @@ CRM.$(function ($) {
     e.preventDefault();
   });
 
-  //Load the Data
-  for(var i in CRM.vars.SimpleWorkflow.details) {
-    SWAddStep(CRM.vars.SimpleWorkflow.details[i].entity_table, CRM.vars.SimpleWorkflow.details[i]);
-  }
-
   //show the first form
   $("#AddSteps .SWToggleForm:first").show();
 
-  //Setup the sortable.
-  SWRefreshSortable();
+  //wait a few hundred milliseconds so others have time to register their hooks.
+  setTimeout(function() {
+
+    //Load the Data
+    for(var i in CRM.vars.SimpleWorkflow.details) {
+      SWAddStep(CRM.vars.SimpleWorkflow.details[i].entity_table, CRM.vars.SimpleWorkflow.details[i]);
+    }
+
+    //Setup the sortable.
+    SWRefreshSortable();
+
+    //Let anyting that wants to run some init code do so now.
+    $("#Data").trigger("load:complete");
+  }, 200);
 });
 
