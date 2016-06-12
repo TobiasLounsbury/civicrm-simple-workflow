@@ -269,13 +269,18 @@ function workflow_civicrm_postProcess($formName, &$form) {
         break;
 
       case "Case":
+        $caseId = $form->case_id;
+        $clientId = $form->client_id;
+        $relationships = CRM_Utils_Array::value("relationships", $step['options'], false);
+        if($relationships) {
+          _workflow_case_process_relationships($caseId, $clientId, $relationships, $wid);
+        }
+        break;
+      default:
+        //Should we do something extra here?
+        //Or is it sufficient to allow a third party extension
+        //hook into the main civicrm_postProcess hook?
+    }
 
-         break;
-       default:
-         //Should we do something extra here?
-         //Or is it sufficient to allow a third party extension
-         //hook into the main civicrm_postProcess hook?
-     }
-
-   }
- }
+  }
+}
