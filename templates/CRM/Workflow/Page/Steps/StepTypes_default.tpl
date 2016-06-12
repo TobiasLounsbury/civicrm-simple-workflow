@@ -1,7 +1,7 @@
 <div id="SimpleWorkflowTypeTemplateDefault" class="Detail">
     <span class='handle'>ↈ</span>
     <span class='DeleteStep'>{ts}delete{/ts}</span>
-    <input type="hidden" name="data[#ORDER#][order]" class="order"/>
+    <input type="hidden" id="detail_order_#ORDER#" name="data[#ORDER#][order]" class="order"/>
     <input type="hidden" name="data[#ORDER#][entity_table]" class="entity_table" />
 
     <div class='entity_name'></div>
