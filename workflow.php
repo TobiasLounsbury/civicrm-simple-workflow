@@ -241,3 +241,41 @@ function workflow_civicrm_navigationMenu( &$params ) {
     );
   }
 }
+
+
+/**
+ * Implements hook_civicrm_postProcess().
+ *
+ * @param string $formName
+ * @param CRM_Core_Form $form
+ */
+function workflow_civicrm_postProcess($formName, &$form) {
+  $workflowStep = CRM_Utils_Array::value("SimpleWorkflowFormStep", $form->_submitValues, false);
+  if ($workflowStep) {
+    list($wid, $stepName) = explode("_", $workflowStep, 2);
+    $step = CRM_Workflow_BAO_WorkflowDetail::getDetail($wid, $stepName);
+    switch($step['entity_table']) {
+      case "Profile":
+        $key = "workflow_{$wid}_step_{$step['order']}_contact_id";
+        $contactID = $form->getVar("_id");
+        //Save the contact_id for this profile
+        CRM_Core_Session::singleton()->set($key, $contactID, "SimpleWorkflow");
+
+        //Process the relationships for this profile if there are any
+        $relationships = CRM_Utils_Array::value("relationships", $step['options'], false);
+        if($relationships) {
+          _workflow_profile_process_relationships($contactID, $relationships, $wid);
+        }
+        break;
+
+      case "Case":
+
+         break;
+       default:
+         //Should we do something extra here?
+         //Or is it sufficient to allow a third party extension
+         //hook into the main civicrm_postProcess hook?
+     }
+
+   }
+ }
