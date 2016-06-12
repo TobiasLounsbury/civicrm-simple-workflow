@@ -1,4 +1,4 @@
-civicrm-workflow
+civicrm-simple-workflow
 ================
 
-A simple workflow administration and front end interface for CiviCRM
+A simple and extensible workflow administration and front end interface for CiviCRM.
