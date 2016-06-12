@@ -258,7 +258,22 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
 
   static function exportJSON($wid) {
     $workflow = self::getWorkflow($wid);
+    foreach($workflow as $key => $fieldData) {
+      if (substr($key, 0, 1) == "_") {
+        unset($workflow[$key]);
+      }
+    }
+
     $steps = self::getWorkflowDetails($wid);
+
+    foreach($steps as &$step) {
+      foreach($step as $key => $fieldData) {
+        if (substr($key, 0, 1) == "_") {
+          unset($step[$key]);
+        }
+      }
+    }
+
     $buffer = json_encode(array("workflow" => $workflow, "steps" => $steps));
     CRM_Utils_System::download($workflow['name'], "application/json", $buffer, "json");
   }
