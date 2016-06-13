@@ -68,4 +68,12 @@ class CRM_Workflow_hook {
       'workflow_execute'
     );
   }
+
+
+  static function completeStep($wid, $stepName, &$context) {
+    return CRM_Utils_Hook::singleton()->invoke(3, $wid, $stepName, $context,
+      self::$_nullObject, self::$_nullObject, self::$_nullObject,
+      'workflow_complete_step'
+    );
+  }
 }
