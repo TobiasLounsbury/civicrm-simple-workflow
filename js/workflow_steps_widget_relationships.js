@@ -86,7 +86,7 @@ function SWRelationship_Add(target, type, contact) {
 function SWRelationship_SetValueDelayed(target, value) {
   //todo: Refactor this so it checks that the option exists.
   if(value) {
-    var index = CRM.$(".order[value=" + value + "]").closest(".Detail").attr("data-index");
+    var index = CRM.$(".order[value='" + value + "']").closest(".Detail").attr("data-index");
     target.val(index);
     //Stop gap that will wait a while and re-try
     //This could cause problems if it never becomes available.
