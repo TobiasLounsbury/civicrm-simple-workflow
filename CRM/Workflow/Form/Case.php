@@ -234,12 +234,16 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
     //This is a hack to store custom case data because the API explicitly
     //strips out all custom data passed to the API ad replaces it with an empty array
     if($case['is_error'] == 0 && array_key_exists("id", $case)) {
+      $this->case = $case['values'][$case['id']];
       $this->case_id = $case['id'];
       $this->client_id = $values['contact_id'];
       CRM_Core_BAO_CustomValueTable::store($customValues, 'civicrm_case', $case['id']);
     }
 
     parent::postProcess();
+
+    CRM_Workflow_hook::completeStep($this->_wid, $this->_name, $this);
+
   }
 
 
