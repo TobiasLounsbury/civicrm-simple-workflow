@@ -35,7 +35,7 @@
     <path>civicrm/workflows/case</path>
     <page_callback>CRM_Workflow_Form_Case</page_callback>
     <title>Case</title>
-    <access_arguments>true</access_arguments>
+    <access_callback>1</access_callback>
     <is_public>true</is_public>
   </item>
 </menu>
