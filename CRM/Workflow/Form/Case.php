@@ -229,6 +229,13 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
       }
     }
 
+    //There must be a creatorId associated with a case.
+    //If the user is anonymous default to the clientContactId
+    $currentUserId = CRM_Core_Session::getLoggedInContactID();
+    if (!$currentUserId) {
+      $values['creator_id'] = $values['contact_id'];
+    }
+
     $case = civicrm_api3('Case', 'create', $values);
 
     //This is a hack to store custom case data because the API explicitly
