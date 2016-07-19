@@ -15,6 +15,9 @@ CRM.$(function ($) {
       $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("stepAvailable");
     }
 
+    //Scroll to the top of the page when a new step is loaded.
+    $("html, body").animate({ scrollTop: 0 }, 300);
+
     //Set the currentStep
     currentStep = CRM.Workflow.steps[order];
     //Trigger an Step Load event
