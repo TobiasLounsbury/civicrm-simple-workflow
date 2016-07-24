@@ -74,7 +74,8 @@ function workflow_civicrm_buildForm($formName, &$form) {
           'workflow' => $workflow
         )));
 
-        //Set the width for the step lis
+        //Set the width for the step
+        //todo: This should be handled client side. We have the number of steps.
         $stepWidth = (empty($steps)) ? 98 : round(98 / sizeof($steps), 0, PHP_ROUND_HALF_DOWN);
         CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('breadcrumWidth' => $stepWidth)));
 
@@ -282,5 +283,18 @@ function workflow_civicrm_postProcess($formName, &$form) {
         //hook into the main civicrm_postProcess hook?
     }
 
+  }
+}
+
+
+/**
+ * Implementation of hook_workflow_getStepParams
+ */
+function workflow_workflow_getStepParams(&$step, $workflowId) {
+  switch($step['entity_table']) {
+    case "Profile":
+      simpleWorkflowPreprocessProfileStep($step, $workflowId);
+      break;
+    default:
   }
 }
