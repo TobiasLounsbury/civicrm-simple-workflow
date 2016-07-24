@@ -4,6 +4,7 @@
     <p>
         <input type="radio" name="SW-Profile-Mode" value="edit" id="SW-Profile-Current" checked="checked" /> <label for="SW-Profile-Current">{ts}Use to update current Contact{/ts}</label>
         <input type="radio" name="SW-Profile-Mode" value="create" id="SW-Profile-Anonymous" /> <label for="SW-Profile-Anonymous">{ts}Use to create new Contact{/ts}</label>
+        <input type="radio" name="SW-Profile-Mode" value="select" id="SW-Profile-Existing" /> <label for="SW-Profile-Existing">{ts}Select existing or create new Contact{/ts}</label>
     </p>
     <p><button id="AddProfile" class="AddStepButton" data-step-type="profile">{ts}Add Profile to Workflow{/ts}</button></p>
 </div>

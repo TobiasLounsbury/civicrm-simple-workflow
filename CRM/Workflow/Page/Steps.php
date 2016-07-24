@@ -31,7 +31,7 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
     if (!$dao->fetch()) {
       $workflow = null;
     } else {
-      $workflow = (array) $dao;
+      $workflow = $dao->toArray();
     }
 
     $dsql = "SELECT * FROM `".$detailTable."` WHERE workflow_id = {$wid} ORDER BY `order`";
@@ -151,6 +151,19 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
     CRM_UF_Page_ProfileEditor::registerSchemas(CRM_Utils_Array::collect('entity_type', $entities));
     $this->assign('profilesDataGroupType', CRM_Core_BAO_UFGroup::encodeGroupType($allowCoreTypes, array(), ';;'));
     $this->assign('profilesDataEntities', json_encode($entities));
+
+
+    //Groups
+    $allGroups = CRM_Contact_BAO_Group::getGroupList();
+    $this->assign('allGroups', $allGroups);
+
+    //Contact Types
+    $contactTypes = CRM_Contact_BAO_ContactType::basicTypePairs();
+    foreach ($contactTypes as $ctName => &$cType) {
+      $subTypes = CRM_Contact_BAO_ContactType::subTypePairs($ctName);
+      $cType = array("label" => $cType, "subTypes" => $subTypes);
+    }
+    $this->assign('contactTypes', $contactTypes);
 
     //Support for Relationships
     $result = civicrm_api3('RelationshipType', 'get', array(

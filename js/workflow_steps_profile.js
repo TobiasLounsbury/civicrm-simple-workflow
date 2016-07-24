@@ -22,6 +22,14 @@ function SimpleWorkflowStepAddProfile(template, index, data) {
     SWRelationship_AddAll(template, data.options.relationships);
   }
 
+  //Handle the Existing Filters
+  if (data.options.mode == "select") {
+
+  } else {
+    template.find(".SW-Profile-Select-Existing-Wrapper").hide();
+  }
+
+
   template.find(".entity_name").html(data.entity_name);
   template.find(".entity_table").val("Profile");
   template.addClass("Profile");
@@ -35,11 +43,19 @@ CRM.$(function ($) {
 
     //Wire up change profile mode
     if (obj.hasClass("SW-Profile-Mode")) {
+
+      //This handles the Relationship Dialog
       if (obj.val() == "create") {
         obj.closest(".Detail").find(".SW-Profile-Relationships-Wrapper").slideDown();
+        obj.closest(".Detail").find(".SW-Profile-Select-Existing-Wrapper").slideUp();
+      } else if (obj.val() == "select") {
+        obj.closest(".Detail").find(".SW-Profile-Relationships-Wrapper").slideDown();
+          obj.closest(".Detail").find(".SW-Profile-Select-Existing-Wrapper").slideDown();
       } else {
+        obj.closest(".Detail").find(".SW-Profile-Select-Existing-Wrapper").slideUp();
         obj.closest(".Detail").find(".SW-Profile-Relationships-Wrapper").slideUp();
       }
+
     }
   });
 });
