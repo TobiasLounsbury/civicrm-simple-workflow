@@ -82,7 +82,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
 
     $result = null;
     if ($dao->fetch()) {
-      $result = (array) $dao;
+      $result = $dao->toArray();
     }
     $detailTable = CRM_Workflow_DAO_WorkflowDetail::$_tableName;
     $dsql = "SELECT `entity_id` as `contains_page` FROM `".$detailTable."` WHERE workflow_id = {$wid} AND `entity_table` = 'Page'";
@@ -103,8 +103,8 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     $dao =& CRM_Core_DAO::executeQuery($dsql);
     $steps = array();
     while ($dao->fetch()) {
-      $steps[$dao->order] = (array) $dao;
-      $steps[$dao->order]['options'] = (array) json_decode($dao->options);
+      $steps[$dao->order] = $dao->toArray();
+      $steps[$dao->order]['options'] = json_decode($dao->options, true);
     }
     return $steps;
   }
@@ -134,7 +134,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     $allLinks = CRM_Workflow_Page_Workflow_List::actionLinks();
     while ($dao->fetch()) {
 
-      $result[$dao->id] = (array) $dao;
+      $result[$dao->id] = $dao->toArray();
 
       // form all action links
       $action = array_sum(array_keys($allLinks));
@@ -187,7 +187,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     if (!$dao->fetch()) {
       return false;
     } else {
-      $a = (array) $dao;
+      $a = $dao->toArray();
       return $a['name'];
     }
   }
@@ -233,7 +233,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     $sql = "SELECT * FROM `".$workflowTable."` WHERE id = {$wid}";
     $dao =& CRM_Core_DAO::executeQuery($sql);
     if ($dao->fetch()) {
-      $workflow = (array) $dao;
+      $workflow = $dao->toArray();
       $workflow['id'] = null;
       $new_workflow = CRM_Workflow_BAO_Workflow::add($workflow);
 
