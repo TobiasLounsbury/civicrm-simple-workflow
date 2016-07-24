@@ -39,6 +39,53 @@ function simpleWorkflowAddResources($formName, &$form) {
   $form->assign('includeWysiwygEditor', true);
 }
 
+
+
+function simpleWorkflowPreprocessStepsForExecution(&$steps) {
+
+  foreach ($steps as &$step) {
+
+    CRM_Workflow_hook::getStepParams($step, $step['workflow_id']);
+
+  }
+
+}
+
+
+/**
+ * This function takes a profile step and returns supporting data if needed.
+ *
+ * @param $step
+ * @param $workflowId
+ *
+ *
+ *
+ */
+function simpleWorkflowPreprocessProfileStep(&$step, $workflowId) {
+  if ($step['options']['mode'] == "select" && !empty($step['options']['existingGroup'])) {
+    $groupContacts = array();
+    $result = civicrm_api3('GroupContact', 'get', array(
+      'sequential' => 1,
+      'return' => array("contact_id"),
+      'group_id' => "Advisory Board",
+      'api.Contact.get' => array('return' => array("display_name")),
+    ));
+
+    foreach($result['values'] as $contact) {
+      $groupContacts[$contact['contact_id']] =  array("id" => $contact['contact_id'], "text" => $contact['api.Contact.get']['values'][0]['display_name']);
+    }
+
+    $step['options']['groupContacts'] = $groupContacts;
+  }
+}
+
+
+/**
+ * @param $wid
+ * @param $contact
+ * @return int|mixed|NULL
+ */
+
 function _workflow_get_step_contact($wid, $contact) {
   if ($contact == "<user>") {
     return CRM_Core_Session::getLoggedInContactID();
