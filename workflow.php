@@ -68,6 +68,9 @@ function workflow_civicrm_buildForm($formName, &$form) {
         //Inject the needed resources into the page
         simpleWorkflowAddResources($formName, $form);
 
+        //Do some pre-processing for the individual steps (delegates to each type)
+        simpleWorkflowPreprocessStepsForExecution($steps);
+
         //Add the settings we need.
         CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array(
           'steps' => $steps,
