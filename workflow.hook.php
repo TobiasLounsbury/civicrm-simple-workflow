@@ -47,9 +47,9 @@ class CRM_Workflow_hook {
    * @param $settings
    * @return mixed
    */
-  static function getStepParams($step, &$urlParams, &$settings) {
-    return CRM_Utils_Hook::singleton()->invoke(3, $step, $urlParams, $settings,
-      self::$_nullObject, self::$_nullObject, self::$_nullObject,
+  static function getStepParams(&$step, $workflow) {
+    return CRM_Utils_Hook::singleton()->invoke(2, $step, $workflow,
+      self::$_nullObject, self::$_nullObject, self::$_nullObject, self::$_nullObject,
       'workflow_getStepParams'
     );
   }
@@ -76,4 +76,7 @@ class CRM_Workflow_hook {
       'workflow_complete_step'
     );
   }
+
+
+
 }
