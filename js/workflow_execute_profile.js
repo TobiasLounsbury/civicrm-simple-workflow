@@ -10,6 +10,7 @@ CRM.$(function ($) {
     
     request.success(function() {
       CRM.Workflow.CompleteCurrentStep();
+      $("#ActionWindow").slideDown();
     });
 
   };
@@ -28,16 +29,25 @@ CRM.$(function ($) {
         if ($("#SWProfileSelect_" + currentStep.order).length == 0) {
 
           //Create the Dom Objects
-          var cont = $("<div id='SWProfileSelect_" + currentStep.order+ "'></div>");
-          var selector = $("<input class='SWProfileSelectValue' id='SWProfileSelect_" + currentStep.order+ "_Value' />");
-          var saveButton = $("<button data-step='" +currentStep.order+ "'>" + ts(currentStep.options.existingButtonText) + "</button>");
+          var cont = $("<div class='SWProfileSelectExistingContainer crm-section' id='SWProfileSelect_" + currentStep.order+ "'></div>");
 
+          var label = $("<div class='label'><label class='SWProfileSelectLabel' for='SWProfileSelect_" + currentStep.order+ "_Value'>"+ts(currentStep.options.existingFieldLabel)+"</label></div>");
+          var selector = $("<div class='content'><input class='SWProfileSelectValue' id='SWProfileSelect_" + currentStep.order+ "_Value' /></div>");
+          var saveButton = $("<button data-step='" +currentStep.order+ "'>" + ts(currentStep.options.existingButtonText) + "</button>");
+          var createButton = $("<button>" + ts(currentStep.options.existingOrMessage) + "</button>");
+          var sepp = $("<hr />").hide();
           //wire up the save button
           saveButton.click(handleProfileSelectExisting);
 
+          createButton.click(function(e) {
+            $("#ActionWindow").slideToggle();
+            sepp.toggle();
+            return e.preventDefault();
+          });
+
 
           //Add the widgets to the page.
-          cont.append(selector).append(saveButton);
+          cont.append(label).append(selector).append(saveButton).append(createButton).append(sepp);
           $("#PreMessage").after(cont);
 
           //trigger create of select2 with data source.
@@ -45,7 +55,7 @@ CRM.$(function ($) {
         }
 
 
-
+        $("#ActionWindow").hide();
         actionType = "create";
       }
       var lsurl = CRM.url("civicrm/profile/" + actionType, {gid: currentStep.entity_id, reset: 1});
