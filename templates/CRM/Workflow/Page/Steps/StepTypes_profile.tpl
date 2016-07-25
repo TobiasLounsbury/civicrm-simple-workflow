@@ -19,8 +19,18 @@
         </div>
 
         <div class="SWStepField">
+            <label>{ts}Field Label{/ts}:</label>
+            <input name="data[#ORDER#][options][existingFieldLabel]" class="profile_option_existing_field_label" />
+        </div>
+
+        <div class="SWStepField">
             <label>{ts}Button Text{/ts}:</label>
             <input name="data[#ORDER#][options][existingButtonText]" class="profile_option_existing_button_text" />
+        </div>
+
+        <div class="SWStepField">
+            <label>{ts}"Or Message"{/ts}:</label>
+            <input name="data[#ORDER#][options][existingOrMessage]" class="profile_option_existing_or_message" />
         </div>
 
         <!--//
