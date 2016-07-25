@@ -210,7 +210,9 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
     $values['custom'] = CRM_Core_BAO_CustomField::postProcess(
       $values,
       $fields,
-      'Case'
+      'Case',
+      false, // inline
+      false //Check perms
     );
 
     //Cleanup Data before we call create otherwise the custom_[x]
