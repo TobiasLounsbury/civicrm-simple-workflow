@@ -61,3 +61,7 @@ div.breadcrumb {
 .crm-contribution-main-form-block {
     display: none;
 }
+
+.SWProfileSelectExistingContainer {
+    margin-top: 10px;
+}
