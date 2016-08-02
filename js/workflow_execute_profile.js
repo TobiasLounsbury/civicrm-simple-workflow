@@ -6,7 +6,7 @@ CRM.$(function ($) {
     var value = $("#SWProfileSelect_" + ind + "_Value").val();
     var step = CRM.Workflow.steps[ind];
 
-    var request = CRM.api3("workflow", "complete_step", {"workflow": step.workflow_id, "step": step.order, "contact": value});
+    var request = CRM.api3("workflow", "complete_step", {"workflow": step.workflow_id, "step": step.name, "contact": value});
     
     request.success(function() {
       CRM.Workflow.CompleteCurrentStep();
@@ -32,7 +32,9 @@ CRM.$(function ($) {
           var cont = $("<div class='SWProfileSelectExistingContainer crm-section' id='SWProfileSelect_" + currentStep.order+ "'></div>");
 
           var label = $("<div class='label'><label class='SWProfileSelectLabel' for='SWProfileSelect_" + currentStep.order+ "_Value'>"+ts(currentStep.options.existingFieldLabel)+"</label></div>");
-          var selector = $("<div class='content'><input class='SWProfileSelectValue' id='SWProfileSelect_" + currentStep.order+ "_Value' /></div>");
+          var selectContainer = $("<div class='content'></div>");
+          var selector = $("<input class='SWProfileSelectValue' id='SWProfileSelect_" + currentStep.order+ "_Value' />");
+
           var saveButton = $("<button data-step='" +currentStep.order+ "'>" + ts(currentStep.options.existingButtonText) + "</button>");
           var createButton = $("<button>" + ts(currentStep.options.existingOrMessage) + "</button>");
           var sepp = $("<hr />").hide();
@@ -47,7 +49,8 @@ CRM.$(function ($) {
 
 
           //Add the widgets to the page.
-          cont.append(label).append(selector).append(saveButton).append(createButton).append(sepp);
+          selectContainer.append(selector);
+          cont.append(label).append(selectContainer).append(saveButton).append(createButton).append(sepp);
           $("#PreMessage").after(cont);
 
           //trigger create of select2 with data source.
