@@ -100,10 +100,10 @@ function _workflow_get_step_contact($wid, $contact) {
 function _workflow_profile_process_relationships($contactID, $relationships, $wid) {
   foreach($relationships as $relationship) {
 
-    $relatedContact = _workflow_get_step_contact($wid, $relationship->contact);
+    $relatedContact = _workflow_get_step_contact($wid, $relationship['contact']);
 
     if($contactID && $relatedContact) {
-      list($type, $primary, $secondary) = explode("_", $relationship->relType);
+      list($type, $primary, $secondary) = explode("_", $relationship['relType']);
 
       $params = array(
         "relationship_type_id" => $type,
@@ -123,9 +123,9 @@ function _workflow_profile_process_relationships($contactID, $relationships, $wi
 function _workflow_case_process_relationships($case, $client, $relationships, $wid) {
 
   foreach($relationships as $relationship) {
-    $relatedContact = _workflow_get_step_contact($wid, $relationship->contact);
+    $relatedContact = _workflow_get_step_contact($wid, $relationship['contact']);
     if($case && $relatedContact) {
-      list($type, $primary, $secondary) = explode("_", $relationship->relType);
+      list($type, $primary, $secondary) = explode("_", $relationship['relType']);
 
       $params = array(
         "relationship_type_id" => $type,
