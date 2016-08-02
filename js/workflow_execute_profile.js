@@ -6,7 +6,7 @@ CRM.$(function ($) {
     var value = $("#SWProfileSelect_" + ind + "_Value").val();
     var step = CRM.Workflow.steps[ind];
 
-    var request = CRM.api3("workflow", "completeStep", {"workflow": step.workflow_id, "step": step.order, "contact": value});
+    var request = CRM.api3("workflow", "complete_step", {"workflow": step.workflow_id, "step": step.order, "contact": value});
     
     request.success(function() {
       CRM.Workflow.CompleteCurrentStep();
