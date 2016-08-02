@@ -264,12 +264,6 @@ function workflow_civicrm_postProcess($formName, &$form) {
         $contactID = $form->getVar("_id");
         //Save the contact_id for this profile
         CRM_Core_Session::singleton()->set($key, $contactID, "SimpleWorkflow");
-
-        //Process the relationships for this profile if there are any
-        $relationships = CRM_Utils_Array::value("relationships", $step['options'], false);
-        if($relationships) {
-          _workflow_profile_process_relationships($contactID, $relationships, $wid);
-        }
         break;
 
       case "Case":
@@ -286,9 +280,31 @@ function workflow_civicrm_postProcess($formName, &$form) {
         //hook into the main civicrm_postProcess hook?
     }
 
+    //Process any extra step details that need to happen.
+    CRM_Workflow_hook::completeStep($wid, $step['name'], $form);
   }
 }
 
+
+function workflow_workflow_complete_step($wid, $stepName, &$context) {
+  $step = CRM_Workflow_BAO_WorkflowDetail::getDetail($wid, $stepName);
+
+  switch($step['entity_table']) {
+    case "Profile":
+      //Process the relationships for this profile if there are any
+      $relationships = CRM_Utils_Array::value("relationships", $step['options'], false);
+      if($relationships) {
+        $key = "workflow_{$wid}_step_{$step['order']}_contact_id";
+        $contactID = CRM_Core_Session::singleton()->get($key, "SimpleWorkflow");
+        _workflow_profile_process_relationships($contactID, $relationships, $wid);
+      }
+      break;
+    case "Case":
+
+      break;
+  }
+
+}
 
 /**
  * Implementation of hook_workflow_getStepParams
