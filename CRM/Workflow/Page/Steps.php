@@ -39,10 +39,10 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
 
     $details = array();
     while ($dao->fetch()) {
-      $details[$dao->order] = (array) $dao;
+      $details[$dao->order] = $dao->toArray();
 
       if($dao->options) {
-        $details[$dao->order]['options'] = json_decode($dao->options);
+        $details[$dao->order]['options'] = json_decode($dao->options, true);
       }
 
       if($dao->entity_table == "Case") {
