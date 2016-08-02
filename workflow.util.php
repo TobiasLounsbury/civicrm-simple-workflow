@@ -64,15 +64,17 @@ function simpleWorkflowPreprocessStepsForExecution(&$steps) {
 function simpleWorkflowPreprocessProfileStep(&$step, $workflowId) {
   if ($step['options']['mode'] == "select" && !empty($step['options']['existingGroup'])) {
     $groupContacts = array();
-    $result = civicrm_api3('GroupContact', 'get', array(
-      'sequential' => 1,
-      'return' => array("contact_id"),
-      'group_id' => "Advisory Board",
-      'api.Contact.get' => array('return' => array("display_name")),
+    $result = civicrm_api3('Contact', 'get', array(
+      'group' => $step['options']['existingGroup'],
+      'options' => array(
+        'limit' => 0,
+        'sort' => 'sort_name',
+      ),
+      'return' => array("display_name"),
     ));
 
     foreach($result['values'] as $contact) {
-      $groupContacts[$contact['contact_id']] =  array("id" => $contact['contact_id'], "text" => $contact['api.Contact.get']['values'][0]['display_name']);
+      $groupContacts[] =  array("id" => $contact['contact_id'], "text" => $contact['display_name']);
     }
 
     $step['options']['groupContacts'] = $groupContacts;
