@@ -170,7 +170,7 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
     $defaults = array();
 
     if(array_key_exists("options", $this->_step) && array_key_exists("defaults", $this->_step['options'])) {
-      $defaults = (array) $this->_step['options']['defaults'];
+      $defaults = $this->_step['options']['defaults'];
       $defaults['client_id'] = _workflow_get_step_contact($this->_wid, $defaults['client_id']);
     }
 
@@ -182,7 +182,7 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
     $defaults = array();
 
     if(array_key_exists("options", $this->_step) && array_key_exists("defaults", $this->_step['options'])) {
-      $defaults = (array) $this->_step['options']['defaults'];
+      $defaults = $this->_step['options']['defaults'];
     }
 
     $defaults['client_id'] = _workflow_get_step_contact($this->_wid, $defaults['client_id']);
