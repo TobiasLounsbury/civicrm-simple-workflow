@@ -13,10 +13,10 @@ class CRM_Workflow_BAO_WorkflowDetail extends CRM_Workflow_DAO_WorkflowDetail {
 
     $dao =& CRM_Core_DAO::executeQuery($sql, $vars);
     $dao->fetch();
-    $data = (array) $dao;
+    $data = $dao->toArray();
 
     if($dao->options) {
-      $data['options'] = (array) json_decode($dao->options);
+      $data['options'] = json_decode($dao->options, true);
     }
 
     return $data;
