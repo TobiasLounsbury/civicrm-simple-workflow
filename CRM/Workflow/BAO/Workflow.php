@@ -276,8 +276,109 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
       unset($step['N']);
     }
 
+    $steps = self::processForExport($steps);
+
     $buffer = json_encode(array("workflow" => $workflow, "steps" => $steps));
     $filename = str_replace(" ", "_", $workflow['name']);
     CRM_Utils_System::download($filename, "application/json", $buffer, "json");
   }
+
+
+
+  static function processForExport($steps) {
+
+    foreach($steps as &$step) {
+
+      switch($step['entity_table']) {
+        case "Profile":
+          $entityName = self::_wf_lookupName("UFGroup", $step['entity_id']);
+          $step['entity_id'] = $step['entity_id']. ":" . $entityName;
+
+          //Todo: Handle Existing Group
+
+          break;
+        case "Case":
+
+          $entityName =  self::_wf_lookupName("CaseType", $step['entity_id']);
+          $step['entity_id'] = $step['entity_id']. ":" . $entityName;
+
+          if(array_key_exists("include_profile", $step['options']) && !empty($step['options']['include_profile'])) {
+            $profileName = self::_wf_lookupName("UFGroup", $step['options']['include_profile']);
+            $step['options']['include_profile'] = $step['options']['include_profile'].":".$profileName;
+          }
+          break;
+        default:
+      }
+
+
+      //Todo: Handle RelationshipTypes
+      /*
+      //Handle Relationships
+      if (array_key_exists("options", $step) && array_key_exists("relationships", $step['options'])) {
+        foreach($step['options']['relationships'] as &$relationship) {
+          $relType = explode("_", $step['relType']);
+
+          $relName = civicrm_api3('UFGroup', 'getvalue', array('return' => array("name"), 'id' => $step['entity_id']));
+
+          $step['relType'] = implode("_", $relType);
+        }
+
+      }
+      */
+
+    }
+
+    return $steps;
+  }
+
+  static function processForImport($steps) {
+
+    foreach($steps as &$step) {
+
+      switch($step['entity_table']) {
+        case "Profile":
+          //Handle the Profile
+          list($id, $name) = explode(":",  $step['entity_id'], 2);
+          $step['entity_id'] = self::_wf_lookupId("UFGroup", $name, $id);
+
+          //Todo: Handle Existing Group
+
+          break;
+        case "Case":
+          //Handle the Case Itself
+          list($id, $name) = explode(":",  $step['entity_id'], 2);
+          $step['entity_id'] = self::_wf_lookupId("CaseType", $name, $id);
+
+          //Handle Included Profile
+          if(array_key_exists("include_profile", $step['options']) && !empty($step['options']['include_profile'])) {
+            list($id, $name) = explode(":",  $step['options']['include_profile'], 2);
+            $step['options']['include_profile'] = self::_wf_lookupId("UFGroup", $name, $id);
+          }
+          break;
+        default:
+      }
+    }
+
+    return $steps;
+  }
+
+  function _wf_lookupId($entity, $name, $id) {
+    return self::_wf_lookup($entity, $name, "name", "id", $id);
+  }
+
+  function _wf_lookupName($entity, $id) {
+    return self::_wf_lookup($entity, $id, "id", "name");
+  }
+
+  function _wf_lookup($entity, $value, $from = "id", $to = "name", $default = null) {
+    try {
+      return civicrm_api3($entity, 'getvalue', array('return' => $to, "{$from}" => $value));
+    } catch (CRM_Core_Exception $e) {
+      if ($default) {
+        return $default;
+      }
+      return $value;
+    }
+  }
+
 }
