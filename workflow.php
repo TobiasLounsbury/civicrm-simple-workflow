@@ -317,3 +317,10 @@ function workflow_workflow_getStepParams(&$step, $workflowId) {
     default:
   }
 }
+
+/**
+ * Implements hook_civicrm_alterAPIPermissions
+ */
+function workflow_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+  $permissions['workflow']['complete_step'] = array('access ajax api');
+}
