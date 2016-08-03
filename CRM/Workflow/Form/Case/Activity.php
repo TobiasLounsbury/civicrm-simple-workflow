@@ -41,7 +41,7 @@ class CRM_Workflow_Form_Case_Activity extends CRM_Core_Form {
     $contactId = CRM_Core_Session::singleton()->get($key, "SimpleWorkflow");
 
     $params = array("activity_type_id" => $this->_step['entity_id']);
-    $activities = CRM_Case_BAO_Case::getCaseActivity($caseId, $params, $contactId);
+    $activities = CRM_Case_BAO_Case::getCaseActivity($caseId, $params, $contactId, null, $contactId);
     $activityId = $activities['data'][0]['DT_RowId'];
 
     $res = civicrm_api3("Activity", "get", array("id" => $activityId, "sequential" => 1));
