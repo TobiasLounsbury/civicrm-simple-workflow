@@ -246,7 +246,7 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
       $this->case = $case['values'][$case['id']];
       $this->case_id = $case['id'];
       $this->client_id = $values['contact_id'];
-      CRM_Core_BAO_CustomValueTable::store($customValues, 'civicrm_case', $case['id']);
+      CRM_Core_BAO_CustomValueTable::store($values['custom'], 'civicrm_case', $case['id']);
     }
 
     parent::postProcess();
