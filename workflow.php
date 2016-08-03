@@ -268,7 +268,13 @@ function workflow_civicrm_postProcess($formName, &$form) {
 
       case "Case":
         $caseId = $form->case_id;
+        $key = "workflow_{$wid}_step_{$step['order']}_data";
+        CRM_Core_Session::singleton()->set($key, $caseId, "SimpleWorkflow");
+
         $clientId = $form->client_id;
+        $key = "workflow_{$wid}_step_{$step['order']}_contact_id";
+        CRM_Core_Session::singleton()->set($key, $clientId, "SimpleWorkflow");
+
         $relationships = CRM_Utils_Array::value("relationships", $step['options'], false);
         if($relationships) {
           _workflow_case_process_relationships($caseId, $clientId, $relationships, $wid);

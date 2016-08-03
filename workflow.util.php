@@ -33,6 +33,7 @@ function simpleWorkflowAddResources($formName, &$form) {
   CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_url.js', 21, 'page-footer');
   CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_html.js', 21, 'page-footer');
   CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_case.js', 21, 'page-footer');
+  CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute_case_activity.js', 21, 'page-footer');
 
 
   //This causes the wysiwyg libraries to be included on the page.

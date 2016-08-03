@@ -38,4 +38,11 @@
     <access_callback>1</access_callback>
     <is_public>true</is_public>
   </item>
+  <item>
+    <path>civicrm/workflows/case/activity</path>
+    <page_callback>CRM_Workflow_Form_Case_Activity</page_callback>
+    <title>Case</title>
+    <access_callback>1</access_callback>
+    <is_public>true</is_public>
+  </item>
 </menu>

@@ -97,6 +97,7 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       "CRM/Workflow/Page/Steps/AddStep_jquery.tpl",
       "CRM/Workflow/Page/Steps/AddStep_url.tpl",
       "CRM/Workflow/Page/Steps/AddStep_case.tpl",
+      "CRM/Workflow/Page/Steps/AddStep_case_activity.tpl",
       "CRM/Workflow/Page/Steps/AddStep_html.tpl",
     );
     $typeTemplates = array(
@@ -105,6 +106,7 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       "CRM/Workflow/Page/Steps/StepTypes_jquery.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_url.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_case.tpl",
+      "CRM/Workflow/Page/Steps/StepTypes_case_activity.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_html.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_default.tpl",
       "CRM/Workflow/Page/Steps/StepTypes_relationship_template.tpl"
@@ -116,6 +118,7 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_page.js'),
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_jquery.js'),
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_case.js'),
+      $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_case_activity.js'),
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_widget_relationships.js'),
       $ccr->getUrl('org.botany.workflow', 'js/workflow_steps_html.js')
     );
@@ -145,7 +148,7 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
 
     //Support for Profiles
     $entities = array(array('entity_name' => 'contact_1', 'entity_type' => 'IndividualModel'));
-    $allowCoreTypes = array_merge(array('Contact', 'Individual', 'Case', "Organization", "Household"), CRM_Contact_BAO_ContactType::subTypes('Individual'));
+    $allowCoreTypes = array_merge(array('Contact', 'Individual', 'Case', "Organization", "Household", "Activity"), CRM_Contact_BAO_ContactType::subTypes('Individual'));
     $allowCoreTypes = array_merge($allowCoreTypes, CRM_Contact_BAO_ContactType::subTypes('Organization'));
     CRM_UF_Page_ProfileEditor::registerProfileScripts();
     CRM_UF_Page_ProfileEditor::registerSchemas(CRM_Utils_Array::collect('entity_type', $entities));
@@ -189,9 +192,26 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
       "relationshipTypes" => $relTypes
     ));
 
+    //Handle Case Activity Types
+    $result = civicrm_api3('OptionValue', 'get', array(
+      'sequential' => 1,
+      'option_group_id' => "activity_type",
+      'component_id' => "CiviCase",
+      'options' => array('limit' => "0"),
+    ));
+    $caseActivityTypes = $result['values'];
+
+    $result = civicrm_api3('OptionValue', 'get', array(
+      'sequential' => 1,
+      'option_group_id' => "activity_status",
+      'options' => array('limit' => "0"),
+    ));
+    $activityStatus = $result['values'];
 
     //Add the Case Data to page
     $this->assign('caseTypes', $caseTypes);
+    $this->assign('caseActivityTypes', $caseActivityTypes);
+    $this->assign('activityStatus', $activityStatus);
     $ccr->addVars('SimpleWorkflow', array(
       "caseTypes" => $caseTypes,
     ));
