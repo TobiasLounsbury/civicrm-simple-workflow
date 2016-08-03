@@ -307,6 +307,12 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
             $step['options']['include_profile'] = $step['options']['include_profile'].":".$profileName;
           }
           break;
+        case "CaseActivity":
+          if(array_key_exists("include_profile", $step['options']) && !empty($step['options']['include_profile'])) {
+            $profileName = self::_wf_lookupName("UFGroup", $step['options']['include_profile']);
+            $step['options']['include_profile'] = $step['options']['include_profile'].":".$profileName;
+          }
+          break;
         default:
       }
 
@@ -349,6 +355,13 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
           list($id, $name) = explode(":",  $step['entity_id'], 2);
           $step['entity_id'] = self::_wf_lookupId("CaseType", $name, $id);
 
+          //Handle Included Profile
+          if(array_key_exists("include_profile", $step['options']) && !empty($step['options']['include_profile'])) {
+            list($id, $name) = explode(":",  $step['options']['include_profile'], 2);
+            $step['options']['include_profile'] = self::_wf_lookupId("UFGroup", $name, $id);
+          }
+          break;
+        case "CaseActivity":
           //Handle Included Profile
           if(array_key_exists("include_profile", $step['options']) && !empty($step['options']['include_profile'])) {
             list($id, $name) = explode(":",  $step['options']['include_profile'], 2);
