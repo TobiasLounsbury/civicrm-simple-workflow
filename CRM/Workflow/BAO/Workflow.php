@@ -308,6 +308,15 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
           }
           break;
         case "CaseActivity":
+
+          $entityName = $result = civicrm_api3('OptionValue', 'getvalue', array(
+            'return' => "name",
+            'value' => $step['entity_id'],
+            'option_group_id' => "activity_type",
+          ));
+
+          $step['entity_id'] = $step['entity_id']. ":" . $entityName;
+          
           if(array_key_exists("include_profile", $step['options']) && !empty($step['options']['include_profile'])) {
             $profileName = self::_wf_lookupName("UFGroup", $step['options']['include_profile']);
             $step['options']['include_profile'] = $step['options']['include_profile'].":".$profileName;
@@ -362,6 +371,20 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
           }
           break;
         case "CaseActivity":
+
+          list($id, $name) = explode(":",  $step['entity_id'], 2);
+
+          try {
+            $entityId = $result = civicrm_api3('OptionValue', 'getvalue', array(
+              'return' => "value",
+              'name' => $name,
+              'option_group_id' => "activity_type",
+            ));
+            $step['entity_id'] = $entityId;
+          } catch (Exception $e) {
+            $step['entity_id'] = $id;
+          }
+
           //Handle Included Profile
           if(array_key_exists("include_profile", $step['options']) && !empty($step['options']['include_profile'])) {
             list($id, $name) = explode(":",  $step['options']['include_profile'], 2);
@@ -386,7 +409,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
   function _wf_lookup($entity, $value, $from = "id", $to = "name", $default = null) {
     try {
       return civicrm_api3($entity, 'getvalue', array('return' => $to, "{$from}" => $value));
-    } catch (CRM_Core_Exception $e) {
+    } catch (Exception $e) {
       if ($default) {
         return $default;
       }
