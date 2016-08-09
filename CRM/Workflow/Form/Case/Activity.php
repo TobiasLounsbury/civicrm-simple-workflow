@@ -40,9 +40,8 @@ class CRM_Workflow_Form_Case_Activity extends CRM_Core_Form {
     $key = "workflow_{$this->_wid}_step_{$this->_step['options']['case_order']}_contact_id";
     $contactId = CRM_Core_Session::singleton()->get($key, "SimpleWorkflow");
 
-    $params = array("activity_type_id" => $this->_step['entity_id']);
-    $activities = CRM_Case_BAO_Case::getCaseActivity($caseId, $params, $contactId, null, $contactId);
-    $activityId = $activities['data'][0]['DT_RowId'];
+    $activities = $this->getCaseActivities($caseId, $this->_step['entity_id']);
+    $activityId = $activities[0];
 
     $res = civicrm_api3("Activity", "get", array("id" => $activityId, "sequential" => 1));
 
@@ -171,4 +170,35 @@ class CRM_Workflow_Form_Case_Activity extends CRM_Core_Form {
     }
     return $elementNames;
   }
+
+
+  /**
+   * This function simplifies getting a list of all activities of
+   * a certain type for a given case.
+   *
+   * @param $caseId
+   * @param $activityType - The activity_type_id to search for.
+   * @return array of activity ids
+   */
+  function getCaseActivities($caseId, $activityType) {
+    $sql = "SELECT civicrm_activity.id FROM `civicrm_activity` LEFT JOIN civicrm_case_activity ON civicrm_case_activity.activity_id = civicrm_activity.id ";
+    $sql .= "WHERE activity_type_id = %1";
+    $sql .= " AND case_id = %2";
+
+    $params = array(
+      1 => array($activityType, "Integer"),
+      2 => array($caseId, "Integer")
+    );
+
+    $dao =& CRM_Core_DAO::executeQuery($sql, $params);
+    $activities = $dao->fetchAll();
+
+    foreach($activities as &$activity) {
+      $activity = $activity['id'];
+    }
+
+    return $activities;
+  }
+
+
 }
