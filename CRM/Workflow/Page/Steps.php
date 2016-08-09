@@ -157,7 +157,8 @@ class CRM_Workflow_Page_Steps extends CRM_Core_Page {
 
 
     //Groups
-    $allGroups = CRM_Contact_BAO_Group::getGroupList();
+    $params = array();
+    $allGroups = CRM_Contact_BAO_Group::getGroupList($params);
     $this->assign('allGroups', $allGroups);
 
     //Contact Types
