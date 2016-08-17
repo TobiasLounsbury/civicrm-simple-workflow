@@ -67,7 +67,10 @@ CRM.$(function ($) {
     $("#ActionWindow").before('<ol class="WorkflowSteps" id="WorkflowSteps"></ol>');
     $("#ActionWindow").before('<div id="PreMessage"></div>');
     $("#crm-submit-buttons").before('<div id="PostMessage"></div>');
-
+    $("#WorkflowSteps").before('<div id="SW_PreFormMessage"></div>');
+    $("#SW_PreFormMessage").html(CRM.Workflow.workflow.pre_message);
+    $("#crm-submit-buttons").after('<div id="SW_PostFormMessage"></div>');
+    $("#SW_PostFormMessage").html(CRM.Workflow.workflow.post_message);
 
     if (CRM.Workflow.returning) {
       var liclass = "stepDone";
