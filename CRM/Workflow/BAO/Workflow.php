@@ -27,6 +27,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
   static function &add(&$params) {
     //require_once 'CRM/Utils/Date.php';
 
+    //TODO: Fix this garbage
     $workf = new CRM_Workflow_DAO_Workflow();
     $workf->name = $params['name'];
     $workf->description = $params['description'];
@@ -38,6 +39,11 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
 
     $workf->is_active = CRM_Utils_Array::value('is_active', $params) ? 1 : 0;
     $workf->require_login = CRM_Utils_Array::value('require_login', $params) ? 1 : 0;
+
+    $workf->pre_message = $params['pre_message'];
+    $workf->post_message = $params['post_message'];
+    $options = (array_key_exists("options", $params) && $params['options']) ? $params['options'] : array();
+    $workf->options = json_encode($options);
 
     $id = empty($params['id']) ? NULL : $params['id'];
     $op = $id ? 'edit' : 'create';
@@ -67,6 +73,7 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     $item->copyValues($params);
     if ($item->find(true)) {
       CRM_Core_DAO::storeValues($item, $defaults);
+      $item->options = json_decode($item->options, true);
       return $item;
     }
     return null;

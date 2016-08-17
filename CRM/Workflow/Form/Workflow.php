@@ -106,6 +106,16 @@ class CRM_Workflow_Form_Workflow extends CRM_Core_Form {
       'require_login',
       ts('Require Login')
     );
+
+    $version = substr(CRM_Utils_System::version(), 0, 3);
+    if($version < 4.7) {
+      $this->addWysiwyg("pre_message", "Pre-Form HTML", array());
+      $this->addWysiwyg("post_message", "Post-Form HTML", array());
+    } else {
+      $this->add("wysiwyg", "pre_message", "Pre-Form HTML");
+      $this->add("wysiwyg", "post_message", "Post-Form HTML");
+    }
+
     $this->addElement(
       'checkbox',
       'is_active',
