@@ -147,7 +147,7 @@ CRM.$(function ($) {
 
   //Allow each step in the breadcrumb to be clickable
   $("ol.WorkflowSteps li").click(function(e) {
-    var obj = $(e.target).parent();
+    var obj = $(this);
     //todo: This whole function should be abstracted out
     if(obj.hasClass("stepDone") || obj.hasClass("stepAvailable")) {
       CRM.Workflow.skipToStep(obj.data("order"));
