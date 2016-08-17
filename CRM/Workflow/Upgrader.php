@@ -54,13 +54,21 @@ class CRM_Workflow_Upgrader extends CRM_Workflow_Upgrader_Base {
     CRM_Core_DAO::executeQuery('RENAME TABLE `civicrm_workflow` TO `civicrm_simple_workflow`');
     CRM_Core_DAO::executeQuery('RENAME TABLE `civicrm_workflow_detail` TO `civicrm_simple_workflow_detail`');
     CRM_Core_DAO::executeQuery('ALTER TABLE `civicrm_simple_workflow_detail` ADD COLUMN `name` VARCHAR(255) NOT NULL  AFTER `breadcrumb`');
-    CRM_Core_DAO::executeQuery('ALTER TABLE `civicrm_simple_workflow_detail` ADD COLUMN `pre_message` text NULL  AFTER `custom_js`');
-    CRM_Core_DAO::executeQuery('ALTER TABLE `civicrm_simple_workflow_detail` ADD COLUMN `post_message` text NULL  AFTER `pre_message`');
+    CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_simple_workflow_detail` ADD COLUMN `pre_message` text NULL COMMENT 'This field is for HTML to be displayed BEFORE the step' AFTER `custom_js`");
+    CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_simple_workflow_detail` ADD COLUMN `post_message` text NULL COMMENT 'This field is for HTML to be displayed AFTER the step' AFTER `pre_message`");
     CRM_Core_DAO::executeQuery("UPDATE `civicrm_simple_workflow_detail` SET `name` = REPLACE(`breadcrumb`, ' ', '_')");
     CRM_Core_DAO::executeQuery('ALTER TABLE `civicrm_simple_workflow_detail` ADD PRIMARY KEY (`workflow_id`, `name`)');
     return TRUE;
   }
 
+
+  public function upgrade_103() {
+    $this->ctx->log->info('Applying Simple Workflow update 1.0.3');
+    CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_simple_workflow` ADD COLUMN `pre_message` text NULL COMMENT 'This field is for HTML to be displayed ABOVE the form' AFTER `login_form_id`");
+    CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_simple_workflow` ADD COLUMN `post_message` text NULL COMMENT 'This field is for HTML to be displayed BELOW the form', AFTER `pre_message`");
+    CRM_Core_DAO::executeQuery("ALTER TABLE `civicrm_simple_workflow` ADD COLUMN `options` text NULL COMMENT 'JSON Encoded string of data for additional options' AFTER `post_message`");
+    return true;
+  }
 
   /**
    * Example: Run an external SQL script

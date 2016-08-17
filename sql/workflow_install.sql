@@ -15,6 +15,9 @@ CREATE TABLE `civicrm_simple_workflow` (
      `require_login` tinyint    COMMENT 'Should this Workflow require a user to login/create an account?',
      `is_active` tinyint    COMMENT 'Is this Workflow active?',
      `login_form_id` int unsigned COMMENT 'Profile ID for forcing login',
+     `pre_message` text NULL COMMENT 'This field is for HTML to be displayed ABOVE the form',
+     `post_message` text NULL COMMENT 'This field is for HTML to be displayed BELOW the form',
+     `options` text NULL   COMMENT 'JSON Encoded string of data for additional options',
 
     PRIMARY KEY ( `id` )
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
