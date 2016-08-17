@@ -33,15 +33,20 @@ ol.WorkflowSteps li:last-of-type {
     border-bottom-right-radius: 10px;
     border-top-right-radius: 10px;
 }
-ol.WorkflowSteps li.stepDone span {
-    cursor: pointer;
-}
-ol.WorkflowSteps li.stepAvailable span {
-    cursor: pointer;
-}
 ol.WorkflowSteps li.stepDone {
     background-color: #4a4;
     text-shadow: 0 -1px 0px #072;
+}
+ol.WorkflowSteps li.stepDone, ol.WorkflowSteps li.stepAvailable {
+    cursor: pointer;
+}
+ol.WorkflowSteps li.stepDone:hover {
+    background-color: #229922;
+    text-shadow: 0 -1px 0px #061;
+}
+ol.WorkflowSteps li.stepAvailable:hover {
+    background-color: #555;
+    text-shadow: 0 -1px 1px #333;
 }
 ol.WorkflowSteps li.stepHasErrors {
     background-color: #c3000d;
