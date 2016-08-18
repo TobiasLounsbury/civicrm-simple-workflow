@@ -60,6 +60,8 @@ CRM.$(function ($) {
 
         $("#ActionWindow").hide();
         actionType = "create";
+      } else {
+        $("#ActionWindow").show();
       }
       var lsurl = CRM.url("civicrm/profile/" + actionType, {gid: currentStep.entity_id, reset: 1});
       var aw = CRM.loadForm(lsurl, {target:"#ActionWindow", dialog: false, autoClose:true});
