@@ -34,7 +34,7 @@ class CRM_Workflow_Page_Execute extends CRM_Core_Page {
         CRM_Core_Resources::singleton()->addSetting(array('Workflow' => array('method' => "template")));
 
         //Add the needed resources to execute the workflow
-        simpleWorkflowAddResources("CRM_Workflow_Page_Execute", $this);
+        simpleWorkflowAddResources("CRM_Workflow_Page_Execute", $this, $workflow);
 
         simpleWorkflowPreprocessStepsForExecution($steps);
 

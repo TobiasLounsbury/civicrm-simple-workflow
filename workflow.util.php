@@ -7,7 +7,7 @@ require_once 'workflow.hook.php';
  * workflow
  *
  */
-function simpleWorkflowAddResources($formName, &$form) {
+function simpleWorkflowAddResources($formName, &$form, &$workflow) {
 
   //Add Stylesheet
   CRM_Core_Resources::singleton()->addStyleFile('org.botany.workflow', 'css/workflow_execute.css');
@@ -23,7 +23,7 @@ function simpleWorkflowAddResources($formName, &$form) {
   }
 
   //Allow other extensions to include files.
-  CRM_Workflow_hook::execute($formName, $form);
+  CRM_Workflow_hook::execute($formName, $form, $workflow);
 
   //Add Javascript files and settings
   CRM_Core_Resources::singleton()->addScriptFile('org.botany.workflow', 'js/workflow_execute.js', 100, 'page-footer');
