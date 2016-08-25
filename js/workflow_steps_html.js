@@ -1,8 +1,19 @@
+function SFHTMLEnableWYSIWYG(selector) {
+  //Setup the wysiwyg
+  if(window.CKEDITOR) {
+    var ck = CKEDITOR.replace(selector);
+    if (ck) {
+      CRM._.extend(ck.config, {width: '99%'});
+    }
+  }
+}
+
 function SimpleWorkflowStepAddHtml(template, index, data) {
   //Set defaults if we have no data.
   if(CRM.$.isEmptyObject(data) ) {
     if(window.CKEDITOR) {
       data.entity_id = CKEDITOR.instances.SWHTMLHtml.getData();
+      CKEDITOR.instances.SWHTMLHtml.setData("");
     } else {
       data.entity_id = CRM.$("#SWHTMLHtml").val();
     }
@@ -19,36 +30,23 @@ function SimpleWorkflowStepAddHtml(template, index, data) {
   var eid = template.find(".entity_id");
   eid.attr("name", eid.attr("name").replace("#ORDER#", index));
 
-  //Enable the WYSIWYG if we can.
+  //Enable the WYSIWYG
   if(window.CKEDITOR) {
-    var ck = CKEDITOR.replace(eid[0]);
-    if (ck) {
-      CRM._.extend(ck.config, {width: '100%'});
-    }
+    SFHTMLEnableWYSIWYG(eid[0]);
+  } else {
+    setTimeout(function() {SFHTMLEnableWYSIWYG(eid[0]);}, 2500);
   }
-
 
   template.find(".entity_table").val("html");
   template.addClass("html");
   template.find(".entity_name").html("Free HTML");
-
-  //Clear the Old Editor
-  if(window.CKEDITOR) {
-    CKEDITOR.instances.SWHTMLHtml.setData("");
-  }
 
   return true;
 }
 
 (function($, _) {
 
-  //Setup the Add Step wysiwyg
-  if(window.CKEDITOR) {
-    var ck = CKEDITOR.replace($("#SWHTMLHtml")[0]);
-    if (ck) {
-      _.extend(ck.config, {width: '99%'});
-    }
-  }
+  SFHTMLEnableWYSIWYG("#SWHTMLHtml");
 
   //Make sure the textareas are updated before save
   $("#Data").on("before:save", function(e) {
