@@ -159,7 +159,11 @@ CRM.$(function ($) {
 
   //Enable the custom Next button to move the flow along
   $("#SWNextButton").click(function(e) {
-    CRM.Workflow.CompleteCurrentStep();
+    var data = {"valid": true, "step": currentStep};
+    $("body").trigger("SimpleWorkflow:Step:Validate", data);
+    if (data.valid) {
+      CRM.Workflow.CompleteCurrentStep();
+    }
     return e.preventDefault();
   });
   $("#SWNextButton").hide();
