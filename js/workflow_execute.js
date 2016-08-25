@@ -142,7 +142,7 @@ CRM.$(function ($) {
   /***********[ Run The Page ]*****************/
   //Check the method we are using and inject elements when needed
   if (CRM.Workflow.method == "inject") {
-    inject_workflow_elements();
+    CRM.Workflow.inject_workflow_elements();
   }
 
   //Set the breadcrumb width
