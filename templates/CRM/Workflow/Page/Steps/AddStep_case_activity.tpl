@@ -1,4 +1,4 @@
-<h3 class="SWToggleFormTrigger">{ts}Add a Case Activity{/ts}:</h3>
+<h3 class="SWToggleFormTrigger"> + {ts}Add a Case Activity{/ts}:</h3>
 <div class="SWToggleForm">
 
     <div class="SWStepField">

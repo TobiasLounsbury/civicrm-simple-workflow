@@ -1,4 +1,4 @@
-<h3 class="SWToggleFormTrigger">{ts}Page Subsections{/ts}</h3>
+<h3 class="SWToggleFormTrigger"> + {ts}Page Subsections{/ts}</h3>
 <div class="SWToggleForm">
     <div class="help">
         {ts}This step type allows you to cut a page into subsections using a list of jquery selectors. It will only hide the elements in a jQuery subsection{/ts}<br />

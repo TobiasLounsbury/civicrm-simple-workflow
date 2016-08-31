@@ -8,7 +8,7 @@
     {/foreach}
     </div>
 
-    <h3>Sort Pages</h3>
+    <h3 id="sortPagesHeader">Sort Pages</h3>
     <form id="Data" class="crm-simple-workflow-steps-form">
         <div id="SortableDetails"></div>
     </form>

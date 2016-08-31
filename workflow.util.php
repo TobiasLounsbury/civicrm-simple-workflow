@@ -63,22 +63,38 @@ function simpleWorkflowPreprocessStepsForExecution(&$steps) {
  *
  */
 function simpleWorkflowPreprocessProfileStep(&$step, $workflowId) {
-  if ($step['options']['mode'] == "select" && !empty($step['options']['existingGroup'])) {
-    $groupContacts = array();
-    $result = civicrm_api3('Contact', 'get', array(
-      'group' => $step['options']['existingGroup'],
-      'options' => array(
-        'limit' => 0,
-        'sort' => 'sort_name',
-      ),
-      'return' => array("display_name"),
-    ));
 
-    foreach($result['values'] as $contact) {
-      $groupContacts[] =  array("id" => $contact['contact_id'], "text" => $contact['display_name']);
-    }
+  switch($step['options']['mode']) {
 
-    $step['options']['groupContacts'] = $groupContacts;
+    case "current":
+      $step['SWRelationshipEntityId'] = $currentContactId = CRM_Core_Session::getLoggedInContactID();
+      break;
+    case "related-edit":
+      //todo: Handle selecting the contact
+      break;
+
+    case "select-edit-existing":
+    case "select-edit-new":
+    case "select-new":
+
+      if (!empty($step['options']['existingGroup'])) {
+        $groupContacts = array();
+        $result = civicrm_api3('Contact', 'get', array(
+          'group' => $step['options']['existingGroup'],
+          'options' => array(
+            'limit' => 0,
+            'sort' => 'sort_name',
+          ),
+          'return' => array("display_name"),
+        ));
+
+        foreach($result['values'] as $contact) {
+          $groupContacts[] =  array("id" => $contact['contact_id'], "text" => $contact['display_name']);
+        }
+
+        $step['options']['groupContacts'] = $groupContacts;
+      }
+      break;
   }
 }
 

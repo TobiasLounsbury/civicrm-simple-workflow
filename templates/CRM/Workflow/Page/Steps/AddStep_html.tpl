@@ -1,4 +1,4 @@
-<h3 class="SWToggleFormTrigger">{ts}Add a new Free HTML Step{/ts}:</h3>
+<h3 class="SWToggleFormTrigger"> + {ts}Add a new Free HTML Step{/ts}:</h3>
 <div class="SWToggleForm">
     <label>{ts}HTML{/ts}:</label><br />
     <textarea id="SWHTMLHtml"  editor="ckeditor" class="crm-form-CKeditor crm-form-wysiwyg"></textarea>

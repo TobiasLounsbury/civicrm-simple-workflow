@@ -23,9 +23,8 @@ function SimpleWorkflowStepAddProfile(template, index, data) {
   }
 
   //Handle the Existing Filters
-  if (data.options.mode == "select-new" || data.options.mode == "select-edit") {
-
-  } else {
+  var selectModes = ["select-new", "select-edit-new", "select-edit-existing"];
+  if (selectModes.indexOf(data.options.mode) == -1) {
     template.find(".SW-Profile-Select-Existing-Wrapper").hide();
   }
 
@@ -52,7 +51,7 @@ CRM.$(function ($) {
       }
 
       //Show hide the select-wrapper
-      if (obj.val() == "select-new" || obj.val() == "select-edit") {
+      if (obj.val() == "select-new" || obj.val() == "select-edit-new" || obj.val() == "select-edit-existing") {
         obj.closest(".Detail").find(".SW-Profile-Select-Existing-Wrapper").slideDown();
       } else {
         obj.closest(".Detail").find(".SW-Profile-Select-Existing-Wrapper").slideUp();

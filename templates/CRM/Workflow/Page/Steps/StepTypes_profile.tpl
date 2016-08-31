@@ -1,5 +1,6 @@
 <div id="SimpleWorkflowTypeTemplateProfile">
-    <p>
+    <fieldset>
+        <legend>{ts}Profile Mode{/ts}</legend>
         <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="current" id="data_#ORDER#_options_mode_current" /> <label for="data_#ORDER#_options_mode_current">{ts}Use to update current Contact{/ts}</label>
         <br />
         <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="related-new" id="data_#ORDER#_options_mode_related_new" /> <label for="data_#ORDER#_options_mode_related_new">{ts}Create a New Contact (allow edit){/ts}</label>
@@ -8,9 +9,13 @@
         <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="create" id="data_#ORDER#_options_mode_create" /> <label for="data_#ORDER#_options_mode_create">{ts}Use to create new Contact on every visit{/ts}</label>
         <br />
         <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="select-new" id="data_#ORDER#_options_mode_select_new" /> <label for="data_#ORDER#_options_mode_select_new">{ts}Select existing or create new Contact{/ts}</label>
+        <!--
         <br />
-        <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="select-edit" id="data_#ORDER#_options_mode_select_edit" /> <label for="data_#ORDER#_options_mode_select_edit">{ts}Select existing or create new Contact (allow edit){/ts}</label>
-    </p>
+        <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="select-edit-new" id="data_#ORDER#_options_mode_select_edit_new" /> <label for="data_#ORDER#_options_mode_select_edit_new">{ts}Select existing or create new Contact (allow edit of newly created contact){/ts}</label>
+        <br />
+        <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="select-edit-existing" id="data_#ORDER#_options_mode_select_edit_existing" /> <label for="data_#ORDER#_options_mode_select_edit_existing">{ts}Select existing or create new Contact (allow edit of existing contacts){/ts}</label>
+        //-->
+    </fieldset>
 
     <fieldset class="SW-Profile-Select-Existing-Wrapper">
         <legend>{ts}Existing Contact Filters{/ts}</legend>

@@ -1,4 +1,4 @@
-<h3 class="SWToggleFormTrigger">{ts}Contribution Pages{/ts}</h3>
+<h3 class="SWToggleFormTrigger"> + {ts}Contribution Pages{/ts}</h3>
 <div class="SWToggleForm">
     <div class="help">{ts}If you leave the breadcrumb for a page blank it will not be shown in the list (Use with jQuery Selectors to show billing block as final step){/ts}.</div>
     <select id="PageSelector">

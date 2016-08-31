@@ -1,4 +1,4 @@
-<h3 class="SWToggleFormTrigger">{ts}Add a new Generic URL{/ts}:</h3>
+<h3 class="SWToggleFormTrigger"> + {ts}Add a new Generic URL{/ts}:</h3>
 <div class="SWToggleForm">
     <label>{ts}URL{/ts}:</label>
     <input id="SWURLUrl" size="75" /><br/>
