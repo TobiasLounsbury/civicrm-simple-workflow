@@ -15,7 +15,7 @@ function SimpleWorkflowStepAddProfile(template, index, data) {
   );
 
   //Handle initial visibility of relationships
-  if (data.options.mode == "edit") {
+  if (data.options.mode == "current") {
     template.find(".SW-Profile-Relationships-Wrapper").hide();
   } else {
     //Add all the relationships we have saved if any.
@@ -23,7 +23,7 @@ function SimpleWorkflowStepAddProfile(template, index, data) {
   }
 
   //Handle the Existing Filters
-  if (data.options.mode == "select") {
+  if (data.options.mode == "select-new" || data.options.mode == "select-edit") {
 
   } else {
     template.find(".SW-Profile-Select-Existing-Wrapper").hide();
@@ -45,15 +45,17 @@ CRM.$(function ($) {
     if (obj.hasClass("SW-Profile-Mode")) {
 
       //This handles the Relationship Dialog
-      if (obj.val() == "create") {
+      if (obj.val() == "current") {
+        obj.closest(".Detail").find(".SW-Profile-Relationships-Wrapper").slideUp();
+      } else {
         obj.closest(".Detail").find(".SW-Profile-Relationships-Wrapper").slideDown();
-        obj.closest(".Detail").find(".SW-Profile-Select-Existing-Wrapper").slideUp();
-      } else if (obj.val() == "select") {
-        obj.closest(".Detail").find(".SW-Profile-Relationships-Wrapper").slideDown();
-          obj.closest(".Detail").find(".SW-Profile-Select-Existing-Wrapper").slideDown();
+      }
+
+      //Show hide the select-wrapper
+      if (obj.val() == "select-new" || obj.val() == "select-edit") {
+        obj.closest(".Detail").find(".SW-Profile-Select-Existing-Wrapper").slideDown();
       } else {
         obj.closest(".Detail").find(".SW-Profile-Select-Existing-Wrapper").slideUp();
-        obj.closest(".Detail").find(".SW-Profile-Relationships-Wrapper").slideUp();
       }
 
     }

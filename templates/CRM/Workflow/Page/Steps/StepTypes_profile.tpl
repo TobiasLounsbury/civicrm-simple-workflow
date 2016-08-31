@@ -1,8 +1,15 @@
 <div id="SimpleWorkflowTypeTemplateProfile">
     <p>
-        <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="edit" id="data_#ORDER#_options_mode_update" /> <label for="data_#ORDER#_options_mode_update">{ts}Use to update current Contact{/ts}</label>
-        <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="create" id="data_#ORDER#_options_mode_create" /> <label for="data_#ORDER#_options_mode_create">{ts}Use to create new Contact{/ts}</label>
-        <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="select" id="data_#ORDER#_options_mode_select" /> <label for="data_#ORDER#_options_mode_select">{ts}Select existing or create new Contact{/ts}</label>
+        <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="current" id="data_#ORDER#_options_mode_current" /> <label for="data_#ORDER#_options_mode_current">{ts}Use to update current Contact{/ts}</label>
+        <br />
+        <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="related-new" id="data_#ORDER#_options_mode_related_new" /> <label for="data_#ORDER#_options_mode_related_new">{ts}Create a New Contact (allow edit){/ts}</label>
+        <br />
+        <!--//<input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="related-edit" id="data_#ORDER#_options_mode_related_edit" /> <label for="data_#ORDER#_options_mode_related_edit">{ts}Update a Related Contact (not part of workflow){/ts}</label>//-->
+        <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="create" id="data_#ORDER#_options_mode_create" /> <label for="data_#ORDER#_options_mode_create">{ts}Use to create new Contact on every visit{/ts}</label>
+        <br />
+        <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="select-new" id="data_#ORDER#_options_mode_select_new" /> <label for="data_#ORDER#_options_mode_select_new">{ts}Select existing or create new Contact{/ts}</label>
+        <br />
+        <input class="SW-Profile-Mode" type="radio" name="data[#ORDER#][options][mode]" value="select-edit" id="data_#ORDER#_options_mode_select_edit" /> <label for="data_#ORDER#_options_mode_select_edit">{ts}Select existing or create new Contact (allow edit){/ts}</label>
     </p>
 
     <fieldset class="SW-Profile-Select-Existing-Wrapper">
