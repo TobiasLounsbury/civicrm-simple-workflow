@@ -100,6 +100,10 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
       $result['contains_page'] = 0;
     }
 
+    if(array_key_exists("options", $result) && is_string($result['options'])) {
+      $result['options'] = json_decode($result['options'], true);
+    }
+
     return $result;
   }
 
