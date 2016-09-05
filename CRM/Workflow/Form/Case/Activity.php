@@ -115,8 +115,6 @@ class CRM_Workflow_Form_Case_Activity extends CRM_Core_Form {
     $activity = civicrm_api3('Activity', 'create', $params);
 
     parent::postProcess();
-
-    CRM_Workflow_hook::completeStep($this->_wid, $this->_name, $this);
   }
 
 

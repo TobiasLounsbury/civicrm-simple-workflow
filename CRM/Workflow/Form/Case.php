@@ -250,9 +250,6 @@ class CRM_Workflow_Form_Case extends CRM_Core_Form {
     }
 
     parent::postProcess();
-
-    CRM_Workflow_hook::completeStep($this->_wid, $this->_name, $this);
-
   }
 
 
