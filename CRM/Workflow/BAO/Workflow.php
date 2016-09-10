@@ -79,6 +79,12 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     return null;
   }
 
+  /**
+   * Fetch a workflow
+   * 
+   * @param $wid
+   * @return array|null
+   */
   static function getWorkflow($wid) {
     if (!$wid) {
       return null;
@@ -107,6 +113,13 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     return $result;
   }
 
+  /**
+   * Fetch all steps for a workflow
+   *
+   * @param $wid
+   * @param bool $AllowNullBreadcrumbs
+   * @return array
+   */
   static function getWorkflowDetails($wid, $AllowNullBreadcrumbs = true) {
     $extraWhere = ($AllowNullBreadcrumbs) ? "" : " AND breadcrumb <> ''";
     $detailTable = CRM_Workflow_DAO_WorkflowDetail::$_tableName;
@@ -136,6 +149,12 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     return $result;
   }
 
+
+  /**
+   * Get an array of all workflows.
+   *
+   * @return array
+   */
   static function getWorkflows() {
 
     $workflowTable = CRM_Workflow_DAO_Workflow::$_tableName;
@@ -239,34 +258,31 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     return FALSE;
   }
 
+  /**
+   * Clone a workflow
+   * @param $wid
+   */
   static function copy($wid) {
-    $workflowTable = CRM_Workflow_DAO_Workflow::$_tableName;
-    $sql = "SELECT * FROM `".$workflowTable."` WHERE id = {$wid}";
-    $dao =& CRM_Core_DAO::executeQuery($sql);
-    if ($dao->fetch()) {
-      $workflow = $dao->toArray();
-      $workflow['id'] = null;
-      $new_workflow = CRM_Workflow_BAO_Workflow::add($workflow);
 
-      $detailTable = CRM_Workflow_DAO_WorkflowDetail::$_tableName;
-      $sql2 = "SELECT * FROM `".$detailTable."` WHERE workflow_id = {$wid}";
-      $dao2 =& CRM_Core_DAO::executeQuery($sql2);
+    $workflow = self::getWorkflow($wid);
+    $steps = self::getWorkflowDetails($wid);
+    unset($workflow['id']);
+    $workflow['name'] = "Copy of ". $workflow['name'];
 
-      $nsql = "INSERT INTO `".$detailTable."` (id, workflow_id, entity_table, entity_id, `order`, breadcrumb) VALUES ";
-      $nid = $new_workflow->id;
-      while ($dao2->fetch()) {
-        $did = 0;
-        $eid = $dao2->entity_id;
-        $e_type = $dao2->entity_table;
-        $order = $dao2->order;
-        $breadcrumb = $dao2->breadcrumb;
-        $nsql .= "($did, $nid, '$e_type', $eid, $order, '$breadcrumb'),";
-      }
-      $nsql = substr($nsql, 0, -1);
-      $dao =& CRM_Core_DAO::executeQuery($nsql);
+    $copy = CRM_Workflow_BAO_Workflow::add($workflow);
+
+    foreach($steps as &$step) {
+      unset($step['workflow_id']);
     }
+
+    civicrm_api3('Workflow', 'Save', array("wid" => $copy->id, "data" => $steps));
   }
 
+  /**
+   * Export the workflow with its steps as a single json file.
+   *
+   * @param $wid
+   */
   static function exportJSON($wid) {
     $workflow = self::getWorkflow($wid);
     foreach($workflow as $key => $fieldData) {
@@ -295,7 +311,14 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
   }
 
 
-
+  /**
+   * This function does some translation of
+   * referenced entities so they can be more correctly
+   * linked when it is imported
+   *
+   * @param $steps
+   * @return mixed
+   */
   static function processForExport($steps) {
 
     foreach($steps as &$step) {
@@ -357,6 +380,15 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     return $steps;
   }
 
+
+  /**
+   * Takes a json encoded definition of workflow
+   * and steps and does some lookup to fetch ids
+   * for referenced entities.
+   *
+   * @param $steps
+   * @return mixed
+   */
   static function processForImport($steps) {
 
     foreach($steps as &$step) {
@@ -409,14 +441,39 @@ class CRM_Workflow_BAO_Workflow extends CRM_Workflow_DAO_Workflow {
     return $steps;
   }
 
+  /**
+   * Utiltiy function to translate name=>id
+   *
+   * @param $entity
+   * @param $name
+   * @param $id
+   * @return array|null
+   */
   function _wf_lookupId($entity, $name, $id) {
     return self::_wf_lookup($entity, $name, "name", "id", $id);
   }
 
+  /**
+   * Utility function to do id=>name translations
+   *
+   * @param $entity
+   * @param $id
+   * @return array|null
+   */
   function _wf_lookupName($entity, $id) {
     return self::_wf_lookup($entity, $id, "id", "name");
   }
 
+  /**
+   * Generic lookup function referenced by lookupId and lookupName
+   *
+   * @param $entity
+   * @param $value
+   * @param string $from
+   * @param string $to
+   * @param null $default
+   * @return array|null
+   */
   function _wf_lookup($entity, $value, $from = "id", $to = "name", $default = null) {
     try {
       return civicrm_api3($entity, 'getvalue', array('return' => $to, "{$from}" => $value));
