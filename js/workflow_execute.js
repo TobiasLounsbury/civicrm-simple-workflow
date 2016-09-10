@@ -41,6 +41,7 @@ CRM.$(function ($) {
     $('ol.WorkflowSteps li[data-order='+order+']').addClass("stepActive");
 
     //Set the window Hash so it can be recalled on backbutton press
+    CRM.Workflow.loadingStep = true;
     location.hash = order;
     CRM.Workflow.stepIndex = order;
   };
@@ -205,9 +206,13 @@ CRM.$(function ($) {
 
   //Setup history functions So clicking back, takes you to previous tab
   window.onhashchange = function() {
-    if (location.hash.length > 0) {
-      var hashOrder = parseInt(location.hash.replace('#',''),10);
-      CRM.Workflow.skipToStep(hashOrder);
+    if (CRM.Workflow.loadingStep) {
+      CRM.Workflow.loadingStep = false;
+    } else {
+      if (location.hash.length > 0) {
+        var hashOrder = parseInt(location.hash.replace('#', ''), 10);
+        CRM.Workflow.skipToStep(hashOrder);
+      }
     }
   };
 
