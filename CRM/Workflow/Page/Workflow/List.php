@@ -98,10 +98,13 @@ class CRM_Workflow_Page_Workflow_List extends CRM_Core_Page {
 
                 case 'delete':
                     CRM_Workflow_BAO_Workflow::del($_GET['wid']);
+                  CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/workflows'));
                     break;
 
                 case 'copy':
                     CRM_Workflow_BAO_Workflow::copy($_GET['wid']);
+                    //forward back to list, so we don't keep copying the workflow
+                    CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/workflows'));
                     break;
                 case 'export':
                     CRM_Workflow_BAO_Workflow::exportJSON($_GET['wid']);
