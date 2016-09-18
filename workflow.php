@@ -84,10 +84,10 @@ function workflow_civicrm_buildForm($formName, &$form) {
 
 
 
-        $jquerySteps = "";
+        $jquerySteps = array();
         $lastStep = 1;
         foreach($steps as $step) {
-          if ($step['entity_table'] == "jQuery") {
+          if ($step['entity_table'] == "jquery") {
             $jquerySteps[] = $step['entity_id'];
             $lastStep = $step['order'];
           }

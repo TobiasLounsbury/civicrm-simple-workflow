@@ -1,8 +1,8 @@
 CRM.$(function ($) {
 
   $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {
-
-    if (currentStep.entity_table == "jQuery") {
+    console.log(currentStep.entity_table);
+    if (currentStep.entity_table == "jquery") {
 
       //Hide the workflow pane
       $("#ActionWindow").hide();
