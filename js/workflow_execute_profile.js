@@ -134,6 +134,19 @@ CRM.$(function ($) {
       CRM.Workflow.steps[CRM.Workflow.stepIndex].SWRelationshipEntityId = data.id;
       CRM.Workflow.steps[CRM.Workflow.stepIndex].SWSelectMode = "form";
     }
+  })
+
+  //$("#ActionWindow")
+  .on("crmFormLoad", function(event, data) {
+    //Make sure we are expecting to load a profile
+    if (CRM.Workflow.steps[CRM.Workflow.stepIndex].entity_table == "Profile") {
+      //Make sure this is the profile we are expecting.
+      var term = "gid=" + CRM.Workflow.steps[CRM.Workflow.stepIndex].entity_id + "&";
+      if (data.url.search(term) > -1) {
+        $("body").trigger("SimpleWorkflow:Step:Load:Profile:Complete", CRM.Workflow.steps[CRM.Workflow.stepIndex]);
+      }
+
+    }
   });
 
 
