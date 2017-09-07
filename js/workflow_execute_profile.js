@@ -56,6 +56,38 @@ CRM.$(function ($) {
     }
   }
 
+  var addActionWindowHandlers = function() {
+    //Watch for successful form completion and react accordingly
+    $("#ActionWindow").on("crmFormSuccess", function(event, data) {
+      if (CRM.Workflow.steps[CRM.Workflow.stepIndex].entity_table == "Profile") {
+        if(CRM.Workflow.steps[CRM.Workflow.stepIndex].options.hasOwnProperty("groupContacts")) {
+          CRM.Workflow.steps[CRM.Workflow.stepIndex].options.groupContacts.push({"id": data.id, "text": data.label});
+        }
+        CRM.Workflow.steps[CRM.Workflow.stepIndex].SWRelationshipEntityId = data.id;
+        CRM.Workflow.steps[CRM.Workflow.stepIndex].SWSelectMode = "form";
+      }
+    })
+
+
+    // Watch for Form Load, and check that it is the current step
+    // And if so, trigger a custom Load:Profile:Complete event
+    // This is so that other watchers don't have to repeat this
+    // logic, and can simply wait for this custom event to run any custom logic
+    // for a custom profile step.
+    //$("#ActionWindow")
+      .on("crmFormLoad", function(event, data) {
+        //Make sure we are expecting to load a profile
+        if (CRM.Workflow.steps[CRM.Workflow.stepIndex].entity_table == "Profile") {
+          //Make sure this is the profile we are expecting.
+          var term = "gid=" + CRM.Workflow.steps[CRM.Workflow.stepIndex].entity_id + "&";
+          if (data.url.search(term) > -1) {
+            $("body").trigger("SimpleWorkflow:Step:Load:Profile:Complete", CRM.Workflow.steps[CRM.Workflow.stepIndex]);
+          }
+        }
+      });
+
+  };
+
 
   $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {
     if (currentStep.entity_table == "Profile") {
@@ -137,35 +169,18 @@ CRM.$(function ($) {
   });
 
 
-
-  //Watch for successful form completion and react accordingly
-  $("#ActionWindow").on("crmFormSuccess", function(event, data) {
-    if (CRM.Workflow.steps[CRM.Workflow.stepIndex].entity_table == "Profile") {
-      if(CRM.Workflow.steps[CRM.Workflow.stepIndex].options.hasOwnProperty("groupContacts")) {
-        CRM.Workflow.steps[CRM.Workflow.stepIndex].options.groupContacts.push({"id": data.id, "text": data.label});
+  if($("#ActionWindow").length > 0) {
+    addActionWindowHandlers();
+  } else {
+    var setupInterval = setInterval(function() {
+      if($("#ActionWindow").length > 0) {
+        addActionWindowHandlers();
+        clearInterval(setupInterval);
       }
-      CRM.Workflow.steps[CRM.Workflow.stepIndex].SWRelationshipEntityId = data.id;
-      CRM.Workflow.steps[CRM.Workflow.stepIndex].SWSelectMode = "form";
-    }
-  })
+    }, 20);
+  }
 
 
-  // Watch for Form Load, and check that it is the current step
-  // And if so, trigger a custom Load:Profile:Complete event
-  // This is so that other watchers don't have to repeat this
-  // logic, and can simply wait for this custom event to run any custom logic
-  // for a custom profile step.
-  //$("#ActionWindow")
-  .on("crmFormLoad", function(event, data) {
-    //Make sure we are expecting to load a profile
-    if (CRM.Workflow.steps[CRM.Workflow.stepIndex].entity_table == "Profile") {
-      //Make sure this is the profile we are expecting.
-      var term = "gid=" + CRM.Workflow.steps[CRM.Workflow.stepIndex].entity_id + "&";
-      if (data.url.search(term) > -1) {
-        $("body").trigger("SimpleWorkflow:Step:Load:Profile:Complete", CRM.Workflow.steps[CRM.Workflow.stepIndex]);
-      }
-    }
-  });
 
 
 });
