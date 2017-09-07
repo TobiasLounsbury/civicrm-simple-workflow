@@ -124,8 +124,21 @@ CRM.$(function ($) {
       var lsurl = CRM.url("civicrm/profile/" + urlAction, urlParams);
       var aw = CRM.loadForm(lsurl, {target:"#ActionWindow", dialog: false, autoClose:true});
     }
+  })
+
+
+  // Teardown of custom things done in the setup step.
+  //$("body")
+  .on("SimpleWorkflow:Step:Teardown", function(event, currentStep) {
+    //Remove the select widget if it exists
+    if (currentStep.entity_table == "Profile") {
+      $("#SWProfileSelect_" + currentStep.order).remove();
+    }
   });
 
+
+
+  //Watch for successful form completion and react accordingly
   $("#ActionWindow").on("crmFormSuccess", function(event, data) {
     if (CRM.Workflow.steps[CRM.Workflow.stepIndex].entity_table == "Profile") {
       if(CRM.Workflow.steps[CRM.Workflow.stepIndex].options.hasOwnProperty("groupContacts")) {
@@ -136,6 +149,12 @@ CRM.$(function ($) {
     }
   })
 
+
+  // Watch for Form Load, and check that it is the current step
+  // And if so, trigger a custom Load:Profile:Complete event
+  // This is so that other watchers don't have to repeat this
+  // logic, and can simply wait for this custom event to run any custom logic
+  // for a custom profile step.
   //$("#ActionWindow")
   .on("crmFormLoad", function(event, data) {
     //Make sure we are expecting to load a profile
@@ -145,15 +164,6 @@ CRM.$(function ($) {
       if (data.url.search(term) > -1) {
         $("body").trigger("SimpleWorkflow:Step:Load:Profile:Complete", CRM.Workflow.steps[CRM.Workflow.stepIndex]);
       }
-
-    }
-  });
-
-
-  $("body").on("SimpleWorkflow:Step:Teardown", function(event, currentStep) {
-    //Remove the select widget if it exists
-    if (currentStep.entity_table == "Profile") {
-      $("#SWProfileSelect_" + currentStep.order).remove();
     }
   });
 
