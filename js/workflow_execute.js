@@ -236,7 +236,7 @@ CRM.$(function ($) {
       }
     });
 
-    CRM.Workflow.load_step(CRM.Workflow.lastStep());
+    CRM.Workflow.load_step(CRM.Workflow.lastStep().order);
   }  else {
     CRM.Workflow.load_step(CRM.Workflow.currentStep.order);
   }
