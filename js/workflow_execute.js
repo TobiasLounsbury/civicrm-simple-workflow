@@ -7,32 +7,33 @@ CRM.$(function ($) {
   };
 
   CRM.Workflow.load_step = function(order) {
-    $('ol.WorkflowSteps li[data-order='+currentStep.order+']').removeClass("stepActive");
-    if ($('ol.WorkflowSteps li[data-order='+currentStep.order+']').hasClass("completed")) {
-      $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("stepDone");
+
+    $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').removeClass("stepActive");
+    if ($('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').hasClass("completed")) {
+      $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').addClass("stepDone");
     } else {
-      $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("stepTodo");
-      $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("stepAvailable");
+      $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').addClass("stepTodo");
+      $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').addClass("stepAvailable");
     }
 
     //Scroll to the top of the page when a new step is loaded.
     $("html, body").animate({ scrollTop: 0 }, 300);
 
-    //Set the currentStep
-    currentStep = CRM.Workflow.steps[order];
+    //Set the CRM.Workflow.currentStep
+    CRM.Workflow.currentStep = CRM.Workflow.steps[order];
     //Trigger an Step Load event
-    $("body").trigger("SimpleWorkflow:Step:Load", currentStep);
+    $("body").trigger("SimpleWorkflow:Step:Load", CRM.Workflow.currentStep);
 
 
-    if (currentStep.title && currentStep.title.length) {
-      $("#WorkflowTitle legend").text(currentStep.title);
+    if (CRM.Workflow.currentStep.title && CRM.Workflow.currentStep.title.length) {
+      $("#WorkflowTitle legend").text(CRM.Workflow.currentStep.title);
       $("#WorkflowTitle").show();
     } else {
       $("#WorkflowTitle").hide();
     }
 
-    $("#PreMessage").html(currentStep.pre_message);
-    $("#PostMessage").html(currentStep.post_message);
+    $("#PreMessage").html(CRM.Workflow.currentStep.pre_message);
+    $("#PostMessage").html(CRM.Workflow.currentStep.post_message);
 
     //Set the new form step to active
     $('ol.WorkflowSteps li[data-order='+order+']').removeClass("stepDone");
@@ -105,9 +106,9 @@ CRM.$(function ($) {
 
   CRM.Workflow.CompleteCurrentStep = function() {
     //Add Classes to the progress-bar
-    $('ol.WorkflowSteps li[data-order='+currentStep.order+']').removeClass("stepActive");
-    $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("stepDone");
-    $('ol.WorkflowSteps li[data-order='+currentStep.order+']').addClass("completed");
+    $('ol.WorkflowSteps li[data-order='+CRM.Workflow.currentStep.order+']').removeClass("stepActive");
+    $('ol.WorkflowSteps li[data-order='+CRM.Workflow.currentStep.order+']').addClass("stepDone");
+    $('ol.WorkflowSteps li[data-order='+CRM.Workflow.currentStep.order+']').addClass("completed");
 
     //Trigger the teardown event
     $("body").trigger("SimpleWorkflow:Step:Teardown", CRM.Workflow.steps[CRM.Workflow.stepIndex]);
@@ -126,14 +127,14 @@ CRM.$(function ($) {
 
   CRM.Workflow.onLastStep = function() {
     var last = CRM.Workflow.lastStep();
-    return (currentStep.order === last.order);
+    return (CRM.Workflow.currentStep.order === last.order);
   };
 
   CRM.Workflow.SetButtonText = function() {
     if (CRM.Workflow.onLastStep()) {
       $("#SWNextButton").hide()
     } else {
-      $("#SWNextButton span").text(" " + currentStep.next + " ");
+      $("#SWNextButton span").text(" " + CRM.Workflow.currentStep.next + " ");
       $("#SWNextButton").show()
     }
   };
@@ -160,7 +161,7 @@ CRM.$(function ($) {
 
   //Enable the custom Next button to move the flow along
   $("#SWNextButton").click(function(e) {
-    var data = {"valid": true, "step": currentStep};
+    var data = {"valid": true, "step": CRM.Workflow.currentStep};
     $("body").trigger("SimpleWorkflow:Step:Validate", data);
     if (data.valid) {
       CRM.Workflow.CompleteCurrentStep();
@@ -169,7 +170,7 @@ CRM.$(function ($) {
   });
   $("#SWNextButton").hide();
 
-  var currentStep = first(CRM.Workflow.steps);
+  CRM.Workflow.currentStep = first(CRM.Workflow.steps);
 
   //Initiate the object that will load the pages
   //This must be below where we inject the ActionWindow
@@ -178,18 +179,18 @@ CRM.$(function ($) {
   //Bind to the load event to make small changes to the various Forms
   swin.on("crmLoad", function(event) {
     if($(event.target).attr("id") == "ActionWindow") {
-      $("#ActionWindow .crm-form-submit").val(" " + currentStep.next + " ");
+      $("#ActionWindow .crm-form-submit").val(" " + CRM.Workflow.currentStep.next + " ");
       $("#ActionWindow a.cancel").hide();
 
       //Todo: This is deprecated and should be replaced with CustomJS from step.
-      var stepfname = window['SimpleWorkflow_Step_' + currentStep.name + "_Load"];
+      var stepfname = window['SimpleWorkflow_Step_' + CRM.Workflow.currentStep.name + "_Load"];
       if (typeof stepfname == 'function') {
         stepfname();
       }
 
       //Add a hidden field to trigger the backend that this is a
       //workflow "form"
-      $("#ActionWindow form").append("<input type='hidden' name='SimpleWorkflowFormStep' value='" + CRM.Workflow.workflow.id + "_" + currentStep.name + "' />");
+      $("#ActionWindow form").append("<input type='hidden' name='SimpleWorkflowFormStep' value='" + CRM.Workflow.workflow.id + "_" + CRM.Workflow.currentStep.name + "' />");
     }
   });
 
@@ -236,7 +237,7 @@ CRM.$(function ($) {
 
     CRM.Workflow.load_step(CRM.Workflow.lastStep());
   }  else {
-    CRM.Workflow.load_step(currentStep.order);
+    CRM.Workflow.load_step(CRM.Workflow.currentStep.order);
   }
 
 });
