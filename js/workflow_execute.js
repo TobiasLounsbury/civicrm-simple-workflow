@@ -7,13 +7,14 @@ CRM.$(function ($) {
   };
 
   CRM.Workflow.load_step = function(order) {
-
-    $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').removeClass("stepActive");
-    if ($('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').hasClass("completed")) {
-      $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').addClass("stepDone");
-    } else {
-      $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').addClass("stepTodo");
-      $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').addClass("stepAvailable");
+    if(CRM.Workflow.currentStep) {
+      $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').removeClass("stepActive");
+      if ($('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').hasClass("completed")) {
+        $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').addClass("stepDone");
+      } else {
+        $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').addClass("stepTodo");
+        $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').addClass("stepAvailable");
+      }
     }
 
     //Scroll to the top of the page when a new step is loaded.
