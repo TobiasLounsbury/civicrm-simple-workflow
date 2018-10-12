@@ -92,7 +92,7 @@ CRM.$(function ($) {
   $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {
     if (currentStep.entity_table == "Profile") {
       if (CRM.Workflow.method == "inject") {
-        $(".crm-contribution-main-form-block").hide();
+        $("#Main").hide();
         $("#ActionWindow").show();
       }
 

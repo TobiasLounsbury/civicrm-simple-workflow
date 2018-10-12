@@ -6,7 +6,7 @@ CRM.$(function ($) {
       $("#ActionWindow").hide();
       $("jQueryNext").hide()
       //Show the contribution form we hid earlier
-      $(".crm-contribution-main-form-block").fadeIn("fast");
+      $("#Main").fadeIn("fast");
     }
   });
 });

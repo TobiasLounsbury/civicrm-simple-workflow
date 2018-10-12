@@ -80,7 +80,7 @@ CRM.$(function ($) {
       $("#ActionWindow").hide();
     } else {
       var liclass = "stepTodo";
-      $(".crm-contribution-main-form-block").hide();
+      $("#Main").hide();
     }
     for (var i in CRM.Workflow.steps){
       if (CRM.Workflow.steps[i]['breadcrumb']) {
@@ -95,7 +95,7 @@ CRM.$(function ($) {
     $("#WorkflowTitle").hide();
 
     //add a jquery next button if we are on a contirubtion page
-    $(".crm-contribution-main-form-block").append("<a href='#' id='SWNextButton' class='button'><span> Next </span></a><div class='clear'></div>");
+    $("#Main").append("<a href='#' id='SWNextButton' class='button'><span> Next </span></a><div class='clear'></div>");
 
     //add wrapper to billing payment block so that it can be controlled.
     $("#billing-payment-block").wrap('<div class="WorkflowBillingBlock" id="WorkflowBillingBlock"></div>');
@@ -236,8 +236,15 @@ CRM.$(function ($) {
       }
     });
 
+    if(CRM.Workflow.allSelector) {
+      $(CRM.Workflow.allSelector).hide();
+    }
+
     CRM.Workflow.load_step(CRM.Workflow.lastStep().order);
   }  else {
+    if(CRM.Workflow.allSelector) {
+      $(CRM.Workflow.allSelector).hide();
+    }
     CRM.Workflow.load_step(CRM.Workflow.currentStep.order);
   }
 

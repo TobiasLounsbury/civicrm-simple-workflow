@@ -6,7 +6,7 @@ CRM.$(function ($) {
       //Hide the workflow pane
       $("#ActionWindow").hide();
 
-      $(".crm-contribution-main-form-block").slideUp("fast", function(e) {
+      $("#Main").slideUp("fast", function(e) {
 
         //Hide all of the extra elements we don't want to see in this step.
         $(CRM.Workflow.allSelector).hide();
@@ -18,7 +18,7 @@ CRM.$(function ($) {
         CRM.Workflow.SetButtonText();
 
         //Show the contribution form we hid earlier
-        $(".crm-contribution-main-form-block").slideDown();
+        $("#Main").slideDown();
 
         //todo: This should be deprecated in favor of more
         //deterministic methods rather than maric naming
@@ -28,5 +28,12 @@ CRM.$(function ($) {
         }
       });
     }
-  });
+  })
+
+    .on("SimpleWorkflow:Step:Teardown", function(event, currentStep) {
+      //Remove the select widget if it exists
+      if (currentStep.entity_table == "jquery") {
+        $(currentStep.entity_id).hide();
+      }
+    });
 });

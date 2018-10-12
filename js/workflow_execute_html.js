@@ -4,7 +4,7 @@ CRM.$(function ($) {
     if (currentStep.entity_table == "html") {
 
       if (CRM.Workflow.method == "inject") {
-        $(".crm-contribution-main-form-block").hide();
+        $("#Main").hide();
         $("#ActionWindow").show();
       }
 
