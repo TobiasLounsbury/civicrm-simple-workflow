@@ -2,6 +2,8 @@ CRM.$(function ($) {
   //Utility function when we don't know if steps will be zero indexed.
   function first(p){for(var i in p)return p[i];}
 
+  CRM.Workflow = CRM.Workflow || {};
+
   CRM.Workflow.get_next_step = function() {
     return $("ol.WorkflowSteps .stepTodo:first").data("order");
   };
