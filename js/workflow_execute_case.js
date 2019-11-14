@@ -1,13 +1,12 @@
 CRM.$(function ($) {
 
-  $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {
-    if (currentStep.entity_table == "Case") {
-      if (CRM.Workflow.method == "inject") {
-        $("#Main").hide();
-        $("#ActionWindow").show();
-      }
+  CRM.Workflow.handle("Step:Load", function(currentStep) {
+    if (currentStep.entity_table === "Case") {
+
+      CRM.Workflow.useActionWindow();
 
       var lsurl = CRM.url("civicrm/workflows/case", {wid: currentStep.workflow_id, stepName: currentStep.name});
+      //todo: This should likely be abstracted so that the actionwindow Id is not needed
       var aw = CRM.loadForm(lsurl, {target:"#ActionWindow", dialog: false, autoClose:false});
     }
   });

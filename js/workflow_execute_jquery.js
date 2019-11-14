@@ -1,10 +1,10 @@
 CRM.$(function ($) {
 
-  $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {
-    if (currentStep.entity_table == "jquery") {
+  CRM.Workflow.handle("Step:Load", function(currentStep) {
+    if (currentStep.entity_table === "jquery") {
 
       //Hide the workflow pane
-      $("#ActionWindow").hide();
+      CRM.Workflow.hideActionWindow();
 
       $("#Main").slideUp("fast", function(e) {
 
@@ -28,9 +28,9 @@ CRM.$(function ($) {
         }
       });
     }
-  })
+  });
 
-    .on("SimpleWorkflow:Step:Teardown", function(event, currentStep) {
+  CRM.Workflow.handle("Step:Teardown", function(currentStep) {
       //Remove the select widget if it exists
       if (currentStep.entity_table == "jquery") {
         $(currentStep.entity_id).hide();

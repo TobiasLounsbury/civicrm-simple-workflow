@@ -1,10 +1,11 @@
 CRM.$(function ($) {
 
-  $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {
-    if (currentStep.entity_table == "Page") {
+  CRM.Workflow.handle("Step:Load", function(currentStep) {
+    if (currentStep.entity_table === "Page") {
       //Hide the workflow pane
-      $("#ActionWindow").hide();
-      $("jQueryNext").hide()
+      CRM.Workflow.hideActionWindow();
+      //todo: Is this doing anything?
+      $("jQueryNext").hide();
       //Show the contribution form we hid earlier
       $("#Main").fadeIn("fast");
     }

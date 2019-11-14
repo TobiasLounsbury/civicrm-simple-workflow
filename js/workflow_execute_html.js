@@ -1,20 +1,14 @@
 CRM.$(function ($) {
 
-  $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {
-    if (currentStep.entity_table == "html") {
+  CRM.Workflow.handle("Step:Load", function(currentStep) {
+    if (currentStep.entity_table === "html") {
 
-      if (CRM.Workflow.method == "inject") {
-        $("#Main").hide();
-        $("#ActionWindow").show();
-      }
+      CRM.Workflow.useActionWindow();
 
-      $("#ActionWindow").html(currentStep.entity_id);
+      CRM.Workflow.$actionWindow.html(currentStep.entity_id);
 
       //Set the Button Text and show it if applicable
       CRM.Workflow.setButtonText();
     }
-  });
-  $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {
-
   });
 });

@@ -1,13 +1,28 @@
 CRM.$(function ($) {
+
+  //Make sure our object exists
+  CRM.Workflow = CRM.Workflow || {};
+
+
   //Utility function when we don't know if steps will be zero indexed.
   function first(p){for(var i in p)return p[i];}
 
-  CRM.Workflow = CRM.Workflow || {};
 
+  /**
+   *
+   *
+   * @returns {*|jQuery|undefined}
+   */
   CRM.Workflow.getNextStep = function() {
     return $("ol.WorkflowSteps .stepTodo:first").data("order");
   };
 
+
+  /**
+   *
+   *
+   * @param order
+   */
   CRM.Workflow.loadStep = function(order) {
     if(CRM.Workflow.currentStep) {
       $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').removeClass("stepActive");
@@ -25,7 +40,7 @@ CRM.$(function ($) {
     //Set the CRM.Workflow.currentStep
     CRM.Workflow.currentStep = CRM.Workflow.steps[order];
     //Trigger an Step Load event
-    $("body").trigger("SimpleWorkflow:Step:Load", CRM.Workflow.currentStep);
+    CRM.Workflow.trigger("Step:Load", CRM.Workflow.currentStep);
 
 
     if (CRM.Workflow.currentStep.title && CRM.Workflow.currentStep.title.length) {
@@ -50,15 +65,21 @@ CRM.$(function ($) {
     CRM.Workflow.stepIndex = order;
   };
 
+
+  /**
+   *
+   * @param index
+   */
   CRM.Workflow.skipToStep = function(index) {
 
     //Trigger the teardown event
-    $("body").trigger("SimpleWorkflow:Step:Teardown", CRM.Workflow.steps[CRM.Workflow.stepIndex]);
+    CRM.Workflow.trigger("Step:Teardown", CRM.Workflow.steps[CRM.Workflow.stepIndex]);
 
+    //todo: This should be refactored so that Step types take care of themselves
     //If we are injecting into a page, but moving to the page content
-    if (CRM.Workflow.method == "inject" && CRM.Workflow.steps[index].entity_table == "Page") {
+    if (CRM.Workflow.method === "inject" && CRM.Workflow.steps[index].entity_table === "Page") {
       //Destroy the snippet so we don't get any overlapping behavior
-      $("#ActionWindow").crmSnippet("destroy");
+      CRM.Workflow.$actionWindow.crmSnippet("destroy");
     }
 
     //Hide the SW Button
@@ -67,10 +88,18 @@ CRM.$(function ($) {
     CRM.Workflow.loadStep(index);
   };
 
-  CRM.Workflow.inject_workflow_elements = function() {
-    $("#Main").before('<div id="ActionWindow"></div>');
-    $("#ActionWindow").before('<ol class="WorkflowSteps" id="WorkflowSteps"></ol>');
-    $("#ActionWindow").before('<div id="PreMessage"></div>');
+
+  /**
+   * Creates some of the needed DOM Elements that make this whole thing tick over.
+   *
+   * todo: Refactor all of this so that progress is its own class and there are no more
+   * magic classes or element ids
+   */
+  CRM.Workflow.injectWorkflowElements = function() {
+    CRM.Workflow.$actionWindow = $('<div id="ActionWindow" class="simpleworkflow-action-window"></div>');
+    $("#Main").before(CRM.Workflow.$actionWindow);
+    CRM.Workflow.$actionWindow.before('<ol class="WorkflowSteps" id="WorkflowSteps"></ol>');
+    CRM.Workflow.$actionWindow.before('<div id="PreMessage"></div>');
     $("#crm-submit-buttons").before('<div id="PostMessage"></div>');
     $("#WorkflowSteps").before('<div id="SW_PreFormMessage"></div>');
     $("#SW_PreFormMessage").html(CRM.Workflow.workflow.pre_message);
@@ -79,7 +108,7 @@ CRM.$(function ($) {
 
     if (CRM.Workflow.returning) {
       var liclass = "stepDone";
-      $("#ActionWindow").hide();
+      CRM.Workflow.$actionWindow.hide();
     } else {
       var liclass = "stepTodo";
       $("#Main").hide();
@@ -107,14 +136,22 @@ CRM.$(function ($) {
 
   };
 
+
+  /**
+   * Complete the current step
+   *
+   * @constructor
+   */
   CRM.Workflow.CompleteCurrentStep = function() {
+
+    //todo: Abstract this out to a progress rendering class
     //Add Classes to the progress-bar
     $('ol.WorkflowSteps li[data-order='+CRM.Workflow.currentStep.order+']').removeClass("stepActive");
     $('ol.WorkflowSteps li[data-order='+CRM.Workflow.currentStep.order+']').addClass("stepDone");
     $('ol.WorkflowSteps li[data-order='+CRM.Workflow.currentStep.order+']').addClass("completed");
 
     //Trigger the teardown event
-    $("body").trigger("SimpleWorkflow:Step:Teardown", CRM.Workflow.steps[CRM.Workflow.stepIndex]);
+    CRM.Workflow.trigger("Step:Teardown", CRM.Workflow.steps[CRM.Workflow.stepIndex]);
 
     //Hide the SW Button
     $("#SWNextButton").hide();
@@ -123,16 +160,30 @@ CRM.$(function ($) {
     CRM.Workflow.loadStep(CRM.Workflow.getNextStep());
   };
 
+  /**
+   * Returns the last step in the workflow
+   *
+   * @returns {step}
+   */
   CRM.Workflow.lastStep = function() {
     var last = Object.keys(CRM.Workflow.steps).slice(-1)[0];
     return CRM.Workflow.steps[last];
   };
 
+  /**
+   * Returns true/false if we are on the last step of the workflow
+   *
+   * @returns {boolean}
+   */
   CRM.Workflow.onLastStep = function() {
     var last = CRM.Workflow.lastStep();
     return (CRM.Workflow.currentStep.order === last.order);
   };
 
+
+  /**
+   *
+   */
   CRM.Workflow.setButtonText = function() {
     if (CRM.Workflow.onLastStep()) {
       $("#SWNextButton").hide()
@@ -143,18 +194,94 @@ CRM.$(function ($) {
   };
 
 
+  /**
+   * Do some handling if we are in an injected state and want to use the
+   * action window
+   */
+  CRM.Workflow.useActionWindow = function() {
+    if (CRM.Workflow.method === "inject") {
+      //todo: Abstract this out maybe?
+      $("#Main").hide();
+      CRM.Workflow.showActionWindow();
+    }
+  };
+
+  /**
+   * Helper function so steps don't need to know about the action window
+   * where it is stored, what the ID is, etc.
+   *
+   * @param animate
+   */
+  CRM.Workflow.hideActionWindow = function(animate) {
+    if(animate) {
+      CRM.Workflow.$actionWindow.slideUp(animate);
+    } else {
+      CRM.Workflow.$actionWindow.hide();
+    }
+  };
+
+
+  /**
+   * Helper function so steps don't need to know about the action window
+   * where it is stored, what the ID is, etc.
+   *
+   * @param animate
+   */
+  CRM.Workflow.showActionWindow = function(animate) {
+    if(animate) {
+      CRM.Workflow.$actionWindow.slideDown(animate);
+    } else {
+      CRM.Workflow.$actionWindow.show();
+    }
+  };
+
+  /** Object to Store event handler callbacks **/
+  CRM.Workflow.callbacks = {};
+
+  /**
+   * Function to register Workflow event handlers
+   *
+   * @param actionName
+   * @param callback
+   * @param weight
+   */
+  CRM.Workflow.handle = function(actionName, callback, weight) {
+    weight = weight || 50;
+    if (!CRM.Workflow.callbacks.hasOwnProperty(actionName)) {
+      CRM.Workflow.callbacks[actionName] = [];
+    }
+    CRM.Workflow.callbacks[actionName].push({"weight": weight, "callback": callback});
+  };
+
+  /**
+   * Trigger a Workflow event for all handlers that have been
+   * registered for that action
+   *
+   * @param actionName
+   */
+  CRM.Workflow.trigger = function(actionName) {
+    if (CRM.Workflow.callbacks.hasOwnProperty(actionName)) {
+      //todo: Take weight into account
+      for(var x in CRM.Workflow.callbacks[actionName]) {
+        if(CRM.Workflow.callbacks[actionName].hasOwnProperty(x) && (typeof CRM.Workflow.callbacks[actionName][x].callback === "function")) {
+          CRM.Workflow.callbacks[actionName][x].callback.apply(null, Array.prototype.slice.call(arguments, 1));
+        }
+      }
+    }
+  };
 
 
 
   /***********[ Run The Page ]*****************/
   //Check the method we are using and inject elements when needed
-  if (CRM.Workflow.method == "inject") {
-    CRM.Workflow.inject_workflow_elements();
+  if (CRM.Workflow.method === "inject") {
+    CRM.Workflow.injectWorkflowElements();
   }
 
   //Set the breadcrumb width
   $("ol.WorkflowSteps li").css("width", CRM.Workflow.breadcrumWidth + "%");
 
+  //todo: Abstract this out to a progress class
   //Allow each step in the breadcrumb to be clickable
   $("ol.WorkflowSteps li").click(function(e) {
     var obj = $(this);
@@ -164,10 +291,11 @@ CRM.$(function ($) {
     }
   });
 
+  //todo: This should probably be moved up to where the button is created
   //Enable the custom Next button to move the flow along
   $("#SWNextButton").click(function(e) {
     var data = {"valid": true, "step": CRM.Workflow.currentStep};
-    $("body").trigger("SimpleWorkflow:Step:Validate", data);
+    CRM.Workflow.trigger("Step:Validate", data);
     if (data.valid) {
       CRM.Workflow.CompleteCurrentStep();
     }
@@ -175,38 +303,42 @@ CRM.$(function ($) {
   });
   $("#SWNextButton").hide();
 
+  //Start at the beginning, the beginning is a very good place to start
   CRM.Workflow.currentStep = first(CRM.Workflow.steps);
 
   //Initiate the object that will load the pages
   //This must be below where we inject the ActionWindow
-  var swin = $("#ActionWindow").crmSnippet();
+  var $swin = CRM.Workflow.$actionWindow.crmSnippet();
 
   //Bind to the load event to make small changes to the various Forms
-  swin.on("crmLoad", function(event) {
-    if($(event.target).attr("id") == "ActionWindow") {
-      $("#ActionWindow .crm-form-submit").val(" " + CRM.Workflow.currentStep.next + " ");
-      $("#ActionWindow a.cancel").hide();
+  $swin.on("crmLoad", function(event) {
+    if($(event.target).attr("id") === "ActionWindow") {
 
-      //Todo: This is deprecated and should be replaced with CustomJS from step.
-      var stepfname = window['SimpleWorkflow_Step_' + CRM.Workflow.currentStep.name + "_Load"];
-      if (typeof stepfname == 'function') {
-        stepfname();
-      }
+      //todo: Should this be here or handled in a callable, or via
+      //custom step handlers
+      CRM.Workflow.$actionWindow.find(".crm-form-submit").val(" " + CRM.Workflow.currentStep.next + " ");
+      CRM.Workflow.$actionWindow.find("a.cancel").hide();
 
-      //Add a hidden field to trigger the backend that this is a
-      //workflow "form"
-      $("#ActionWindow form").append("<input type='hidden' name='SimpleWorkflowFormStep' value='" + CRM.Workflow.workflow.id + "_" + CRM.Workflow.currentStep.name + "' />");
+      //Trigger so that step handlers can do what they need.
+      CRM.Workflow.trigger("Action:crmLoad", data);
+
+      //Add a hidden field to trigger the backend that this is a workflow "form"
+      CRM.Workflow.$actionWindow.find("form").append("<input type='hidden' name='SimpleWorkflowFormStep' value='" + CRM.Workflow.workflow.id + "_" + CRM.Workflow.currentStep.name + "' />");
     }
-  });
-
-  swin.on("crmBeforeLoad", function(e, data) {
-
-  });
+  })
+  .on("crmBeforeLoad", function(e, data) {
+    CRM.Workflow.trigger("Action:crmBeforeLoad", data);
+  })
+  .on("crmFormLoad", function(e, data) {
+    CRM.Workflow.trigger("Action:crmFormLoad", data);
+  })
 
   //When each form is submitted.
-  swin.on("crmFormSuccess", function(e, data) {
+  .on("crmFormSuccess", function(e, data) {
+
+    CRM.Workflow.trigger("Action:crmFormSuccess", data);
     //This keeps the page from "refreshing" and loading the workflow a second time into the div
-    $("#ActionWindow").crmSnippet("destroy");
+    CRM.Workflow.$actionWindow.crmSnippet("destroy");
     CRM.Workflow.CompleteCurrentStep();
   });
 
@@ -226,12 +358,14 @@ CRM.$(function ($) {
   //Or the last step if we are returning.
   if (CRM.Workflow.returning) {
 
+    //todo: Abstract this out into a render/display class or state machine
     //Mark all the steps as visited so it doesn't look like we are on the last step
     //with an incomplete workflow
     $('ol.WorkflowSteps li').addClass("completed");
     $('ol.WorkflowSteps li:last').removeClass("completed");
 
 
+    //todo: Abstract this out into a render/display class or state machine
     //Loop through the tabs, and check to see if there are errors, and if so
     //add an error class to them.
     $.each(CRM.Workflow.steps, function(tab, data) {
