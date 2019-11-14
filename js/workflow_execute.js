@@ -141,7 +141,6 @@ CRM.$(function ($) {
   };
 
 
-
   /***********[ Run The Page ]*****************/
   //Check the method we are using and inject elements when needed
   if (CRM.Workflow.method == "inject") {
@@ -175,11 +174,15 @@ CRM.$(function ($) {
 
   //Initiate the object that will load the pages
   //This must be below where we inject the ActionWindow
-  var swin = $("#ActionWindow").crmSnippet();
+  var $swin = $("#ActionWindow").crmSnippet();
 
   //Bind to the load event to make small changes to the various Forms
-  swin.on("crmLoad", function(event) {
+  $swin.on("crmLoad", function(event, data) {
     if($(event.target).attr("id") == "ActionWindow") {
+
+      $("body").trigger("SimpleWorkflow:action:crmLoad", data);
+
+      //todo: Decide if this should be here or in profile.
       $("#ActionWindow .crm-form-submit").val(" " + CRM.Workflow.currentStep.next + " ");
       $("#ActionWindow a.cancel").hide();
 
@@ -193,18 +196,25 @@ CRM.$(function ($) {
       //workflow "form"
       $("#ActionWindow form").append("<input type='hidden' name='SimpleWorkflowFormStep' value='" + CRM.Workflow.workflow.id + "_" + CRM.Workflow.currentStep.name + "' />");
     }
-  });
+  })
 
-  swin.on("crmBeforeLoad", function(e, data) {
+    .on("crmBeforeLoad", function(event, data) {
+      $("body").trigger("SimpleWorkflow:action:crmBeforeLoad", data);
+    })
 
-  });
+    .on("crmFormLoad", function(event, data) {
+      $("body").trigger("SimpleWorkflow:action:crmFormLoad", data);
+    })
 
-  //When each form is submitted.
-  swin.on("crmFormSuccess", function(e, data) {
-    //This keeps the page from "refreshing" and loading the workflow a second time into the div
-    $("#ActionWindow").crmSnippet("destroy");
-    CRM.Workflow.CompleteCurrentStep();
-  });
+    //When each form is submitted.
+    .on("crmFormSuccess", function(event, data) {
+      $("body").trigger("SimpleWorkflow:action:crmFormSuccess", data);
+
+      //This keeps the page from "refreshing" and loading the workflow a second time into the div
+      $("#ActionWindow").crmSnippet("destroy");
+      //todo: Should this be part of execute or profile?
+      CRM.Workflow.CompleteCurrentStep();
+    });
 
   //Setup history functions So clicking back, takes you to previous tab
   window.onhashchange = function() {

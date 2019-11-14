@@ -56,15 +56,22 @@ CRM.$(function ($) {
     }
   }
 
-  var addActionWindowHandlers = function() {
+
     //Watch for successful form completion and react accordingly
-    $("#ActionWindow").on("crmFormSuccess", function(event, data) {
-      if (CRM.Workflow.steps[CRM.Workflow.stepIndex].entity_table == "Profile") {
-        if(CRM.Workflow.steps[CRM.Workflow.stepIndex].options.hasOwnProperty("groupContacts")) {
-          CRM.Workflow.steps[CRM.Workflow.stepIndex].options.groupContacts.push({"id": data.id, "text": data.label});
+    $("body").on("SimpleWorkflow:action:crmFormSuccess", function(event, data) {
+      let currentStep = CRM.Workflow.steps[CRM.Workflow.stepIndex];
+      if (currentStep.entity_table == "Profile") {
+        if(currentStep.options.hasOwnProperty("groupContacts")) {
+          currentStep.options.groupContacts.push({"id": data.id, "text": data.label});
         }
-        CRM.Workflow.steps[CRM.Workflow.stepIndex].SWRelationshipEntityId = data.id;
-        CRM.Workflow.steps[CRM.Workflow.stepIndex].SWSelectMode = "form";
+
+        var actionType = currentStep.options.mode || "current";
+        if(actionType === "current" && !(currentStep.SWRelationshipEntityId)) {
+          CRM.Workflow.newCurrentCID = data.id;
+        }
+
+        currentStep.SWRelationshipEntityId = data.id;
+        currentStep.SWSelectMode = "form";
       }
     })
 
@@ -74,8 +81,8 @@ CRM.$(function ($) {
     // This is so that other watchers don't have to repeat this
     // logic, and can simply wait for this custom event to run any custom logic
     // for a custom profile step.
-    //$("#ActionWindow")
-      .on("crmFormLoad", function(event, data) {
+
+    .on("SimpleWorkflow:action:crmFormLoad", function(event, data) {
         //Make sure we are expecting to load a profile
         if (CRM.Workflow.steps[CRM.Workflow.stepIndex].entity_table == "Profile") {
           //Make sure this is the profile we are expecting.
@@ -84,12 +91,10 @@ CRM.$(function ($) {
             $("body").trigger("SimpleWorkflow:Step:Load:Profile:Complete", CRM.Workflow.steps[CRM.Workflow.stepIndex]);
           }
         }
-      });
-
-  };
+      })
 
 
-  $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {
+    .on("SimpleWorkflow:Step:Load", function(event, currentStep) {
     if (currentStep.entity_table == "Profile") {
       if (CRM.Workflow.method == "inject") {
         $("#Main").hide();
@@ -102,7 +107,8 @@ CRM.$(function ($) {
       var showActionWindow = true;
       switch(actionType) {
         case "current":
-          if(!currentStep.SWRelationshipEntityId) {
+          //if(!currentStep.SWRelationshipEntityId) {
+          if(!currentStep.SWRelationshipEntityId && !CRM.Workflow.newCurrentCID) {
             urlAction = "create";
           }
           break;
@@ -161,26 +167,11 @@ CRM.$(function ($) {
 
   // Teardown of custom things done in the setup step.
   //$("body")
-  .on("SimpleWorkflow:Step:Teardown", function(event, currentStep) {
-    //Remove the select widget if it exists
-    if (currentStep.entity_table == "Profile") {
-      $("#SWProfileSelect_" + currentStep.order).remove();
-    }
-  });
-
-
-  if($("#ActionWindow").length > 0) {
-    addActionWindowHandlers();
-  } else {
-    var setupInterval = setInterval(function() {
-      if($("#ActionWindow").length > 0) {
-        addActionWindowHandlers();
-        clearInterval(setupInterval);
+    .on("SimpleWorkflow:Step:Teardown", function(event, currentStep) {
+      //Remove the select widget if it exists
+      if (currentStep.entity_table == "Profile") {
+        $("#SWProfileSelect_" + currentStep.order).remove();
       }
-    }, 20);
-  }
-
-
-
+    });
 
 });
