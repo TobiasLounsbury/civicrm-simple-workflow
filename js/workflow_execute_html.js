@@ -11,7 +11,7 @@ CRM.$(function ($) {
       $("#ActionWindow").html(currentStep.entity_id);
 
       //Set the Button Text and show it if applicable
-      CRM.Workflow.SetButtonText();
+      CRM.Workflow.setButtonText();
     }
   });
   $("body").on("SimpleWorkflow:Step:Load", function(event, currentStep) {

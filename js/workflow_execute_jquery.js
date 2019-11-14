@@ -15,7 +15,7 @@ CRM.$(function ($) {
         $(currentStep.entity_id).show();
 
         //Set the Button Text and show if applicable
-        CRM.Workflow.SetButtonText();
+        CRM.Workflow.setButtonText();
 
         //Show the contribution form we hid earlier
         $("#Main").slideDown();

@@ -2,11 +2,13 @@ CRM.$(function ($) {
   //Utility function when we don't know if steps will be zero indexed.
   function first(p){for(var i in p)return p[i];}
 
-  CRM.Workflow.get_next_step = function() {
+  CRM.Workflow = CRM.Workflow || {};
+
+  CRM.Workflow.getNextStep = function() {
     return $("ol.WorkflowSteps .stepTodo:first").data("order");
   };
 
-  CRM.Workflow.load_step = function(order) {
+  CRM.Workflow.loadStep = function(order) {
     if(CRM.Workflow.currentStep) {
       $('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').removeClass("stepActive");
       if ($('ol.WorkflowSteps li[data-order=' + CRM.Workflow.currentStep.order + ']').hasClass("completed")) {
@@ -62,7 +64,7 @@ CRM.$(function ($) {
     //Hide the SW Button
     $("#SWNextButton").hide();
 
-    CRM.Workflow.load_step(index);
+    CRM.Workflow.loadStep(index);
   };
 
   CRM.Workflow.inject_workflow_elements = function() {
@@ -118,7 +120,7 @@ CRM.$(function ($) {
     $("#SWNextButton").hide();
 
     //Load the next step in the workflow
-    CRM.Workflow.load_step(CRM.Workflow.get_next_step());
+    CRM.Workflow.loadStep(CRM.Workflow.getNextStep());
   };
 
   CRM.Workflow.lastStep = function() {
@@ -131,7 +133,7 @@ CRM.$(function ($) {
     return (CRM.Workflow.currentStep.order === last.order);
   };
 
-  CRM.Workflow.SetButtonText = function() {
+  CRM.Workflow.setButtonText = function() {
     if (CRM.Workflow.onLastStep()) {
       $("#SWNextButton").hide()
     } else {
@@ -139,6 +141,8 @@ CRM.$(function ($) {
       $("#SWNextButton").show()
     }
   };
+
+
 
 
 
@@ -240,12 +244,12 @@ CRM.$(function ($) {
       $(CRM.Workflow.allSelector).hide();
     }
 
-    CRM.Workflow.load_step(CRM.Workflow.lastStep().order);
+    CRM.Workflow.loadStep(CRM.Workflow.lastStep().order);
   }  else {
     if(CRM.Workflow.allSelector) {
       $(CRM.Workflow.allSelector).hide();
     }
-    CRM.Workflow.load_step(CRM.Workflow.currentStep.order);
+    CRM.Workflow.loadStep(CRM.Workflow.currentStep.order);
   }
 
 });
