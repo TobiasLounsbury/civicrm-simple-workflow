@@ -20,12 +20,8 @@ CRM.$(function ($) {
         //Show the contribution form we hid earlier
         $("#Main").slideDown();
 
-        //todo: This should be deprecated in favor of more
-        //deterministic methods rather than maric naming
-        var stepfname = window['CRM_Workflow_' + currentStep.breadcrumb.replace(/ /g, "_")];
-        if (typeof stepfname == 'function') {
-          stepfname();
-        }
+        //Trigger a custom event in case we need to do some custom work/cleanup elsewhere
+        CRM.Workflow.trigger("Step:Load:Complete:jquery", currentStep);
       });
     }
   });
