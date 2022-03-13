@@ -18,8 +18,10 @@ function simpleWorkflowAddResources($formName, &$form, &$workflow) {
     $notiFile = CRM_Core_Resources::singleton()->getUrl('civicrm', "packages/jquery/plugins/jquery.notify.min.js", true);
     CRM_Core_Resources::singleton()->addScriptUrl($notiFile, -2, 'html-header');
 
-    $blockFile = CRM_Core_Resources::singleton()->getUrl('civicrm', "packages/jquery/plugins/jquery.blockUI.min.js", true);
-    CRM_Core_Resources::singleton()->addScriptUrl($blockFile, -1, 'html-header');
+
+    //This inclusion is no longer needed in 4.5+
+    //$blockFile = CRM_Core_Resources::singleton()->getUrl('civicrm', "packages/jquery/plugins/jquery.blockUI.min.js", true);
+    //CRM_Core_Resources::singleton()->addScriptUrl($blockFile, -10, 'html-header');
   }
 
   //Allow other extensions to include files.
